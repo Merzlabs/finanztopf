@@ -17,11 +17,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "serve": "cd pecuniator-api && npm run build && ionic serve",
-    "prebuild": "cd pecuniator-api && npm run build",
     "build": "ng build --base-href ./ && npx cap copy",
     "build:electron": "npm run build && cd electron && npm run electron:start",
-    "deploy:docs": "cd pecuniator-api && npm run doc && cd ../ && firebase deploy --only hosting:pecuniator-docs",
     "build:web": "ionic build --prod"
   },
   "dependencies": {
