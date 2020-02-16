@@ -15,6 +15,8 @@ export class Tab3Page {
     private files: CachedFile[];
     api: PecuniAPI;
     message = '';
+    incomeSum: number;
+    outcomeSum: number;
 
     constructor(private filecache: FileCacheService) {
         this.api = new PecuniAPI();
@@ -23,6 +25,8 @@ export class Tab3Page {
     ionViewWillEnter() {
         // Reset api instance of this page from files in cache every time
         this.api.clear();
+        this.incomeSum = 0;
+        this.outcomeSum = 0;
         this.files = this.filecache.getAll();
         if (typeof this.files !== 'undefined' && this.files.length > 0) {
             for (const file of this.files) {
@@ -61,6 +65,7 @@ export class Tab3Page {
             const checkEntry = entry as CheckEntry;
             checkEntry.found = [];
             this.checkCategories(checkEntry, categories);
+            this.checkIncomeOutcome(checkEntry);
         }
 
         console.debug(categories);
@@ -87,6 +92,14 @@ export class Tab3Page {
                     }
                 }
             }
+        }
+    }
+
+    checkIncomeOutcome(entry: PEntry) {
+        if (entry.creditordebit === 'CRDT') {
+            this.incomeSum += entry.amount;
+        } else if (entry.creditordebit === 'DBIT') {
+            this.outcomeSum += entry.amount;
         }
     }
 }
