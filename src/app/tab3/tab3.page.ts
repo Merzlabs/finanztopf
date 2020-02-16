@@ -2,8 +2,22 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FileCacheService, CachedFile } from '../services/file-cache.service';
 import { PecuniAPI, PEntry } from '@merzlabs/pecuniator-api';
 
+/**
+ * Just for categorizing one field added
+ */
 class CheckEntry extends PEntry {
     found: Array<string>;
+}
+
+/**
+ * Query object for entries with some fields for categories. Always tests objects properties with include.
+ */
+class Category {
+    remittanceInformation?: Array<string>;
+    creditorName?: Array<string>;
+    sum: number;
+    title: string;
+    id: string;
 }
 
 @Component({
@@ -14,9 +28,9 @@ class CheckEntry extends PEntry {
 export class Tab3Page {
     private files: CachedFile[];
     api: PecuniAPI;
-    message = '';
     incomeSum: number;
     outcomeSum: number;
+    categories: Array<Category>;
 
     constructor(private filecache: FileCacheService) {
         this.api = new PecuniAPI();
@@ -34,60 +48,57 @@ export class Tab3Page {
             }
         }
 
-        const categories = {
-            saving: {
+        this.categories = [
+            {
                 remittanceInformation: ['DEPOT'],
-                amount: 0,
-                title: 'Savings'
+                sum: 0,
+                title: 'Sparen',
+                id: 'saving',
             },
-            fuel: {
+            {
                 creditorName: ['Tank'],
-                amount: 0,
-                title: 'Tank'
+                sum: 0,
+                title: 'Tanken',
+                id: 'fuel',
             },
-            insu: {
+            {
                 remittanceInformation: ['Versicherung'],
-                amount: 0,
-                title: 'Insurance'
+                sum: 0,
+                title: 'Versicherung',
+                id: 'insu',
             },
-            online: {
+            {
                 creditorName: ['Paypal'],
-                amount: 0,
-                title: 'Online'
+                sum: 0,
+                title: 'Onlinetransaktionen',
+                id: 'online',
             },
-            cell: {
+            {
                 creditorName: ['Drillisch', 'Telekom'],
-                amount: 0,
-                title: 'Cellphone'
+                sum: 0,
+                title: 'Handy',
+                id: 'cell',
             },
-        };
+        ];
         for (const entry of this.api.entries) {
             const checkEntry = entry as CheckEntry;
             checkEntry.found = [];
-            this.checkCategories(checkEntry, categories);
+            this.checkCategories(checkEntry);
             this.checkIncomeOutcome(checkEntry);
         }
 
-        console.debug(categories);
-        for (const name in categories) {
-            if (categories.hasOwnProperty(name)) {
-                const cat = categories[name];
-                this.message += `|| ${cat.title} - ${cat.amount}€ ||`;
-            }
-        }
+        console.debug(this.categories);
     }
 
-    checkCategories(entry: CheckEntry, categories) {
-        for (const catname in categories) {
-            if (categories.hasOwnProperty(catname)) {
-                const cat = categories[catname];
-                for (const check in cat) {
-                    if (check !== 'amount' && check !== 'title' && typeof entry[check] !== 'undefined') {
-                        for (const test of cat[check]) {
-                            if (!entry.found.includes(catname) && entry[check].toString().toLowerCase().includes(test.toLowerCase())) {
-                                cat.amount += entry.amount;
-                                entry.found.push(catname);
-                            }
+    checkCategories(entry: CheckEntry) {
+        for (const cat of this.categories) {
+            const catname = cat.id;
+            for (const check in cat) {
+                if (check !== 'amount' && check !== 'title' && typeof entry[check] !== 'undefined') {
+                    for (const test of cat[check]) {
+                        if (!entry.found.includes(catname) && entry[check].toString().toLowerCase().includes(test.toLowerCase())) {
+                            cat.sum += entry.amount;
+                            entry.found.push(catname);
                         }
                     }
                 }

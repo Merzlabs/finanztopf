@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Finaztöpfe
+      Finanztöpfe
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -27,6 +27,15 @@
   </ion-card>
 
 
-  {{message}}
+  <ion-list>
+    <ion-item *ngFor="let cat of categories">
+      <ion-label>
+        {{cat.title}}
+      </ion-label>
+      <ion-badge>
+        {{cat.sum}} {{api.accounts[0]?.currency}}
+      </ion-badge>
+    </ion-item>
+  </ion-list>
   
 </ion-content>
