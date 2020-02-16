@@ -33,7 +33,7 @@
         {{cat.title}}
       </ion-label>
       <ion-badge>
-        {{cat.sum}} {{api.accounts[0]?.currency}}
+        {{cat.sum.toFixed(2)}} {{api.accounts[0]?.currency}}
       </ion-badge>
     </ion-item>
   </ion-list>
