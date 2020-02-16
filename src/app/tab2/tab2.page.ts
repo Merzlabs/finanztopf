@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { FileCacheService, CachedFile } from '../services/file-cache.service';
-import { PecuniAPI } from 'pecuniator-api/main';
+import { PecuniAPI } from '@merzlabs/pecuniator-api';
 
 @Component({
   selector: 'app-tab2',
