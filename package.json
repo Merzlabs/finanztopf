@@ -39,7 +39,7 @@
     "@merzlabs/pecuniator-api": "^0.0.6",
     "camtts": "0.0.2",
     "core-js": "^2.5.4",
-    "rxjs": "~6.5.1",
+    "rxjs": "~6.5.4",
     "tslib": "^1.9.0",
     "zone.js": "~0.10.2"
   },
