@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Finanztopf
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-card class="welcome-card">
+      <ion-card-header>
+        <ion-card-subtitle>Get Started</ion-card-subtitle>
+        <ion-card-title>Welcome to the Pecuniator App</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Start with adding you CAMT052 XML files here!</p>
+        <p>Then go to the "Sandbox" tab to get started</p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Call for developers Contributing</ion-card-title>
+        <ion-card-subtitle>Pecuniator is open source!</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+
+        <b>You can get a sticker after your first contribution. Order  <a href="https://sticker.pecuniator.com">here</a></b>
+
+        <p>Go to <a href="https://github.com/Merzlabs/finanztopf">Github</a> to see the code and report issues</p>
+        <p>
+          For general discussions about the project we are going a bit oldschool for now (I am member in way too many Slack workspaces).
+          <a href="mailto:users-subscribe@pecuniator.com">Subscribe</a> to the mailing list if you are interested in this project. <br>
+          We would love to discuss ideas with you on the list. Just mail to <a href="mailto:users@pecuniator.com">users@pecuniator.com</a>.
+        </p>
+        <p>This project is in a very early stage and we need developers interested in building the API and the app.</p>
+
+        <ion-list>
+          <ion-list-header>
+            More resources
+          </ion-list-header>
+          <ion-item href="https://wiki.pecuniator.com">
+            wiki.pecuniator.com
+          </ion-item>
+          <ion-item href="https://docs.pecuniator.com/modules/_interface_.html">
+            docs.pecuniator.com
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-item>
+      <ion-label>Add CAMT files</ion-label>
+      <input type="file" multiple id="camtfiles" (change)="handleFileInput($event.target.files)">
+    </ion-item>
+    
+    <ion-list>
+      <ion-list-header>
+        Current files
+      </ion-list-header>
+      <ion-item>
+        <ion-label class="ion-text-wrap">{{fileNames.substr(1)}}</ion-label>
+      </ion-item>
+      <ion-button fill="outline" slot="end" type="button" (click)="clearCache()">Clear all</ion-button>
+    </ion-list>
+
+    <ion-list>
+      <ion-item routerLink="/tabs/tab3" detail="true">
+        <ion-label>Start scripting</ion-label>
+        <ion-icon slot="start" name="code"></ion-icon>
+      </ion-item>
+      <!-- <ion-item routerLink="/tabs/tab2" detail="true">
+        <ion-label>Show overview</ion-label>
+        <ion-icon slot="start" name="apps"></ion-icon>
+      </ion-item> -->
+    </ion-list>
+</ion-content>

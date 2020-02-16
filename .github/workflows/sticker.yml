@@ -1,0 +1,15 @@
+name: Sticker Challenge
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: niklasmerz/first-interaction@master
+      if: github.event.pull_request.merged == true
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        pr-message: 'Awesome your first contribution got merged. Order your sticker on sticker.pecuniator.com with a link to this PR'
