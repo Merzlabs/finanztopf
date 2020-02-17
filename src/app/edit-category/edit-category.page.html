@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Topf bearbeiten</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="close()">
+        OK
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>Name</ion-label>
+    <ion-input placeholder="Name des Topfes" [(ngModel)]="category.title"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label>Verwendungszweck</ion-label>
+    <ion-input placeholder="Verwendungszweck entält...." [(ngModel)]="category.remittanceInformation"></ion-input>
+  </ion-item>
+</ion-content>

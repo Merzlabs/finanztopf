@@ -27,15 +27,23 @@
   </ion-card>
 
 
-  <ion-list>
-    <ion-item *ngFor="let cat of categories">
-      <ion-label>
-        {{cat.title}}
-      </ion-label>
-      <ion-badge>
-        {{cat.sum.toFixed(2)}} {{api.accounts[0]?.currency}}
-      </ion-badge>
-    </ion-item>
+  <ion-list #categorylist>
+    <ion-item-sliding *ngFor="let cat of categories">
+      <ion-item>
+        <ion-label>
+          {{cat.title}}
+        </ion-label>
+        <ion-badge>
+          {{cat.sum.toFixed(2)}} {{api.accounts[0]?.currency}}
+        </ion-badge>
+      </ion-item>
+
+      <ion-item-options side="end" (ionSwipe)="edit(cat)">
+        <ion-item-option color="tertiary" expandable (click)="edit(cat)">
+          Editieren
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
   
 </ion-content>

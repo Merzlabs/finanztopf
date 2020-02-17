@@ -1,23 +1,15 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { FileCacheService, CachedFile } from '../services/file-cache.service';
 import { PecuniAPI, PEntry } from '@merzlabs/pecuniator-api';
+import { ModalController, IonList } from '@ionic/angular';
+import { EditCategoryPage } from '../edit-category/edit-category.page';
+import { Category } from '../types/Category';
 
 /**
  * Just for categorizing one field added
  */
 class CheckEntry extends PEntry {
     found: Array<string>;
-}
-
-/**
- * Query object for entries with some fields for categories. Always tests objects properties with include.
- */
-class Category {
-    remittanceInformation?: Array<string>;
-    creditorName?: Array<string>;
-    sum: number;
-    title: string;
-    id: string;
 }
 
 @Component({
@@ -31,22 +23,10 @@ export class Tab3Page {
     incomeSum: number;
     outcomeSum: number;
     categories: Array<Category>;
+    @ViewChild('categorylist') list: IonList;
 
-    constructor(private filecache: FileCacheService) {
+    constructor(private filecache: FileCacheService, private modalCtrl: ModalController) {
         this.api = new PecuniAPI();
-    }
-
-    ionViewWillEnter() {
-        // Reset api instance of this page from files in cache every time
-        this.api.clear();
-        this.incomeSum = 0;
-        this.outcomeSum = 0;
-        this.files = this.filecache.getAll();
-        if (typeof this.files !== 'undefined' && this.files.length > 0) {
-            for (const file of this.files) {
-                this.api.load(file.content);
-            }
-        }
 
         this.categories = [
             {
@@ -80,13 +60,32 @@ export class Tab3Page {
                 id: 'cell',
             },
         ];
+    }
+
+    ionViewWillEnter() {
+        // Reset api instance of this page from files in cache every time
+        this.api.clear();
+        this.files = this.filecache.getAll();
+        if (typeof this.files !== 'undefined' && this.files.length > 0) {
+            for (const file of this.files) {
+                this.api.load(file.content);
+            }
+        }
+
+        this.calcCategories();
+    }
+
+    private calcCategories() {
+        this.incomeSum = 0;
+        this.outcomeSum = 0;
+        this.categories.forEach((elem) => elem.sum = 0);
+
         for (const entry of this.api.entries) {
             const checkEntry = entry as CheckEntry;
             checkEntry.found = [];
             this.checkCategories(checkEntry);
             this.checkIncomeOutcome(checkEntry);
         }
-
         console.debug(this.categories);
     }
 
@@ -112,5 +111,21 @@ export class Tab3Page {
         } else if (entry.creditordebit === 'DBIT') {
             this.outcomeSum += entry.amount;
         }
+    }
+
+    async edit(category: Category) {
+        this.list.closeSlidingItems();
+        const modal = await this.modalCtrl.create({
+            component: EditCategoryPage,
+            swipeToClose: true,
+            componentProps: {
+                category
+            }
+        });
+        modal.onDidDismiss().then((value) => {
+            console.debug(value);
+            this.calcCategories();
+        });
+        modal.present();
     }
 }
