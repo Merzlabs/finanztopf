@@ -116,7 +116,11 @@ export class Tab3Page {
     add() {
         const cat = new Category();
         this.categories.push(cat);
-        this.edit(cat)
+        this.edit(cat);
+    }
+
+    remove(index: number) {
+        this.categories.splice(index, 1);
     }
 
     async edit(category: Category) {

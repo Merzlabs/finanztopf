@@ -28,7 +28,7 @@
 
 
   <ion-list #categorylist>
-    <ion-item-sliding *ngFor="let cat of categories">
+    <ion-item-sliding *ngFor="let cat of categories; let i = index">
       <ion-item>
         <ion-label>
           {{cat.title}}
@@ -39,6 +39,9 @@
       </ion-item>
 
       <ion-item-options side="end" (ionSwipe)="edit(cat)">
+        <ion-item-option color="danger" (click)="remove(i)">
+          Entfernen
+        </ion-item-option>
         <ion-item-option color="tertiary" expandable (click)="edit(cat)">
           Editieren
         </ion-item-option>
