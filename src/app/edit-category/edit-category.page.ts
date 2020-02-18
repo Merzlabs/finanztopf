@@ -10,13 +10,27 @@ import { ModalController } from '@ionic/angular';
 export class EditCategoryPage implements OnInit {
 
   @Input() category: Category;
+  condtions: Array<{property: string, filter: Array<string>}>;
 
   constructor(private modalCtrl: ModalController) { }
 
   ngOnInit() {
-    console.debug(this.category);
+    this.condtions = [];
+    for (const prop in this.category) {
+      if (this.category.hasOwnProperty(prop) && prop !== 'id' && prop !== 'title' && prop !== 'sum') {
+        this.condtions.push({property: prop, filter: this.category[prop]});
+      }
+    }
+    console.debug(this.condtions);
   }
 
+  setValue(event: CustomEvent, property: string, index: number) {
+    this.category[property][index] = event.detail.value;
+  }
+
+  addCondition() {
+    this.condtions.push({property: 'TODO', filter: ['Enthält?']});
+  }
 
   close() {
     this.modalCtrl.dismiss();
