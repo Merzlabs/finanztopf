@@ -7,58 +7,52 @@
 </ion-header>
 
 <ion-content>
-    <ion-card class="welcome-card">
-      <ion-card-header>
-        <ion-card-title>Das ist Finanztopf</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p>Mit Finanztopf teilen Sie ihre Kontotransaktionen in verschiedene Töpfe ein und sehen so ganz einfach was mit ihrem Geld passiert.</p>
-        <p>Importieren Sie hier einfach die Daten aus dem Online Banking und dann können Sie beginnen Finanztöpfe nach ihren persönlichen Ansprüchen anzulegen</p>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-item>
-      <ion-label>CAMT-Dateien hinzufügen</ion-label>
-      <input type="file" multiple id="camtfiles" (change)="handleFileInput($event.target.files)">
+  <ion-list>
+    <ion-list-header mode="ios">
+      Das ist Finanztopf
+    </ion-list-header>
+    <ion-item class="ion-text-wrap">
+      Mit Finanztopf teilen Sie ihre Kontotransaktionen in verschiedene Töpfe ein und sehen so ganz einfach was mit
+        ihrem Geld passiert. 
+      Importieren Sie hier einfach die Daten aus dem Online Banking und dann können Sie beginnen Finanztöpfe nach
+        ihren persönlichen Ansprüchen anzulegen.
     </ion-item>
-    
-    <ion-list>
-      <ion-list-header>
-        Importierte Dateien
-      </ion-list-header>
-      <ion-item>
-        <ion-label class="ion-text-wrap">{{fileNames.substr(1)}}</ion-label>
-      </ion-item>
-      <ion-button fill="clear" slot="end" type="button" (click)="clearCache()">Aufräumen</ion-button>
-    </ion-list>
+  </ion-list>
 
-    <ion-list>
-      <ion-item routerLink="/tabs/tab3" detail="true">
-        <ion-label>Weiter</ion-label>
-      </ion-item>
-      <!-- <ion-item routerLink="/tabs/tab2" detail="true">
+  <ion-item>
+    <ion-label>CAMT-Dateien hinzufügen</ion-label>
+    <input type="file" multiple id="camtfiles" (change)="handleFileInput($event.target.files)">
+  </ion-item>
+
+  <ion-list>
+    <ion-list-header mode="ios">
+      Importierte Dateien
+    </ion-list-header>
+    <ion-item>
+      <ion-label class="ion-text-wrap">{{fileNames.substr(1)}}</ion-label>
+    </ion-item>
+    <ion-button fill="clear" slot="end" type="button" (click)="clearCache()">Aufräumen</ion-button>
+  </ion-list>
+
+  <ion-list>
+    <ion-item routerLink="/tabs/tab3" detail="true">
+      <ion-label>Weiter</ion-label>
+    </ion-item>
+    <!-- <ion-item routerLink="/tabs/tab2" detail="true">
         <ion-label>Show overview</ion-label>
         <ion-icon slot="start" name="apps"></ion-icon>
       </ion-item> -->
-    </ion-list>
+  </ion-list>
 
-    <ion-card>
-      <ion-card-header>
-        <ion-card-title>Über Finanztopf</ion-card-title>
-        <ion-card-subtitle>Finanztopf ist Open Source!</ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content>
-        <ion-list>
-          <ion-list-header>
-            Mehr erfahren
-          </ion-list-header>
-          <ion-item href="https://github.com/Merzlabs/finanztopf">
-            Github
-          </ion-item>
-          <ion-item href="https://web.pecuniator.com">
-            Spielplatz für Programmierer
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
+  <ion-list>
+    <ion-list-header mode="ios">
+      Finanztopf ist Open Source!
+    </ion-list-header>
+    <ion-item href="https://github.com/Merzlabs/finanztopf">
+      Github
+    </ion-item>
+    <ion-item href="https://web.pecuniator.com">
+      Spielplatz für Programmierer
+    </ion-item>
+  </ion-list>
 </ion-content>
