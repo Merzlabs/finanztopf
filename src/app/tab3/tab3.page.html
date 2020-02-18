@@ -29,7 +29,7 @@
 
   <ion-list #categorylist>
     <ion-item-sliding *ngFor="let cat of categories; let i = index">
-      <ion-item>
+      <ion-item (click)="details(cat)">
         <ion-label>
           {{cat.title}}
         </ion-label>

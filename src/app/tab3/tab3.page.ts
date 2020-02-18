@@ -34,30 +34,35 @@ export class Tab3Page {
                 sum: 0,
                 title: 'Sparen',
                 id: 'saving',
+                entries: [],
             },
             {
                 creditorName: ['Tank'],
                 sum: 0,
                 title: 'Tanken',
                 id: 'fuel',
+                entries: [],
             },
             {
                 remittanceInformation: ['Versicherung'],
                 sum: 0,
                 title: 'Versicherung',
                 id: 'insu',
+                entries: [],
             },
             {
                 creditorName: ['Paypal'],
                 sum: 0,
                 title: 'Onlinetransaktionen',
                 id: 'online',
+                entries: [],
             },
             {
                 creditorName: ['Drillisch', 'Telekom'],
                 sum: 0,
                 title: 'Handy',
                 id: 'cell',
+                entries: [],
             },
         ];
     }
@@ -78,7 +83,10 @@ export class Tab3Page {
     private calcCategories() {
         this.incomeSum = 0;
         this.outcomeSum = 0;
-        this.categories.forEach((elem) => elem.sum = 0);
+        this.categories.forEach((elem) => {
+            elem.sum = 0;
+            elem.entries = [];
+        });
 
         for (const entry of this.api.entries) {
             const checkEntry = entry as CheckEntry;
@@ -87,6 +95,7 @@ export class Tab3Page {
             this.checkIncomeOutcome(checkEntry);
         }
         console.debug(this.categories);
+        console.debug(this.api.entries);
     }
 
     checkCategories(entry: CheckEntry) {
@@ -97,6 +106,7 @@ export class Tab3Page {
                     for (const test of cat[check]) {
                         if (!entry.found.includes(catname) && entry[check].toString().toLowerCase().includes(test.toLowerCase())) {
                             cat.sum += entry.amount;
+                            cat.entries.push(entry);
                             entry.found.push(catname);
                         }
                     }
@@ -121,6 +131,10 @@ export class Tab3Page {
 
     remove(index: number) {
         this.categories.splice(index, 1);
+    }
+
+    details(cat: Category) {
+        console.debug(cat.entries);
     }
 
     async edit(category: Category) {
