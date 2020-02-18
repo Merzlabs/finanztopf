@@ -4,6 +4,7 @@ import { PecuniAPI, PEntry } from '@merzlabs/pecuniator-api';
 import { ModalController, IonList } from '@ionic/angular';
 import { EditCategoryPage } from '../edit-category/edit-category.page';
 import { Category } from '../types/Category';
+import { DetailCategoryPage } from '../detail-category/detail-category.page';
 
 /**
  * Just for categorizing one field added
@@ -133,8 +134,18 @@ export class Tab3Page {
         this.categories.splice(index, 1);
     }
 
-    details(cat: Category) {
-        console.debug(cat.entries);
+    async details(category: Category) {
+        const modal = await this.modalCtrl.create({
+            component: DetailCategoryPage,
+            swipeToClose: true,
+            componentProps: {
+                category
+            }
+        });
+        modal.onDidDismiss().then((value) => {
+            console.debug(value);
+        });
+        modal.present();
     }
 
     async edit(category: Category) {

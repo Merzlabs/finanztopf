@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Transaktionen</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="close()">
+        OK
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <ion-item *ngFor="let entry of category.entries">
+      <ion-label>{{entry.creditorName}}</ion-label>
+      <ion-note>{{entry.remittanceInformation}}</ion-note>
+      <ion-badge slot="end">{{entry.amount}}</ion-badge>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
