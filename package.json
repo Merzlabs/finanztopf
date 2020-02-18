@@ -35,6 +35,7 @@
     "@ionic/angular": "^5.0.0",
     "@merzlabs/pecuniator-api": "^0.0.6",
     "camtts": "0.0.2",
+    "cordova-android": "8.1.0",
     "core-js": "^2.5.4",
     "rxjs": "~6.5.4",
     "tslib": "^1.9.0",
@@ -54,6 +55,12 @@
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "codelyzer": "^5.0.0",
+    "cordova-plugin-device": "^2.0.2",
+    "cordova-plugin-ionic-keyboard": "^2.2.0",
+    "cordova-plugin-ionic-webview": "^4.1.3",
+    "cordova-plugin-splashscreen": "^5.0.2",
+    "cordova-plugin-statusbar": "^2.4.2",
+    "cordova-plugin-whitelist": "^1.3.3",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
@@ -66,5 +73,20 @@
     "tslint": "~5.15.0",
     "typescript": "~3.6.4"
   },
-  "description": "Simple app for putting transactions into 'töpfe'"
+  "description": "Simple app for putting transactions into 'töpfe'",
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-ionic-webview": {
+        "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
+      },
+      "cordova-plugin-ionic-keyboard": {}
+    },
+    "platforms": [
+      "android"
+    ]
+  }
 }
