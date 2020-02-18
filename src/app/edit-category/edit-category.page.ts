@@ -25,8 +25,21 @@ export class EditCategoryPage implements OnInit {
     console.debug(this.condtions);
   }
 
-  setValue(event: CustomEvent, property: string, index: number) {
-    this.category[property][index] = event.detail.value;
+  setValue(event: CustomEvent, property: string, index?: number) {
+    if (typeof this.category[property] === 'undefined') {
+      this.category[property] = [];
+    }
+
+    const value = event.detail.value;
+    if (value === '') {
+      this.category[property].splice(index, 1);
+    } else {
+      if (typeof index === 'undefined') {
+        this.category[property].push(value);
+      } else {
+        this.category[property][index] = value;
+      }
+    }
   }
 
   async addCondition() {
