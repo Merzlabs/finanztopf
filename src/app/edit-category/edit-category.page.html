@@ -18,11 +18,13 @@
   <ion-list-header>
     Bedinungen
   </ion-list-header>
-  <ion-list *ngFor="let c of condtions">
-    <ion-item *ngFor="let f of c.filter; let i = index">
-      <ion-label>{{c.property | filter }}</ion-label>
-      <ion-input [value]="f" debounce="1000" (ionChange)="setValue($event, c.property, i)"></ion-input>
-    </ion-item>
+  <ion-list>
+    <ng-container *ngFor="let c of condtions">
+      <ion-item *ngFor="let f of c.filter; let i = index">
+        <ion-label>{{c.property | filter }}</ion-label>
+        <ion-input [value]="f" debounce="1000" (ionChange)="setValue($event, c.property, i)" clearOnEdit="true"></ion-input>
+      </ion-item>
+    </ng-container>
   </ion-list>
 
   <ion-button expand="full" type="button" (click)="addCondition()">Bedingung hinzufügen</ion-button>

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Category } from '../types/Category';
-import { ModalController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
+import { Filters } from '../types/Filter';
 
 @Component({
   selector: 'app-edit-category',
@@ -12,7 +13,7 @@ export class EditCategoryPage implements OnInit {
   @Input() category: Category;
   condtions: Array<{property: string, filter: Array<string>}>;
 
-  constructor(private modalCtrl: ModalController) { }
+  constructor(private modalCtrl: ModalController, private alertCtrl: AlertController) { }
 
   ngOnInit() {
     this.condtions = [];
@@ -28,8 +29,45 @@ export class EditCategoryPage implements OnInit {
     this.category[property][index] = event.detail.value;
   }
 
-  addCondition() {
-    this.condtions.push({property: 'TODO', filter: ['Enthält?']});
+  async addCondition() {
+    const inputs = [];
+    let checked = true;
+    for (const f in Filters) {
+      if (typeof Filters[f] === 'string') {
+          inputs.push({
+            name: f,
+            type: 'radio',
+            label: Filters[f],
+            value: f,
+            checked
+          });
+          checked = false;
+      }
+  }
+
+    const alert = await this.alertCtrl.create({
+      header: 'Radio',
+      inputs,
+      buttons: [
+        {
+          text: 'Abbrechen',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            // Ignore
+          }
+        }, {
+          text: 'Ok',
+          handler: (value) => {
+            console.log('Confirm Ok', value);
+
+            this.condtions.push({property: value, filter: ['Enthält?']});
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   close() {
