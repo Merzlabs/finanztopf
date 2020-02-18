@@ -7,4 +7,9 @@ export class Category {
     sum: number;
     title: string;
     id: string;
+
+    constructor() {
+        this.id = Date.now().toString(); // TODO better idgen
+        this.sum = 0;
+    }
 }

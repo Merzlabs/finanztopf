@@ -113,6 +113,12 @@ export class Tab3Page {
         }
     }
 
+    add() {
+        const cat = new Category();
+        this.categories.push(cat);
+        this.edit(cat)
+    }
+
     async edit(category: Category) {
         this.list.closeSlidingItems();
         const modal = await this.modalCtrl.create({
