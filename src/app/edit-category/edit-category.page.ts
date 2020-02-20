@@ -16,28 +16,33 @@ export class EditCategoryPage implements OnInit {
   constructor(private modalCtrl: ModalController, private alertCtrl: AlertController) { }
 
   ngOnInit() {
+    this.buildConditions();
+  }
+
+  private buildConditions() {
     this.condtions = [];
     for (const prop in this.category) {
       if (this.category.hasOwnProperty(prop) && prop !== 'id' && prop !== 'title' && prop !== 'sum' && prop !== 'entries') {
-        this.condtions.push({property: prop, filter: this.category[prop]});
+        this.condtions.push({ property: prop, filter: this.category[prop] });
       }
     }
-    console.debug(this.condtions);
   }
 
-  setValue(event: CustomEvent, property: string, index?: number) {
+  setValue(event: CustomEvent, property: string, oldValue?: string) {
     if (typeof this.category[property] === 'undefined') {
       this.category[property] = [];
     }
 
     const value = event.detail.value;
+    const index = this.category[property].indexOf(oldValue);
     if (value === '') {
       this.category[property].splice(index, 1);
     } else {
-      if (typeof index === 'undefined') {
-        this.category[property].push(value);
-      } else {
+      if (index >= 0) {
         this.category[property][index] = value;
+      } else {
+        // Should never happen
+        console.error('Value not found');
       }
     }
   }
@@ -74,8 +79,13 @@ export class EditCategoryPage implements OnInit {
           handler: (value) => {
             console.log('Confirm Ok', value);
 
-            const newCondition = {property: value, filter: ['Enthält?']};
-            this.condtions.push(newCondition);
+            if (this.category[value] instanceof Array) {
+              this.category[value].push('Enthält?');
+            } else {
+              this.category[value] = ['Enthält?'];
+            }
+
+            this.buildConditions();
           }
         }
       ]
