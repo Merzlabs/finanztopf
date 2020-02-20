@@ -30,12 +30,18 @@
   <ion-list #categorylist>
     <ion-item-sliding *ngFor="let cat of categories; let i = index">
       <ion-item (click)="details(cat)">
+        <ion-button fill="clear" class="desktop-button" slot="start" (click)="remove(i); $event.stopPropagation()">
+          <ion-icon color="danger" name="trash" slot="icon-only"></ion-icon>
+        </ion-button>
         <ion-label>
           {{cat.title}}
         </ion-label>
         <ion-badge>
           {{cat.sum.toFixed(2)}} {{api.accounts[0]?.currency}}
         </ion-badge>
+        <ion-button fill="clear" class="desktop-button" slot="end" (click)="edit(cat); $event.stopPropagation()">
+          <ion-icon name="pencil-sharp" slot="end"></ion-icon>
+        </ion-button>
       </ion-item>
 
       <ion-item-options side="end" (ionSwipe)="edit(cat)">
