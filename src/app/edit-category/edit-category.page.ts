@@ -18,7 +18,7 @@ export class EditCategoryPage implements OnInit {
   ngOnInit() {
     this.condtions = [];
     for (const prop in this.category) {
-      if (this.category.hasOwnProperty(prop) && prop !== 'id' && prop !== 'title' && prop !== 'sum') {
+      if (this.category.hasOwnProperty(prop) && prop !== 'id' && prop !== 'title' && prop !== 'sum' && prop !== 'entries') {
         this.condtions.push({property: prop, filter: this.category[prop]});
       }
     }
@@ -74,7 +74,8 @@ export class EditCategoryPage implements OnInit {
           handler: (value) => {
             console.log('Confirm Ok', value);
 
-            this.condtions.push({property: value, filter: ['Enthält?']});
+            const newCondition = {property: value, filter: ['Enthält?']};
+            this.condtions.push(newCondition);
           }
         }
       ]

@@ -96,7 +96,6 @@ export class Tab3Page {
             this.checkIncomeOutcome(checkEntry);
         }
         console.debug(this.categories);
-        console.debug(this.api.entries);
     }
 
     checkCategories(entry: CheckEntry) {
@@ -141,9 +140,6 @@ export class Tab3Page {
             componentProps: {
                 category
             }
-        });
-        modal.onDidDismiss().then((value) => {
-            console.debug(value);
         });
         modal.present();
     }

@@ -9,7 +9,7 @@ export class Category {
     sum: number;
     title: string;
     id: string;
-    entries: Array<PEntry>;
+    entries?: Array<PEntry>;
 
     constructor() {
         this.id = Date.now().toString(); // TODO better idgen
