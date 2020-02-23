@@ -6,6 +6,7 @@ const routes: Routes = [
     path: '',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
+  { path: 'redirect', redirectTo: 'tabs/tab1', pathMatch: 'full' },
   { path: 'edit-category', loadChildren: './edit-category/edit-category.module#EditCategoryPageModule' },
   { path: 'detail-category', loadChildren: './detail-category/detail-category.module#DetailCategoryPageModule' }
 ];
