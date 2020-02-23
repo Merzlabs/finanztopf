@@ -12,4 +12,4 @@ jobs:
       if: github.event.pull_request.merged == true
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        pr-message: 'Awesome your first contribution got merged. Order your sticker on sticker.pecuniator.com with a link to this PR'
+        pr-message: 'Awesome your first contribution got merged. Order your sticker on https://sticker.pecuniator.com with a link to this PR'
