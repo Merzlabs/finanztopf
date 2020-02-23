@@ -16,11 +16,11 @@
       <ion-list>
         <ion-item>
           <ion-label>Zahlungseingänge</ion-label>
-          <ion-badge slot="end" color="success">{{incomeSum}}</ion-badge>
+          <ion-badge slot="end" color="success">{{incomeSum.toFixed(2)}}</ion-badge>
         </ion-item>
         <ion-item>
           <ion-label>Zahlungsausgänge</ion-label>
-          <ion-badge slot="end" color="danger">{{outcomeSum}}</ion-badge>
+          <ion-badge slot="end" color="danger">{{outcomeSum.toFixed(2)}}</ion-badge>
         </ion-item>
       </ion-list>
     </ion-card-content>
