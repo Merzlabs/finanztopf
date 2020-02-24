@@ -1,10 +1,13 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { FileCacheService, CachedFile } from '../services/file-cache.service';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { PecuniAPI, PEntry } from '@merzlabs/pecuniator-api';
 import { ModalController, IonList, AlertController, ToastController } from '@ionic/angular';
+
 import { EditCategoryPage } from '../edit-category/edit-category.page';
 import { Category } from '../types/Category';
 import { DetailCategoryPage } from '../detail-category/detail-category.page';
+import { FileCacheService, CachedFile } from '../services/file-cache.service';
 import { StorageService } from '../services/storage.service';
 
 /**
@@ -19,26 +22,20 @@ class CheckEntry extends PEntry {
     templateUrl: 'tab3.page.html',
     styleUrls: ['tab3.page.scss']
 })
-export class Tab3Page {
+export class Tab3Page implements OnInit, OnDestroy {
     private files: CachedFile[];
     api: PecuniAPI;
     incomeSum: number;
     outcomeSum: number;
     categories: Array<Category>;
     @ViewChild('categorylist') list: IonList;
+    querySubscription: Subscription;
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
-                private storage: StorageService, private toastCtrl: ToastController) {
+                private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute) {
         this.api = new PecuniAPI();
 
         this.categories = [
-            {
-                remittanceInformation: ['DEPOT'],
-                sum: 0,
-                title: 'Sparen',
-                id: 'saving',
-                entries: [],
-            },
             {
                 creditorName: ['Tank'],
                 sum: 0,
@@ -83,6 +80,18 @@ export class Tab3Page {
         this.calcCategories();
     }
 
+    ngOnInit() {
+        this.querySubscription = this.route.queryParams.subscribe((params)=> {
+           if (params.load) {
+               this.download(params.load);
+           }
+        });
+    }
+
+    ngOnDestroy() {
+        this.querySubscription.unsubscribe();
+    }
+
     private calcCategories() {
         this.incomeSum = 0;
         this.outcomeSum = 0;
@@ -97,7 +106,7 @@ export class Tab3Page {
             this.checkCategories(checkEntry);
             this.checkIncomeOutcome(checkEntry);
         }
-        console.debug(this.categories);
+        console.log(this.categories);
     }
 
     checkCategories(entry: CheckEntry) {
@@ -156,7 +165,6 @@ export class Tab3Page {
             }
         });
         modal.onDidDismiss().then((value) => {
-            console.debug(value);
             this.calcCategories();
         });
         modal.present();
@@ -178,7 +186,7 @@ export class Tab3Page {
                 role: 'cancel',
                 cssClass: 'secondary',
                 handler: () => {
-                  console.log('Confirm Cancel');
+
                 }
               }, {
                 text: 'Ok',
