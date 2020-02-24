@@ -27,6 +27,10 @@ export class StorageService {
   }
 
   addToStorage(cat: Category) {
+    // Clean up!
+    cat.sum = 0;
+    delete cat.entries;
+
     const storageRef = firebase.storage().ref();
     const fileRef = storageRef.child('toepfe/' + cat.id + '.json');
     return fileRef.putString(JSON.stringify(cat));
