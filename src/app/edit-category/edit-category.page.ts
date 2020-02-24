@@ -113,7 +113,8 @@ export class EditCategoryPage implements OnInit {
             icon: 'clipboard',
             text: 'Kopieren',
             handler: () => {
-              navigator.clipboard.writeText(location.href + '?load=' + this.category.id);
+              const url = location.href.replace(location.search, '');
+              navigator.clipboard.writeText(url + '?load=' + this.category.id);
             }
           }
         ]
