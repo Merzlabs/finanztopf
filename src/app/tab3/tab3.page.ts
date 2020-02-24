@@ -1,10 +1,11 @@
 import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { FileCacheService, CachedFile } from '../services/file-cache.service';
 import { PecuniAPI, PEntry } from '@merzlabs/pecuniator-api';
-import { ModalController, IonList } from '@ionic/angular';
+import { ModalController, IonList, AlertController, ToastController } from '@ionic/angular';
 import { EditCategoryPage } from '../edit-category/edit-category.page';
 import { Category } from '../types/Category';
 import { DetailCategoryPage } from '../detail-category/detail-category.page';
+import { StorageService } from '../services/storage.service';
 
 /**
  * Just for categorizing one field added
@@ -26,7 +27,8 @@ export class Tab3Page {
     categories: Array<Category>;
     @ViewChild('categorylist') list: IonList;
 
-    constructor(private filecache: FileCacheService, private modalCtrl: ModalController) {
+    constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
+                private storage: StorageService, private toastCtrl: ToastController) {
         this.api = new PecuniAPI();
 
         this.categories = [
@@ -158,5 +160,48 @@ export class Tab3Page {
             this.calcCategories();
         });
         modal.present();
+    }
+
+    async openDownload() {
+        const alert = await this.alertCtrl.create({
+            header: 'Einen Topf laden',
+            inputs: [
+              {
+                name: 'id',
+                type: 'text',
+                placeholder: 'ID des Topfes'
+              }
+            ],
+            buttons: [
+              {
+                text: 'Abbrechen',
+                role: 'cancel',
+                cssClass: 'secondary',
+                handler: () => {
+                  console.log('Confirm Cancel');
+                }
+              }, {
+                text: 'Ok',
+                handler: (data) => {
+                  this.download(data.id);
+                }
+              }
+            ]
+          });
+
+        await alert.present();
+    }
+
+    private download(id: string) {
+        this.storage.getFromStorage(id).then(async (data) => {
+            this.categories.push(data);
+
+            const toast = await this.toastCtrl.create({
+                duration: 3000,
+                message: `Topf mit der ID "${id}" hinzugefügt.`,
+                color: 'primary'
+              });
+            toast.present();
+        }).catch((e) => console.error(e));
     }
 }

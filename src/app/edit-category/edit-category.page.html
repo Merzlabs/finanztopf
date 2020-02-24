@@ -1,5 +1,10 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="secondary">
+      <ion-button (click)="share()">
+        <ion-icon name="share" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>Topf bearbeiten</ion-title>
     <ion-buttons slot="primary">
       <ion-button (click)="close()">
