@@ -35,36 +35,41 @@ export class Tab3Page implements OnInit, OnDestroy {
                 private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute) {
         this.api = new PecuniAPI();
 
-        this.categories = [
-            {
-                creditorName: ['Tank'],
-                sum: 0,
-                title: 'Tanken',
-                id: 'fuel',
-                entries: [],
-            },
-            {
-                remittanceInformation: ['Versicherung'],
-                sum: 0,
-                title: 'Versicherung',
-                id: 'insu',
-                entries: [],
-            },
-            {
-                creditorName: ['Paypal'],
-                sum: 0,
-                title: 'Onlinetransaktionen',
-                id: 'online',
-                entries: [],
-            },
-            {
-                creditorName: ['Drillisch', 'Telekom'],
-                sum: 0,
-                title: 'Handy',
-                id: 'cell',
-                entries: [],
-            },
-        ];
+        const savedCategories = localStorage.getItem('userCategories');
+        if (savedCategories && savedCategories !== '') {
+            this.categories = JSON.parse(savedCategories);
+        } else {
+            this.categories = [
+                {
+                    creditorName: ['Tank'],
+                    sum: 0,
+                    title: 'Tanken',
+                    id: 'fuel',
+                    entries: [],
+                },
+                {
+                    remittanceInformation: ['Versicherung'],
+                    sum: 0,
+                    title: 'Versicherung',
+                    id: 'insu',
+                    entries: [],
+                },
+                {
+                    creditorName: ['Paypal'],
+                    sum: 0,
+                    title: 'Onlinetransaktionen',
+                    id: 'online',
+                    entries: [],
+                },
+                {
+                    creditorName: ['Drillisch', 'Telekom'],
+                    sum: 0,
+                    title: 'Handy',
+                    id: 'cell',
+                    entries: [],
+                },
+            ];
+        }
     }
 
     ionViewWillEnter() {
@@ -80,8 +85,12 @@ export class Tab3Page implements OnInit, OnDestroy {
         this.calcCategories();
     }
 
+    ionViewWillLeave() {
+       this.saveCategories();
+    }
+
     ngOnInit() {
-        this.querySubscription = this.route.queryParams.subscribe((params)=> {
+        this.querySubscription = this.route.queryParams.subscribe((params) => {
            if (params.load) {
                this.download(params.load);
            }
@@ -107,6 +116,16 @@ export class Tab3Page implements OnInit, OnDestroy {
             this.checkIncomeOutcome(checkEntry);
         }
         console.log(this.categories);
+    }
+
+    saveCategories() {
+        this.categories.forEach((elem) => {
+            elem.sum = 0;
+            elem.entries = [];
+        });
+
+        localStorage.setItem('userCategories', JSON.stringify(this.categories));
+        this.calcCategories();
     }
 
     checkCategories(entry: CheckEntry) {
