@@ -106,7 +106,17 @@ export class EditCategoryPage implements OnInit {
         duration: 5000,
         message: `Topf mit der ID "${this.category.id}" zum Teilen verfügbar.`,
         header: 'Speichern erfolgreich',
-        color: 'primary'
+        color: 'primary',
+        buttons: [
+          {
+            side: 'end',
+            icon: 'clipboard',
+            text: 'Kopieren',
+            handler: () => {
+              navigator.clipboard.writeText(location.href + '?load=' + this.category.id);
+            }
+          }
+        ]
       });
       toast.present();
     });
