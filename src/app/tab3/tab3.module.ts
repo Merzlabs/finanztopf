@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Tab3Page } from './tab3.page';
 import { SumOverviewComponent } from '../components/sum-overview/sum-overview.component';
+import { MoneyValueComponent } from '../components/moneyvalue/moneyvalue.component';
 
 @NgModule({
   imports: [
@@ -13,6 +14,6 @@ import { SumOverviewComponent } from '../components/sum-overview/sum-overview.co
     FormsModule,
     RouterModule.forChild([{ path: '', component: Tab3Page }])
   ],
-  declarations: [Tab3Page, SumOverviewComponent]
+  declarations: [Tab3Page, SumOverviewComponent, MoneyValueComponent]
 })
 export class Tab3PageModule {}

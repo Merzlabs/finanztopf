@@ -6,18 +6,10 @@
   <ion-card-content>
     <ion-list>
       <ion-item>
-        <ion-label>Zahlungseingänge</ion-label>
-        <ion-badge slot="end" color="success">
-          <ng-container *ngIf="incomeSum > 0">+</ng-container>
-          {{incomeSum | currency:currency:'symbol':'1.2-2':'de-DE'}}
-        </ion-badge>
+        <app-moneyvalue name="Zahlungseingänge" [value]="incomeSum" [currency]="currency" badgeSlot="end"></app-moneyvalue>
       </ion-item>
       <ion-item>
-        <ion-label>Zahlungsausgänge</ion-label>
-        <ion-badge slot="end" color="danger">
-          <ng-container *ngIf="outcomeSum > 0">-</ng-container>
-          {{outcomeSum | currency:currency:'symbol':'1.2-2':'de-DE'}}
-        </ion-badge>
+        <app-moneyvalue name="Zahlungsausgänge" [value]="outcomeSum" [currency]="currency" badgeSlot="end"></app-moneyvalue>
       </ion-item>
     </ion-list>
   </ion-card-content>

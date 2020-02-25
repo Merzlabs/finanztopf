@@ -31,12 +31,8 @@
               <ion-button fill="clear" class="desktop-button" slot="start" (click)="remove(i); $event.stopPropagation()">
                 <ion-icon color="danger" name="trash" slot="icon-only"></ion-icon>
               </ion-button>
-              <ion-label>
-                {{cat.title}}
-              </ion-label>
-              <ion-badge>
-                {{cat.sum | currency:currency:'symbol':'1.2-2':'de-DE'}}
-              </ion-badge>
+              <app-moneyvalue [name]="cat.title" [value]="cat.sum" [currency]="currency">
+              </app-moneyvalue>
               <ion-button fill="clear" class="desktop-button" slot="end" (click)="edit(cat); $event.stopPropagation()">
                 <ion-icon name="pencil-sharp" slot="end"></ion-icon>
               </ion-button>

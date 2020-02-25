@@ -1,0 +1,18 @@
+<ion-label>{{name}}</ion-label>
+
+<ion-note *ngIf="note">{{note}}</ion-note>
+
+<!-- plus minus and neutral values -->
+<ion-badge *ngIf="value > 0" slot="{{badgeSlot}}" color="success">
+  <ng-container>+</ng-container>
+  {{value | currency:currency:'symbol':'1.2-2':'de-DE'}}
+</ion-badge>
+
+<ion-badge *ngIf="value < 0" slot="{{badgeSlot}}" color="danger">
+  <ng-container>-</ng-container>
+  {{value | currency:currency:'symbol':'1.2-2':'de-DE'}}
+</ion-badge>
+
+<ion-badge *ngIf="value == 0" slot="{{badgeSlot}}" color="primary">
+  {{value | currency:currency:'symbol':'1.2-2':'de-DE'}}
+</ion-badge>
