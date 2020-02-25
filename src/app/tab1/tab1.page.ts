@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FileCacheService, CachedFile } from '../services/file-cache.service';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
-import { InfoComponent } from '../components/info/info.component';
 
 @Component({
   selector: 'app-tab1',
