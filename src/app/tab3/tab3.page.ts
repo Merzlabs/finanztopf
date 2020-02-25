@@ -139,7 +139,12 @@ export class Tab3Page implements OnInit, OnDestroy {
                 if (check !== 'amount' && check !== 'title' && typeof entry[check] !== 'undefined') {
                     for (const test of cat[check]) {
                         if (!entry.found.includes(catname) && entry[check].toString().toLowerCase().includes(test.toLowerCase())) {
-                            cat.sum += entry.amount;
+
+                            if (entry.creditordebit === 'CRDT') {
+                                cat.sum += entry.amount;
+                            } else if (entry.creditordebit === 'DBIT') {
+                                cat.sum -= entry.amount;
+                            }
                             cat.entries.push(entry);
                             entry.found.push(catname);
                         }

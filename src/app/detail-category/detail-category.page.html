@@ -15,7 +15,7 @@
     <ion-item *ngFor="let entry of category.entries">
       <ion-label>{{entry.creditorName}}</ion-label>
       <ion-note>{{entry.remittanceInformation}}</ion-note>
-      <ion-badge slot="end">{{entry.amount | currency:entry.currency:'symbol':'1.2-2':'de-DE'}}</ion-badge>
+      <app-moneyvaluebadge [value]="entry.amount" [currency]="entry.currency" badgeSlot="end" [creditordebit]="entry.creditordebit" includePrefix="true"></app-moneyvaluebadge>
     </ion-item>
   </ion-list>
 

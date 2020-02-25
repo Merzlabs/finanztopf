@@ -1,0 +1,12 @@
+<!-- plus minus and neutral values -->
+<ion-badge *ngIf="credit" slot="{{badgeSlot}}" color="success">
+  <ng-container *ngIf="includePrefix">+</ng-container>{{value | currency:currency:'symbol':'1.2-2':'de-DE'}}
+</ion-badge>
+
+<ion-badge *ngIf="debit" slot="{{badgeSlot}}" color="danger">
+  <ng-container *ngIf="includePrefix">-</ng-container>{{value | currency:currency:'symbol':'1.2-2':'de-DE'}}
+</ion-badge>
+
+<ion-badge *ngIf="!credit && !debit" slot="{{badgeSlot}}" color="primary">
+  {{value | currency:currency:'symbol':'1.2-2':'de-DE'}}
+</ion-badge>
