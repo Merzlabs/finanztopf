@@ -97,7 +97,6 @@ export class EditCategoryPage implements OnInit {
   }
 
   close() {
-    // TODO dont close if no condition save but rather tell user
     this.modalCtrl.dismiss();
   }
 
