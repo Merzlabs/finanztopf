@@ -6,10 +6,12 @@
   <ion-card-content>
     <ion-list>
       <ion-item>
-        <app-moneyvalue name="Zahlungseingänge" [value]="incomeSum" [currency]="currency" badgeSlot="end"></app-moneyvalue>
+        <ion-label>Zahlungseingänge</ion-label>
+        <app-moneyvaluebadge [value]="incomeSum" credit="true" [currency]="currency" badgeSlot="end"></app-moneyvaluebadge>
       </ion-item>
       <ion-item>
-        <app-moneyvalue name="Zahlungsausgänge" [value]="outcomeSum" [currency]="currency" badgeSlot="end"></app-moneyvalue>
+        <ion-label>Zahlungsausgänge</ion-label>
+        <app-moneyvaluebadge [value]="outcomeSum" debit="true" [currency]="currency" badgeSlot="end"></app-moneyvaluebadge>
       </ion-item>
     </ion-list>
   </ion-card-content>
