@@ -82,9 +82,9 @@ export class EditCategoryPage implements OnInit {
             console.log('Confirm Ok', value);
 
             if (this.category[value] instanceof Array) {
-              this.category[value].push('Enthält?');
+              this.category[value].push('');
             } else {
-              this.category[value] = ['Enthält?'];
+              this.category[value] = [''];
             }
 
             this.buildConditions();
