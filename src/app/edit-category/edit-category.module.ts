@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { EditCategoryPage } from './edit-category.page';
-import { FilterPipe } from '../filter-translate.pipe';
+import { FilterPipe } from '../pipes/filter-translate.pipe';
 
 const routes: Routes = [
   {

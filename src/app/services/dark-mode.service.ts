@@ -13,14 +13,13 @@ export class DarkModeService {
     // Use matchMedia to check the user preference
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-    localStorage.get(STORAGE_KEY).then((value) => {
-      if (value === undefined || value === null) {
-        // initialize
-        this.setDarkTheme(prefersDark.matches);
-      } else {
-        this.setDarkTheme(value);
-      }
-    });
+    const value = localStorage.getItem(STORAGE_KEY);;
+    if (value === undefined || value === null) {
+      // initialize
+      this.setDarkTheme(prefersDark.matches);
+    } else {
+      this.setDarkTheme(value === 'true');
+    }
 
     // Listen for changes to the prefers-color-scheme media query
     prefersDark.addEventListener('change', (mediaQuery) => {
@@ -33,6 +32,6 @@ export class DarkModeService {
     // TODO set into localstorage
     this.prefersDark = shouldAdd;
     document.body.classList.toggle('dark', this.prefersDark);
-    localStorage.set(STORAGE_KEY, shouldAdd);
+    localStorage.setItem(STORAGE_KEY, String(shouldAdd));
   }
 }

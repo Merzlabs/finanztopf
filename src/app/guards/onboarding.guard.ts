@@ -14,7 +14,7 @@ export class OnboardingGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Promise<boolean> {
-    const completedOnboarding = localStorage.get('onboardingDone');
+    const completedOnboarding = localStorage.getItem('onboardingDone') === 'true';
 
     if (!completedOnboarding) {
       this.router.navigateByUrl('/onboarding');

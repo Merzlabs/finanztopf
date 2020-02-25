@@ -15,11 +15,11 @@
     <ion-item *ngFor="let entry of category.entries">
       <ion-label>{{entry.creditorName}}</ion-label>
       <ion-note>{{entry.remittanceInformation}}</ion-note>
-      <ion-badge slot="end">{{entry.amount}}</ion-badge>
+      <ion-badge slot="end">{{entry.amount | currency:entry.currency:'symbol':'1.2-2':'de-DE'}}</ion-badge>
     </ion-item>
   </ion-list>
 
-  <ion-item *ngIf="category.entries.length < 1">
+ <ion-item *ngIf="category.entries.length < 1">
     <ion-label>
       Keine Transaktionen
     </ion-label>

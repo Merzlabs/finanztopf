@@ -19,7 +19,7 @@ export class OnboardingPage implements OnInit {
   }
 
   async finish() {
-    localStorage.set('onboardingDone', true);
+    localStorage.setItem('onboardingDone', String(true));
     this.router.navigateByUrl('/');
   }
 
