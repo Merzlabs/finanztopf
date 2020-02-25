@@ -26,11 +26,17 @@
       <ion-list>
         <ion-item>
           <ion-label>Zahlungseingänge</ion-label>
-          <ion-badge slot="end" color="success">{{incomeSum.toFixed(2)}}</ion-badge>
+          <ion-badge slot="end" color="success">
+            <ng-container *ngIf="incomeSum > 0">+</ng-container>
+            {{incomeSum.toFixed(2)}}
+          </ion-badge>
         </ion-item>
         <ion-item>
           <ion-label>Zahlungsausgänge</ion-label>
-          <ion-badge slot="end" color="danger">{{outcomeSum.toFixed(2)}}</ion-badge>
+          <ion-badge slot="end" color="danger">
+            <ng-container *ngIf="outcomeSum > 0">-</ng-container>
+            {{outcomeSum.toFixed(2)}}
+          </ion-badge>
         </ion-item>
       </ion-list>
     </ion-card-content>
@@ -40,8 +46,8 @@
   <ion-list #categorylist>
     <ion-item-sliding *ngFor="let cat of categories; let i = index">
       <ion-item (click)="details(cat)">
-        <ion-button fill="clear" class="desktop-button" slot="start" (click)="remove(i); $event.stopPropagation()">
-          <ion-icon color="danger" name="trash" slot="icon-only"></ion-icon>
+        <ion-button fill="" class="desktop-button" slot="start" (click)="edit(cat); $event.stopPropagation()">
+          <ion-icon name="pencil-sharp" slot="end"></ion-icon>
         </ion-button>
         <ion-label>
           {{cat.title}}
@@ -49,8 +55,8 @@
         <ion-badge>
           {{cat.sum.toFixed(2)}} {{api.accounts[0]?.currency}}
         </ion-badge>
-        <ion-button fill="clear" class="desktop-button" slot="end" (click)="edit(cat); $event.stopPropagation()">
-          <ion-icon name="pencil-sharp" slot="end"></ion-icon>
+        <ion-button fill="" class="desktop-button" slot="end" (click)="remove(i); $event.stopPropagation()">
+          <ion-icon color="danger" name="trash" slot="icon-only"></ion-icon>
         </ion-button>
       </ion-item>
 
