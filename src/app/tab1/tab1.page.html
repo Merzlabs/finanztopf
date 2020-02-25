@@ -7,24 +7,6 @@
 </ion-header>
 
 <ion-content>
-  <ion-card class="welcome-card">
-    <img src="assets/img/cover.png"/>
-    <ion-card-header>
-      <ion-card-title>Finanzdaten verdammt einfach auswerten</ion-card-title>
-      <ion-card-subtitle><a href="http://github.com/Merzlabs">Ein Merzlabs Pecuniator Project</a></ion-card-subtitle>
-    </ion-card-header>
-    <ion-card-content>
-      <p> Mit Finanztopf teilen Sie ihre Kontotransaktionen in verschiedene Töpfe ein und sehen so ganz einfach was mit
-        ihrem Geld passiert. </p>
-      <p>Importieren Sie hier einfach die Daten aus dem Online Banking und dann können Sie beginnen Finanztöpfe nach
-        ihren persönlichen Ansprüchen anzulegen. </p>
-
-      <p>
-        Achtung! Auf mobile Geräten verstecken sich Aktionen unter den Töpfen die per Wischen eingeblendet werden.
-      </p>
-    </ion-card-content>
-  </ion-card>
-
   <ion-item>
     <ion-label>CAMT-Dateien hinzufügen</ion-label>
     <input type="file" multiple id="camtfiles" (change)="handleFileInput($event.target.files)">
@@ -48,19 +30,6 @@
         <ion-label>Show overview</ion-label>
         <ion-icon slot="start" name="apps"></ion-icon>
       </ion-item> -->
-  </ion-list>
-
-  <ion-list>
-    <ion-list-header mode="ios">
-      Finanztopf ist Open Source!
-    </ion-list-header>
-    <ion-item>Alle Daten verlassen niemals den Browser. Der Quellcode ist komplett einsehbar.</ion-item>
-    <ion-item href="https://github.com/Merzlabs/finanztopf">
-      Github
-    </ion-item>
-    <ion-item href="https://web.pecuniator.com">
-      Spielplatz für Programmierer
-    </ion-item>
   </ion-list>
 
   <ion-button (click)="connectToBank()">XS2A Test mit Sandbox</ion-button>

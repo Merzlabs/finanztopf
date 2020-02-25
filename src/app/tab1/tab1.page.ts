@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FileCacheService, CachedFile } from '../services/file-cache.service';
 import { ActivatedRoute } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+import { InfoComponent } from '../components/info/info.component';
 
 @Component({
   selector: 'app-tab1',
@@ -10,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 export class Tab1Page implements OnInit {
   fileNames: string;
 
-  constructor(private filecache: FileCacheService, private route: ActivatedRoute) {
+  constructor(private filecache: FileCacheService, private route: ActivatedRoute, public modalController: ModalController) {
     this.fileNames = '';
   }
 

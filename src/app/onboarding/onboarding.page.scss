@@ -1,0 +1,22 @@
+// thanks to https://fireship.io/lessons/ionic4-intro-slides-tutorial-to-educate-app-users/
+
+ion-slide {
+    height: 100vh;
+    flex-direction: column;
+}
+
+.introduction {
+    background: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
+}
+
+// TODO which colors here
+.opensource {
+    background: var(--ion-color-secondary);
+    color: var(--ion-color-secondary-contrast);
+}
+
+.stepThree {
+    background: var(--ion-color-tertiary);
+    color: var(--ion-color-tertiary-contrast);
+}
