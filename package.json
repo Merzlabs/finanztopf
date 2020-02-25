@@ -10,7 +10,7 @@
   },
   "version": "0.0.1",
   "author": "Merzlabs",
-  "homepage": "https://ionicframework.com/",
+  "homepage": "https://finanztopf.pecuniator.com/",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -69,10 +69,5 @@
     "tslint": "~5.15.0",
     "typescript": "~3.6.4"
   },
-  "description": "Simple app for putting transactions into 'töpfe'",
-  "cordova": {
-    "plugins": {
-      "cordova-sqlite-storage": {}
-    }
-  }
+  "description": "Simple app for putting transactions into 'töpfe'"
 }
