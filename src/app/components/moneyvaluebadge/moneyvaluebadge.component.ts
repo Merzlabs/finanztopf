@@ -12,6 +12,7 @@ export class MoneyValueBadgeComponent implements OnInit {
   @Input() badgeSlot: string;
   @Input() credit: boolean;
   @Input() debit: boolean;
+  @Input() includePrefix: boolean;
 
   @Input()
   set creditordebit(value) {
