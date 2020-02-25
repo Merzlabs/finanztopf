@@ -82,9 +82,9 @@ export class EditCategoryPage implements OnInit {
             console.log('Confirm Ok', value);
 
             if (this.category[value] instanceof Array) {
-              this.category[value].push('Enthält?');
+              this.category[value].push('');
             } else {
-              this.category[value] = ['Enthält?'];
+              this.category[value] = [''];
             }
 
             this.buildConditions();
@@ -97,6 +97,7 @@ export class EditCategoryPage implements OnInit {
   }
 
   close() {
+    // TODO dont close if no condition save but rather tell user
     this.modalCtrl.dismiss();
   }
 
