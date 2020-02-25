@@ -1,0 +1,24 @@
+<ion-card *ngIf="incomeSum > 0 || outcomeSum > 0">
+  <ion-card-header>
+    <ion-card-title>Übersicht</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-list>
+      <ion-item>
+        <ion-label>Zahlungseingänge</ion-label>
+        <ion-badge slot="end" color="success">
+          <ng-container *ngIf="incomeSum > 0">+</ng-container>
+          {{incomeSum.toFixed(2)}}
+        </ion-badge>
+      </ion-item>
+      <ion-item>
+        <ion-label>Zahlungsausgänge</ion-label>
+        <ion-badge slot="end" color="danger">
+          <ng-container *ngIf="outcomeSum > 0">-</ng-container>
+          {{outcomeSum.toFixed(2)}}
+        </ion-badge>
+      </ion-item>
+    </ion-list>
+  </ion-card-content>
+</ion-card>
