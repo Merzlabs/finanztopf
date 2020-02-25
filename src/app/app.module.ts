@@ -12,12 +12,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { ComponentsModule } from './components/components.module';
 
 registerLocaleData(localeDe);
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [],
+  entryComponents: [ComponentsModule],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

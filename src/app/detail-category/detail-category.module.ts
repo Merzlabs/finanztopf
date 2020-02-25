@@ -6,7 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { DetailCategoryPage } from './detail-category.page';
-import { MoneyValueBadgeComponent } from '../components/moneyvaluebadge/moneyvaluebadge.component';
+import { ComponentsModule } from '../components/components.module';
 
 const routes: Routes = [
   {
@@ -20,8 +20,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ComponentsModule
   ],
-  declarations: [DetailCategoryPage, MoneyValueBadgeComponent]
+  declarations: [DetailCategoryPage]
 })
 export class DetailCategoryPageModule {}

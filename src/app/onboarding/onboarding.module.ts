@@ -6,8 +6,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { OnboardingPage } from './onboarding.page';
-import { IntroductionComponent } from '../components/introduction/introduction.component';
-import { OpensourceComponent } from '../components/opensource/opensource.component';
+import { ComponentsModule } from '../components/components.module';
 
 const routes: Routes = [
   {
@@ -21,8 +20,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    ComponentsModule
   ],
-  declarations: [OnboardingPage, IntroductionComponent, OpensourceComponent]
+  declarations: [OnboardingPage]
 })
 export class OnboardingPageModule {}
