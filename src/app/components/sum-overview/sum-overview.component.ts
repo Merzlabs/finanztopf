@@ -9,6 +9,7 @@ export class SumOverviewComponent implements OnInit {
 
   @Input() incomeSum: number;
   @Input() outcomeSum: number;
+  @Input() currency: string;
 
   constructor() { }
 

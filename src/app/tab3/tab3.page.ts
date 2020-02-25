@@ -30,6 +30,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     categories: Array<Category>;
     @ViewChild('categorylist') list: IonList;
     querySubscription: Subscription;
+    currency: string;
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
                 private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute) {
@@ -108,6 +109,9 @@ export class Tab3Page implements OnInit, OnDestroy {
             elem.sum = 0;
             elem.entries = [];
         });
+
+        const accounts = this.api.accounts;
+        this.currency = accounts.length > 0 ? accounts[0].currency : 'EUR';
 
         for (const entry of this.api.entries) {
             const checkEntry = entry as CheckEntry;

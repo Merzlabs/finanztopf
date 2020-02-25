@@ -1,4 +1,6 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
+
+const STORAGE_KEY = 'darkMode';
 
 @Injectable({
   providedIn: 'root'
@@ -8,16 +10,17 @@ export class DarkModeService {
   public prefersDark: boolean;
 
   constructor() {
-      // TODO load from settings in localstorage
-    // if (unset){}
-    this.initialize();
-  }
-
-  private initialize() {
     // Use matchMedia to check the user preference
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-    this.setDarkTheme(prefersDark.matches);
+    const value = localStorage.getItem(STORAGE_KEY);;
+    if (value === undefined || value === null) {
+      // initialize
+      this.setDarkTheme(prefersDark.matches);
+    } else {
+      this.setDarkTheme(value === 'true');
+    }
+
     // Listen for changes to the prefers-color-scheme media query
     prefersDark.addEventListener('change', (mediaQuery) => {
       this.setDarkTheme(mediaQuery.matches);
@@ -29,5 +32,6 @@ export class DarkModeService {
     // TODO set into localstorage
     this.prefersDark = shouldAdd;
     document.body.classList.toggle('dark', this.prefersDark);
+    localStorage.setItem(STORAGE_KEY, String(shouldAdd));
   }
 }

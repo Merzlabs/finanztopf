@@ -5,13 +5,14 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
 
-import { EditCategoryPage } from './edit-category.page';
-import { FilterPipe } from '../pipes/filter-translate.pipe';
+import { OnboardingPage } from './onboarding.page';
+import { IntroductionComponent } from '../components/introduction/introduction.component';
+import { OpensourceComponent } from '../components/opensource/opensource.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: EditCategoryPage
+    component: OnboardingPage
   }
 ];
 
@@ -22,6 +23,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [EditCategoryPage, FilterPipe]
+  declarations: [OnboardingPage, IntroductionComponent, OpensourceComponent]
 })
-export class EditCategoryPageModule {}
+export class OnboardingPageModule {}

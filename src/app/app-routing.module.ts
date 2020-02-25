@@ -9,7 +9,8 @@ const routes: Routes = [
   { path: 'redirect', redirectTo: 'tabs/tab1', pathMatch: 'full' },
   { path: 'edit-category', loadChildren: './edit-category/edit-category.module#EditCategoryPageModule' },
   { path: 'detail-category', loadChildren: './detail-category/detail-category.module#DetailCategoryPageModule' },
-  { path: 'settings', loadChildren: './settings/settings.module#SettingsPageModule' }
+  { path: 'settings', loadChildren: './settings/settings.module#SettingsPageModule' },
+  { path: 'onboarding', loadChildren: './onboarding/onboarding.module#OnboardingPageModule' }
 ];
 @NgModule({
   imports: [

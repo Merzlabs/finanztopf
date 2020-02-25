@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { OnboardingGuard } from '../guards/onboarding.guard';
 
 const routes: Routes = [
   {
@@ -32,6 +33,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
+            canActivate: [OnboardingGuard],
             loadChildren: () =>
               import('../tab3/tab3.module').then(m => m.Tab3PageModule)
           }

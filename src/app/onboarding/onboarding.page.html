@@ -1,0 +1,15 @@
+<ion-content [scrollEvents]="true" (ionScroll)="scrolled($event)" (ionScrollStart)="scrolled($event)">
+  <ion-slides pager="true">
+    <ion-slide class="introduction">
+      <app-introduction></app-introduction>
+      <ion-button color="dark" shape="round" (click)="next()">
+        Weiter
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </ion-slide>
+    <ion-slide class="opensource">
+      <app-opensource></app-opensource>
+      <ion-button color="dark" shape="round" (click)="finish()">Los geht's</ion-button>
+    </ion-slide>
+  </ion-slides>
+</ion-content>
