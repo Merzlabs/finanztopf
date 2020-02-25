@@ -3,16 +3,14 @@ import { Injectable, OnInit } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class DarkModeService implements OnInit {
+export class DarkModeService {
 
   public prefersDark: boolean;
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor() {
       // TODO load from settings in localstorage
-      // if (unset){}
-      this.initialize();
+    // if (unset){}
+    this.initialize();
   }
 
   private initialize() {
@@ -27,7 +25,7 @@ export class DarkModeService implements OnInit {
   }
 
   // Add or remove the "dark" class based on if the media query matches
-  public setDarkTheme(shouldAdd) {
+  public setDarkTheme(shouldAdd: boolean) {
     // TODO set into localstorage
     this.prefersDark = shouldAdd;
     document.body.classList.toggle('dark', this.prefersDark);
