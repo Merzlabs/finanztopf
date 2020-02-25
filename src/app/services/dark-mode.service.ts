@@ -1,5 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
-import { Storage } from '@ionic/storage';
+import { Injectable } from '@angular/core';
 
 const STORAGE_KEY = 'darkMode';
 
@@ -10,11 +9,11 @@ export class DarkModeService {
 
   public prefersDark: boolean;
 
-  constructor(private storage: Storage) {
+  constructor() {
     // Use matchMedia to check the user preference
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-    this.storage.get(STORAGE_KEY).then((value) => {
+    localStorage.get(STORAGE_KEY).then((value) => {
       if (value === undefined || value === null) {
         // initialize
         this.setDarkTheme(prefersDark.matches);
@@ -34,6 +33,6 @@ export class DarkModeService {
     // TODO set into localstorage
     this.prefersDark = shouldAdd;
     document.body.classList.toggle('dark', this.prefersDark);
-    this.storage.set(STORAGE_KEY, shouldAdd);
+    localStorage.set(STORAGE_KEY, shouldAdd);
   }
 }

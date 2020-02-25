@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Storage } from '@ionic/storage';
 import { Router } from '@angular/router';
 
 import { IonSlides } from '@ionic/angular';
@@ -11,7 +10,7 @@ import { IonSlides } from '@ionic/angular';
 })
 export class OnboardingPage implements OnInit {
 
-  constructor(private storage: Storage, private router: Router) { }
+  constructor(private router: Router) { }
 
   @ViewChild(IonSlides)
   slides: IonSlides;
@@ -20,7 +19,7 @@ export class OnboardingPage implements OnInit {
   }
 
   async finish() {
-    await this.storage.set('onboardingDone', true);
+    localStorage.set('onboardingDone', true);
     this.router.navigateByUrl('/');
   }
 

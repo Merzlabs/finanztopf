@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, CanActivate, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { Storage } from '@ionic/storage';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OnboardingGuard implements CanActivate {
 
-  constructor(private router: Router, private storage: Storage) {
+  constructor(private router: Router) {
 
   }
 
@@ -16,7 +14,7 @@ export class OnboardingGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Promise<boolean> {
-    const completedOnboarding = await this.storage.get('onboardingDone');
+    const completedOnboarding = localStorage.get('onboardingDone');
 
     if (!completedOnboarding) {
       this.router.navigateByUrl('/onboarding');
