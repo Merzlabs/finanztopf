@@ -18,12 +18,13 @@ registerLocaleData(localeDe);
 
 @NgModule({
   declarations: [AppComponent],
-  entryComponents: [ComponentsModule],
+  entryComponents: [],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    ComponentsModule
   ],
   providers: [
     StatusBar,
