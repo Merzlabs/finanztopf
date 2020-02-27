@@ -13,6 +13,9 @@
   <ion-item>
     <ion-label>CAMT-Dateien hinzufügen</ion-label>
     <input type="file" multiple id="camtfiles" (change)="handleFileInput($event.target.files)">
+    <ion-button fill="clear" (click)="clearCache()" slot="end">
+      <ion-icon slot="icon-only" name="trash"></ion-icon>
+    </ion-button>
   </ion-item>
 
   <ion-list>
@@ -22,15 +25,8 @@
     <ion-item>
       <ion-label class="ion-text-wrap">{{fileNames.substr(1)}}</ion-label>
     </ion-item>
-    <ion-button fill="clear" slot="end" type="button" (click)="clearCache()">Aufräumen</ion-button>
-  </ion-list>
-
-  <ion-list>
     <ion-item routerLink="/tabs/tab3" detail="true">
       <ion-label color="primary">Weiter</ion-label>
-    </ion-item>
-    <ion-item routerLink="/settings" detail="true">
-      <ion-label color="primary">Einstellungen</ion-label>
     </ion-item>
   </ion-list>
 
