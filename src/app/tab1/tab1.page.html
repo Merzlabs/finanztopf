@@ -3,6 +3,9 @@
     <ion-title>
       Finanztopf
     </ion-title>
+    <ion-button routerLink="/settings" slot="end" fill="clear">
+      <ion-icon slot="icon-only" name="settings-outline"></ion-icon>
+    </ion-button>
   </ion-toolbar>
 </ion-header>
 
@@ -31,8 +34,6 @@
         <ion-icon slot="start" name="apps"></ion-icon>
       </ion-item> -->
   </ion-list>
-
-  <ion-button size="large" routerLink="/settings">Einstellungen</ion-button>
 
   <ion-button (click)="connectToBank()">XS2A Test mit Sandbox</ion-button>
 </ion-content>
