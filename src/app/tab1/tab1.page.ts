@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FileCacheService, CachedFile } from '../services/file-cache.service';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { X2saService } from '../services/x2sa/x2sa.service';
 
 @Component({
   selector: 'app-tab1',
@@ -11,14 +12,18 @@ import { ModalController } from '@ionic/angular';
 export class Tab1Page implements OnInit {
   fileNames: string;
 
-  constructor(private filecache: FileCacheService, private route: ActivatedRoute, public modalController: ModalController) {
+  constructor(
+    private filecache: FileCacheService,
+    private route: ActivatedRoute,
+    public modalController: ModalController,
+    public x2saService: X2saService) {
     this.fileNames = '';
   }
 
   ngOnInit() {
     this.route.queryParams.subscribe((res) => {
       if (res.state) {
-        this.loadxs2aTransactions(res.state);
+        this.x2saService.loadxs2aTransactions(res.state);
       }
     });
   }
@@ -56,23 +61,4 @@ export class Tab1Page implements OnInit {
     xmlReader.readAsText(file);
   }
 
-  async connectToBank() {
-    const response = await fetch('http://localhost:8080/oauth/start');
-    const body = await response.json();
-    location.href = body.authUrl;
-  }
-
-  async loadxs2aTransactions(state: string) {
-    let response = await fetch('http://localhost:8080/accounts?state=' + state);
-    let body = await response.json();
-    const accountList = body.accounts;
-
-    // Load all accounts
-    for (const account of accountList) {
-      response = await fetch(`http://localhost:8080/accounts/transactions?state=${state}&resourceId=${account.resourceId}`);
-      body = await response.text();
-      console.log(body);
-      this.filecache.add(new CachedFile(account.resourceId + '.xml', body));
-    }
-  }
 }
