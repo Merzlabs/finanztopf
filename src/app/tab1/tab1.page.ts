@@ -10,14 +10,12 @@ import { X2saService } from '../services/x2sa/x2sa.service';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page implements OnInit {
-  fileNames: string;
 
   constructor(
-    private filecache: FileCacheService,
+    public filecache: FileCacheService,
     private route: ActivatedRoute,
     public modalController: ModalController,
     public x2saService: X2saService) {
-    this.fileNames = '';
   }
 
   ngOnInit() {
@@ -28,37 +26,16 @@ export class Tab1Page implements OnInit {
     });
   }
 
-
   handleFileInput(files: FileList) {
     console.log('Files', files);
-
-    // tslint:disable-next-line: prefer-for-of
-    for (let i = 0; i < files.length; i++) {
-      if (files[i].type === 'text/xml') {
-        this.processXML(files[i]);
-      } else {
-        console.warn('File not supported');
-      }
-    }
+    this.filecache.loadFiles(files);
   }
 
   ionViewDidEnter() {
-    this.fileNames = this.filecache.getFileNames().join(',');
   }
 
   clearCache() {
     this.filecache.deleteAll();
-    this.fileNames = '';
-  }
-
-  private processXML(file: File) {
-    const xmlReader = new FileReader();
-    xmlReader.onload = (e: any) => {
-      const xmlContent = e.target.result;
-      this.fileNames += ',' + file.name;
-      this.filecache.add(new CachedFile(file.name, xmlContent));
-    };
-    xmlReader.readAsText(file);
   }
 
 }
