@@ -31,6 +31,8 @@ export class Tab3Page implements OnInit, OnDestroy {
     @ViewChild('categorylist') list: IonList;
     querySubscription: Subscription;
     currency: string;
+    incomeEntries: Array<PEntry>;
+    outcomeEntries: Array<PEntry>;
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
                 private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute) {
@@ -105,6 +107,8 @@ export class Tab3Page implements OnInit, OnDestroy {
     private calcCategories() {
         this.incomeSum = 0;
         this.outcomeSum = 0;
+        this.incomeEntries = [];
+        this.outcomeEntries = [];
         this.categories.forEach((elem) => {
             elem.sum = 0;
             elem.entries = [];
@@ -157,8 +161,10 @@ export class Tab3Page implements OnInit, OnDestroy {
     checkIncomeOutcome(entry: PEntry) {
         if (entry.creditordebit === 'CRDT') {
             this.incomeSum += entry.amount;
+            this.incomeEntries.push(entry);
         } else if (entry.creditordebit === 'DBIT') {
             this.outcomeSum += entry.amount;
+            this.outcomeEntries.push(entry);
         }
     }
 
@@ -172,12 +178,19 @@ export class Tab3Page implements OnInit, OnDestroy {
         this.categories.splice(index, 1);
     }
 
-    async details(category: Category) {
+    async details(p: Category | Array<PEntry>) {
+        let entries: Array<PEntry> = [];
+        if (p instanceof Array) {
+            entries = p;
+        } else {
+            entries = p.entries;
+        }
+
         const modal = await this.modalCtrl.create({
             component: DetailCategoryPage,
             swipeToClose: true,
             componentProps: {
-                entries: category.entries
+                entries
             }
         });
         modal.present();
