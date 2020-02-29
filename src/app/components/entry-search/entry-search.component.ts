@@ -19,8 +19,15 @@ export class EntrySearchComponent implements OnInit {
   ngOnInit() {}
 
   private showFirst() {
-    // show first 9 of all entries if focussed without input or empty search
-    this.results = this.entries.slice(0, this.MAX_EMPTY_ENTRIES);
+    // show last 9 transactions of all entries if focussed without input or empty search
+    this.results = this.entries.sort((a, b) => {
+      if (a.bookingDate > b.bookingDate) {
+        return -1;
+      } else if (a.bookingDate < b.bookingDate) {
+        return 1;
+      }
+      return 0;
+    }).slice(0, this.MAX_EMPTY_ENTRIES);
   }
 
   focusSearch(ev: CustomEvent) {
