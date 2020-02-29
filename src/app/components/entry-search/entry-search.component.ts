@@ -25,8 +25,15 @@ export class EntrySearchComponent implements OnInit {
 
     searchString = searchString.toLowerCase();
     this.results = this.entries.filter((elem) => {
-      return elem.remittanceInformation?.toString().toLowerCase().includes(searchString)
-      || elem.creditorName?.toString().toLowerCase().includes(searchString);
+      const propertiesToCheck = ['remittanceInformation', 'creditorName']; // TODO get from categories
+
+      for (const prop of propertiesToCheck) {
+        if (typeof elem[prop] !== 'undefined') {
+          if (elem[prop].toString().toLowerCase().includes(searchString)) {
+            return true;
+          }
+        }
+      }
     });
   }
 
