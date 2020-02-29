@@ -74,10 +74,16 @@ export class Tab3Page implements OnInit, OnDestroy {
     }
 
     get incomeSum(): number {
+        if (!this.incomeEntries || this.incomeEntries.length === 0) {
+            return 0.0;
+        }
         return this.incomeEntries.map(item => item.amount).reduce((prev, next) => prev + next);
     }
 
     get outcomeSum(): number {
+        if (!this.outcomeEntries || this.outcomeEntries.length === 0) {
+            return 0.0;
+        }
         return this.outcomeEntries.map(item => item.amount).reduce((prev, next) => prev + next);
     }
 
