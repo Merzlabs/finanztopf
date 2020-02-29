@@ -25,8 +25,6 @@ class CheckEntry extends PEntry {
 export class Tab3Page implements OnInit, OnDestroy {
     private files: CachedFile[];
     api: PecuniAPI;
-    incomeSum: number;
-    outcomeSum: number;
     categories: Array<Category>;
     @ViewChild('categorylist') list: IonList;
     querySubscription: Subscription;
@@ -75,6 +73,14 @@ export class Tab3Page implements OnInit, OnDestroy {
         }
     }
 
+    get incomeSum(): number {
+        return this.incomeEntries.map(item => item.amount).reduce((prev, next) => prev + next);
+    }
+
+    get outcomeSum(): number {
+        return this.outcomeEntries.map(item => item.amount).reduce((prev, next) => prev + next);
+    }
+
     ionViewWillEnter() {
         // Reset api instance of this page from files in cache every time
         this.api.clear();
@@ -105,8 +111,6 @@ export class Tab3Page implements OnInit, OnDestroy {
     }
 
     private calcCategories() {
-        this.incomeSum = 0;
-        this.outcomeSum = 0;
         this.incomeEntries = [];
         this.outcomeEntries = [];
         this.categories.forEach((elem) => {
@@ -160,10 +164,8 @@ export class Tab3Page implements OnInit, OnDestroy {
 
     checkIncomeOutcome(entry: PEntry) {
         if (entry.creditordebit === 'CRDT') {
-            this.incomeSum += entry.amount;
             this.incomeEntries.push(entry);
         } else if (entry.creditordebit === 'DBIT') {
-            this.outcomeSum += entry.amount;
             this.outcomeEntries.push(entry);
         }
     }
