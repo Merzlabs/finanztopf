@@ -12,17 +12,17 @@
 <ion-content>
 
   <ion-list>
-    <ion-item *ngFor="let entry of category.entries">
+    <ion-item *ngFor="let entry of entries">
       <ion-label>{{entry.creditorName}}</ion-label>
       <ion-note>{{entry.remittanceInformation}}</ion-note>
       <app-moneyvaluebadge [value]="entry.amount" [currency]="entry.currency" badgeSlot="end" [creditordebit]="entry.creditordebit" includePrefix="true"></app-moneyvaluebadge>
     </ion-item>
+    <ion-item *ngIf="entries.length < 1">
+       <ion-label>
+         Keine Transaktionen
+       </ion-label>
+     </ion-item>
   </ion-list>
 
- <ion-item *ngIf="category.entries.length < 1">
-    <ion-label>
-      Keine Transaktionen
-    </ion-label>
-  </ion-item>
 
 </ion-content>

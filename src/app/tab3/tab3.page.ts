@@ -177,7 +177,7 @@ export class Tab3Page implements OnInit, OnDestroy {
             component: DetailCategoryPage,
             swipeToClose: true,
             componentProps: {
-                category
+                entries: category.entries
             }
         });
         modal.present();
