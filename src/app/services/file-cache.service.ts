@@ -47,11 +47,11 @@ export class FileCacheService {
             }
             this.add(new CachedFile(name, xmlContent));
           } else {
-            console.warn('Unzipped File not supported');
+            console.warn('Unzipped File not supported', path);
           }
         });
       } else {
-        console.warn('File not supported');
+        console.warn('File not supported:', files[i].name);
       }
     }
   }
