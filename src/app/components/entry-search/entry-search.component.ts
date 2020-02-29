@@ -10,26 +10,43 @@ export class EntrySearchComponent implements OnInit {
 
   @Input() entries: Array<PEntry>;
   @Input() results: Array<PEntry>;
+  private searchString: string;
+
+  private MAX_EMPTY_ENTRIES = 10;
 
   constructor() { }
 
   ngOnInit() {}
 
-  search(ev: CustomEvent) {
-    let searchString = ev.detail.value;
+  private showFirst() {
+    // show first 9 of all entries if focussed without input or empty search
+    this.results = this.entries.slice(0, this.MAX_EMPTY_ENTRIES);
+  }
 
-    if (!searchString || searchString === '') {
-      this.results = [];
-      return;
+  focusSearch(ev: CustomEvent) {
+    this.showFirst();
+  }
+
+  blurSearch(ev: any) {
+    if (!this.searchString || this.searchString.trim().length === 0) {
+      this.results = null;
+    }
+  }
+
+  search(ev: CustomEvent) {
+    this.searchString = ev.detail.value;
+
+    if (!this.searchString || this.searchString === '') {
+      return this.showFirst();
     }
 
-    searchString = searchString.toLowerCase();
+    this.searchString = this.searchString.toLowerCase();
     this.results = this.entries.filter((elem) => {
       const propertiesToCheck = ['remittanceInformation', 'creditorName']; // TODO get from categories
 
       for (const prop of propertiesToCheck) {
         if (typeof elem[prop] !== 'undefined') {
-          if (elem[prop].toString().toLowerCase().includes(searchString)) {
+          if (elem[prop].toString().toLowerCase().includes(this.searchString)) {
             return true;
           }
         }
