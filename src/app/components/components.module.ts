@@ -7,6 +7,8 @@ import { MoneyValueBadgeComponent } from './moneyvaluebadge/moneyvaluebadge.comp
 import { OpensourceComponent } from './opensource/opensource.component';
 import { SumOverviewComponent } from './sum-overview/sum-overview.component';
 import { IntroductionComponent } from './introduction/introduction.component';
+import { EntrySearchComponent } from './entry-search/entry-search.component';
+import { EntryListComponent } from './entry-list-item/entry-list.component';
 
 @NgModule({
   imports: [
@@ -14,7 +16,9 @@ import { IntroductionComponent } from './introduction/introduction.component';
     FormsModule,
     IonicModule
   ],
-  declarations: [MoneyValueBadgeComponent, OpensourceComponent, SumOverviewComponent, IntroductionComponent],
-  exports: [MoneyValueBadgeComponent, OpensourceComponent, SumOverviewComponent, IntroductionComponent]
+  declarations: [MoneyValueBadgeComponent, OpensourceComponent, SumOverviewComponent, IntroductionComponent, EntrySearchComponent,
+    EntryListComponent],
+  exports: [MoneyValueBadgeComponent, OpensourceComponent, SumOverviewComponent, IntroductionComponent, EntrySearchComponent,
+    EntryListComponent]
 })
-export class ComponentsModule {}
+export class ComponentsModule { }
