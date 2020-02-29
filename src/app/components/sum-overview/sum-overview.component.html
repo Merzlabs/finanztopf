@@ -5,11 +5,11 @@
 
   <ion-card-content>
     <ion-list>
-      <ion-item>
+      <ion-item button (click)="incomeClick()">
         <ion-label>Zahlungseingänge</ion-label>
         <app-moneyvaluebadge [value]="incomeSum" credit="true" [currency]="currency" badgeSlot="end" includePrefix="true"></app-moneyvaluebadge>
       </ion-item>
-      <ion-item>
+      <ion-item button (click)="outcomeClick()">
         <ion-label>Zahlungsausgänge</ion-label>
         <app-moneyvaluebadge [value]="outcomeSum" debit="true" [currency]="currency" badgeSlot="end" includePrefix="true"></app-moneyvaluebadge>
       </ion-item>
