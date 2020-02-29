@@ -12,7 +12,7 @@ import { X2saService } from '../services/x2sa/x2sa.service';
 export class Tab1Page implements OnInit {
 
   constructor(
-    private filecache: FileCacheService,
+    public filecache: FileCacheService,
     private route: ActivatedRoute,
     public modalController: ModalController,
     public x2saService: X2saService) {
