@@ -34,7 +34,6 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            canActivate: [OnboardingGuard],
             loadChildren: () =>
               import('../tab3/tab3.module').then(m => m.Tab3PageModule)
           }
