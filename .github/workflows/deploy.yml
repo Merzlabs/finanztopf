@@ -23,9 +23,23 @@ jobs:
           CI: true
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - run: npm run build:web
+    - name: create deployment
+      uses: niklasmerz/github-deployment-action@master
+      if: contains(github.ref, 'master')
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        args: -o merzlabs -r finanztopf -c master -e production
     - uses: w9jds/firebase-action@master
       with:
         args: deploy --only hosting
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+    - name: set deployment status
+      uses: niklasmerz/github-deployment-action@master
+      if: contains(github.ref, 'master')
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        args: -o merzlabs -r finanztopf -s success -u https://finanztopf.pecuniator.com -f
 
