@@ -316,6 +316,7 @@ export class Tab3Page implements OnInit, OnDestroy {
         });
         modal.onDidDismiss().then((value) => {
             this.calcCategories();
+            this.saveCategories();
         });
         modal.present();
     }
