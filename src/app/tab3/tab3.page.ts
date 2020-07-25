@@ -43,7 +43,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     month: Month;
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
-                private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute) {
+        private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute) {
         this.api = new PecuniAPI();
 
         const savedCategories = localStorage.getItem('userCategories');
@@ -111,14 +111,14 @@ export class Tab3Page implements OnInit, OnDestroy {
     }
 
     ionViewWillLeave() {
-       this.saveCategories();
+        this.saveCategories();
     }
 
     ngOnInit() {
         this.querySubscription = this.route.queryParams.subscribe((params) => {
-           if (params.load) {
-               this.download(params.load);
-           }
+            if (params.load) {
+                this.download(params.load);
+            }
         });
     }
 
@@ -126,10 +126,20 @@ export class Tab3Page implements OnInit, OnDestroy {
         this.querySubscription.unsubscribe();
     }
 
-    private calcCategories() {
-        this.incomeEntries = [];
-        this.outcomeEntries = [];
-        this.months = [];
+    calcCategories(entries?: Array<PEntry>) {
+        let clearCache = false;
+        if (!entries) {
+            clearCache = true;
+            entries = this.api.entries;
+        }
+
+        if (clearCache) {
+            this.incomeEntries = [];
+            this.outcomeEntries = [];
+            this.months = [];
+        }
+
+        // Reset sums on categories
         this.categories.forEach((elem) => {
             elem.sum = 0;
             elem.entries = [];
@@ -138,20 +148,23 @@ export class Tab3Page implements OnInit, OnDestroy {
         const accounts = this.api.accounts;
         this.currency = accounts.length > 0 ? accounts[0].currency : 'EUR';
 
-        for (const entry of this.api.entries) {
+        for (const entry of entries) {
             const checkEntry = entry as CheckEntry;
             checkEntry.found = [];
             this.checkCategories(checkEntry);
-            const isExpense = this.checkIncomeOutcome(checkEntry);
 
-            if (isExpense) {
-                this.calculateExpenses(entry);
+            if (clearCache) {
+                const isExpense = this.checkIncomeOutcome(checkEntry);
+                if (isExpense) {
+                    this.addExpense(entry);
+                }
             }
+
         }
         console.log(this.categories);
     }
 
-    private calculateExpenses(entry: PEntry) {
+    private addExpense(entry: PEntry) {
         const yearAndMonth = entry.bookingDate.substring(0, 7);
         const month = this.months.find((elem) => elem.date === yearAndMonth);
         if (month) {
@@ -166,8 +179,6 @@ export class Tab3Page implements OnInit, OnDestroy {
                 amount: entry.amount
             });
         }
-
-        console.debug(this.months);
     }
 
     saveCategories() {
@@ -263,28 +274,28 @@ export class Tab3Page implements OnInit, OnDestroy {
         const alert = await this.alertCtrl.create({
             header: 'Einen Topf laden',
             inputs: [
-              {
-                name: 'id',
-                type: 'text',
-                placeholder: 'ID des Topfes'
-              }
+                {
+                    name: 'id',
+                    type: 'text',
+                    placeholder: 'ID des Topfes'
+                }
             ],
             buttons: [
-              {
-                text: 'Abbrechen',
-                role: 'cancel',
-                cssClass: 'secondary',
-                handler: () => {
+                {
+                    text: 'Abbrechen',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: () => {
 
+                    }
+                }, {
+                    text: 'Ok',
+                    handler: (data) => {
+                        this.download(data.id);
+                    }
                 }
-              }, {
-                text: 'Ok',
-                handler: (data) => {
-                  this.download(data.id);
-                }
-              }
             ]
-          });
+        });
 
         await alert.present();
     }
@@ -297,7 +308,7 @@ export class Tab3Page implements OnInit, OnDestroy {
                 duration: 3000,
                 message: `Topf mit der ID "${id}" hinzugefügt.`,
                 color: 'primary'
-              });
+            });
             toast.present();
         }).catch((e) => console.error(e));
     }
