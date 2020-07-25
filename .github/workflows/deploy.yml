@@ -24,7 +24,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - run: npm run build:web
     - name: create deployment
-      uses: docker://niklasmerz/github-deployment-action/deployment-action:v1.1.0
+      uses: niklasmerz/github-deployment-action@master
       if: contains(github.ref, 'master')
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -36,7 +36,7 @@ jobs:
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
     - name: set deployment status
-      uses: docker://niklasmerz/github-deployment-action/deployment-action:v1.1.0
+      uses: niklasmerz/github-deployment-action@master
       if: contains(github.ref, 'master')
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
