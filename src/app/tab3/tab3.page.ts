@@ -119,8 +119,8 @@ export class Tab3Page implements OnInit, OnDestroy {
             }
         }
 
-        this.calcCategories();
         this.loadIgnored();
+        this.calcCategories();
     }
 
     loadIgnored() {
