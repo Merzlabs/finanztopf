@@ -13,6 +13,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: https://npm.pkg.github.com/
+        scope: '@merzlabs'
     - uses: actions/setup-node@master
       with:
         node-version: '12.x'
