@@ -12,17 +12,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@master
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-        registry-url: https://npm.pkg.github.com/
-        scope: '@merzlabs'
-    - uses: actions/setup-node@master
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
       with:
         node-version: '12.x'
+        registry-url: https://npm.pkg.github.com/
+        scope: '@merzlabs'
     - run: npm install
+      env:
+          CI: true
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - run: npm run build:web
     - uses: w9jds/firebase-action@master
       with:
