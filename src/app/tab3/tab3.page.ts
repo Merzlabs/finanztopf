@@ -174,7 +174,7 @@ export class Tab3Page implements OnInit, OnDestroy {
         } else {
             const date = new Date(entry.bookingDate);
             this.months.push({
-                label: `${date.getMonth() + 1}-${date.getFullYear()}`,
+                label: `${date.getMonth() > 9 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getFullYear()}`,
                 date: yearAndMonth,
                 entries: [entry],
                 amount: entry.amount
