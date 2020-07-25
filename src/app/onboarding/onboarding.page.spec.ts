@@ -2,6 +2,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { OnboardingPage } from './onboarding.page';
+import { RouterModule } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
 
 describe('OnboardingPage', () => {
   let component: OnboardingPage;
@@ -11,6 +13,7 @@ describe('OnboardingPage', () => {
     TestBed.configureTestingModule({
       declarations: [ OnboardingPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [IonicModule.forRoot(), RouterModule.forRoot([])],
     })
     .compileComponents();
   }));

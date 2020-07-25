@@ -1,14 +1,27 @@
-import { AppPage } from './app.po';
+import { OnboardingPage, Tab3Page as Tab3Page } from './app.po';
 
-describe('new App', () => {
-  let page: AppPage;
+describe('load Intro', () => {
+  let page: OnboardingPage;
 
   beforeEach(() => {
-    page = new AppPage();
+    page = new OnboardingPage();
   });
 
-  it('should display welcome message', () => {
+  it('should display intro', () => {
     page.navigateTo();
-    expect(page.getPageTitle()).toContain('Tab One');
+    expect(page.getTitle()).toContain('Finanzdaten simpel und schnell auswerten');
+  });
+});
+
+describe('load Tab3', () => {
+  let page: Tab3Page;
+
+  beforeEach(() => {
+    page = new Tab3Page();
+  });
+
+  it('should display correct title', () => {
+    page.navigateTo();
+    expect(page.getTitle()).toContain('Finanztöpfe');
   });
 });

@@ -6,7 +6,7 @@ describe('FileCacheService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: FileCacheService = TestBed.get(FileCacheService);
+    const service: FileCacheService = TestBed.inject(FileCacheService);
     expect(service).toBeTruthy();
   });
 });
