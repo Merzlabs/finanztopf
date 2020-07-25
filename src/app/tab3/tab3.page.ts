@@ -21,7 +21,7 @@ class CheckEntry extends PEntry {
 class Month implements Expense {
     label: string;
     date: string;
-    entries?: Array<PEntry>;
+    entries: Array<PEntry>;
     amount: number;
 }
 
