@@ -8,9 +8,23 @@ exports.config = {
   specs: [
     './src/**/*.e2e-spec.ts'
   ],
-  capabilities: {
-    'browserName': 'chrome'
-  },
+  multiCapabilities: [
+    {
+      browserName: 'chrome',
+      chromeOptions: {
+        'args': ['--headless']
+      },
+    },
+    {
+      browserName: 'firefox',
+      firefoxOptions: {
+        args: ['--headless']
+      },
+      'moz:firefoxOptions': {
+        args: ['--headless']
+      }
+    },
+  ],
   directConnect: true,
   baseUrl: 'http://localhost:4200/',
   framework: 'jasmine',
