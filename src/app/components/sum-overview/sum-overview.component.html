@@ -14,5 +14,15 @@
         <app-moneyvaluebadge [value]="outcomeSum" debit="true" [currency]="currency" badgeSlot="end" includePrefix="true"></app-moneyvaluebadge>
       </ion-item>
     </ion-list>
+
+    <ion-list *ngIf="expenses">
+      <ion-list-header>
+        Ausgaben pro Monat
+      </ion-list-header>
+      <ion-item button *ngFor="let expense of expenses" (click)="expenseClick(expense)">
+        <ion-label>{{expense.label}}</ion-label>
+        <app-moneyvaluebadge [value]="expense.amount" debit="true" [currency]="currency" badgeSlot="end" includePrefix="true"></app-moneyvaluebadge>
+      </ion-item>
+    </ion-list>
   </ion-card-content>
 </ion-card>

@@ -9,12 +9,20 @@ import { Category } from '../types/Category';
 import { DetailCategoryPage } from '../detail-category/detail-category.page';
 import { FileCacheService, CachedFile } from '../services/file-cache.service';
 import { StorageService } from '../services/storage.service';
+import { Expense } from '../types/Expense';
 
 /**
  * Just for categorizing one field added
  */
 class CheckEntry extends PEntry {
     found: Array<string>;
+}
+
+class Month implements Expense {
+    label: string;
+    date: string;
+    entries?: Array<PEntry>;
+    amount: number;
 }
 
 @Component({
@@ -31,6 +39,8 @@ export class Tab3Page implements OnInit, OnDestroy {
     currency: string;
     incomeEntries: Array<PEntry>;
     outcomeEntries: Array<PEntry>;
+    months: Array<Month>;
+    month: Month;
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
                 private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute) {
@@ -119,6 +129,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     private calcCategories() {
         this.incomeEntries = [];
         this.outcomeEntries = [];
+        this.months = [];
         this.categories.forEach((elem) => {
             elem.sum = 0;
             elem.entries = [];
@@ -131,9 +142,32 @@ export class Tab3Page implements OnInit, OnDestroy {
             const checkEntry = entry as CheckEntry;
             checkEntry.found = [];
             this.checkCategories(checkEntry);
-            this.checkIncomeOutcome(checkEntry);
+            const isExpense = this.checkIncomeOutcome(checkEntry);
+
+            if (isExpense) {
+                this.calculateExpenses(entry);
+            }
         }
         console.log(this.categories);
+    }
+
+    private calculateExpenses(entry: PEntry) {
+        const yearAndMonth = entry.bookingDate.substring(0, 7);
+        const month = this.months.find((elem) => elem.date === yearAndMonth);
+        if (month) {
+            month.entries.push(entry);
+            month.amount += entry.amount;
+        } else {
+            const date = new Date(entry.bookingDate);
+            this.months.push({
+                label: `${date.getMonth() + 1}-${date.getFullYear()}`,
+                date: yearAndMonth,
+                entries: [entry],
+                amount: entry.amount
+            });
+        }
+
+        console.debug(this.months);
     }
 
     saveCategories() {
@@ -168,11 +202,17 @@ export class Tab3Page implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Check creditordebit
+     * @return true if outcome
+     */
     checkIncomeOutcome(entry: PEntry) {
         if (entry.creditordebit === 'CRDT') {
             this.incomeEntries.push(entry);
+            return false;
         } else if (entry.creditordebit === 'DBIT') {
             this.outcomeEntries.push(entry);
+            return true;
         }
     }
 
