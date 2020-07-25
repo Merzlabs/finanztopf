@@ -21,7 +21,7 @@
     <ion-row>
       <ion-col size-sm *ngIf="incomeSum > 0 || outcomeSum > 0">
         <app-sum-overview [incomeSum]="incomeSum" [outcomeSum]="outcomeSum" [currency]="currency"
-          (incomeClicked)="calcCategories(incomeEntries)" (outcomeClicked)="calcCategories(outcomeEntries)" [expenses]="months" (expenseClicked)="calcCategories($event.entries)"></app-sum-overview>
+          (incomeClicked)="filterEntries(incomeEntries)" (outcomeClicked)="filterEntries(outcomeEntries)" [expenses]="months" (expenseClicked)="filterEntries($event.entries)"></app-sum-overview>
       </ion-col>
 
       <ion-col size-md>
@@ -57,7 +57,7 @@
 
     <ion-row>
       <ion-col>
-        <app-entry-search [entries]="api.entries"></app-entry-search>
+        <app-entry-search [entries]="api.entries" [results]="results"></app-entry-search>
 
         <!-- TODO allow to put camt add file here on this site -->
         <!-- <ion-card>

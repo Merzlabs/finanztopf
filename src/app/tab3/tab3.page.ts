@@ -41,9 +41,10 @@ export class Tab3Page implements OnInit, OnDestroy {
     outcomeEntries: Array<PEntry>;
     months: Array<Month>;
     month: Month;
+    results: PEntry[];
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
-        private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute) {
+                private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute) {
         this.api = new PecuniAPI();
 
         const savedCategories = localStorage.getItem('userCategories');
@@ -126,7 +127,7 @@ export class Tab3Page implements OnInit, OnDestroy {
         this.querySubscription.unsubscribe();
     }
 
-    calcCategories(entries?: Array<PEntry>) {
+    private calcCategories(entries?: Array<PEntry>) {
         let clearCache = false;
         if (!entries) {
             clearCache = true;
@@ -211,6 +212,11 @@ export class Tab3Page implements OnInit, OnDestroy {
                 }
             }
         }
+    }
+
+    filterEntries(entries: Array<PEntry>) {
+        this.calcCategories(entries);
+        this.results = entries;
     }
 
     /**

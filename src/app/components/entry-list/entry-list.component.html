@@ -1,6 +1,9 @@
 <ion-list *ngIf="entries && entries.length > 0">
   <ion-item *ngFor="let entry of entries">
-    <ion-label>{{entry.creditorName}}</ion-label>
+    <ion-label>
+      {{entry.creditorName}}
+      <p>{{entry.bookingDate}}</p>
+    </ion-label>
     <ion-note>{{entry.remittanceInformation}}</ion-note>
     <app-moneyvaluebadge [value]="entry.amount" [currency]="entry.currency" badgeSlot="end"
       [creditordebit]="entry.creditordebit" includePrefix="true"></app-moneyvaluebadge>
