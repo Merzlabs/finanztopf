@@ -22,9 +22,10 @@ export class DarkModeService {
     }
 
     // Listen for changes to the prefers-color-scheme media query
-    prefersDark.addEventListener('change', (mediaQuery) => {
-      this.setDarkTheme(mediaQuery.matches);
-    });
+    // iOS Problems
+    // prefersDark.addEventListener('change', (mediaQuery) => {
+    //  this.setDarkTheme(mediaQuery.matches);
+    // });
   }
 
   // Add or remove the "dark" class based on if the media query matches
