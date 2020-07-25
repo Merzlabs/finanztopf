@@ -10,6 +10,7 @@ import { DetailCategoryPage } from '../detail-category/detail-category.page';
 import { FileCacheService, CachedFile } from '../services/file-cache.service';
 import { StorageService } from '../services/storage.service';
 import { Expense } from '../types/Expense';
+import { SavingsComponent } from '../components/savings/savings.component';
 
 /**
  * Just for categorizing one field added
@@ -39,9 +40,12 @@ export class Tab3Page implements OnInit, OnDestroy {
     currency: string;
     incomeEntries: Array<PEntry>;
     outcomeEntries: Array<PEntry>;
+    savings: Array<PEntry>;
     months: Array<Month>;
     month: Month;
     results: PEntry[];
+    ignoredIBANs: string[];
+    ignoredCreditors: string[];
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
                 private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute) {
@@ -98,6 +102,13 @@ export class Tab3Page implements OnInit, OnDestroy {
         return this.outcomeEntries.map(item => item.amount).reduce((prev, next) => prev + next);
     }
 
+    get savingsSum(): number {
+        if (!this.savings || this.savings.length === 0) {
+            return 0.0;
+        }
+        return this.savings.map(item => item.amount).reduce((prev, next) => prev + next);
+    }
+
     ionViewWillEnter() {
         // Reset api instance of this page from files in cache every time
         this.api.clear();
@@ -109,6 +120,12 @@ export class Tab3Page implements OnInit, OnDestroy {
         }
 
         this.calcCategories();
+        this.loadIgnored();
+    }
+
+    loadIgnored() {
+        this.ignoredIBANs = localStorage.getItem(SavingsComponent.IGNOREIBAN)?.split(',');
+        this.ignoredCreditors = localStorage.getItem(SavingsComponent.IGNORECREDITOR)?.split(',');
     }
 
     ionViewWillLeave() {
@@ -138,6 +155,7 @@ export class Tab3Page implements OnInit, OnDestroy {
             this.incomeEntries = [];
             this.outcomeEntries = [];
             this.months = [];
+            this.savings = [];
         }
 
         // Reset sums on categories
@@ -228,9 +246,35 @@ export class Tab3Page implements OnInit, OnDestroy {
             this.incomeEntries.push(entry);
             return false;
         } else if (entry.creditordebit === 'DBIT') {
+            if (this.checkIgnored(entry)) {
+                return false;
+            }
+
             this.outcomeEntries.push(entry);
             return true;
         }
+    }
+
+    checkIgnored(entry: PEntry): boolean {
+        let invalid = false;
+        if (this.ignoredIBANs?.length > 0) {
+            invalid = this.ignoredIBANs.includes(entry.creditorIBAN);
+        }
+
+        if (!invalid && this.ignoredCreditors?.length > 0) {
+            let i = 0;
+            let cred = this.ignoredCreditors[i];
+            while (cred && !invalid) {
+                invalid = entry.creditorName.toLowerCase().includes(cred.toLowerCase());
+                cred = this.ignoredCreditors[++i];
+            }
+        }
+
+        if (invalid) {
+            this.savings.push(entry);
+        }
+
+        return invalid;
     }
 
     add() {

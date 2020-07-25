@@ -9,6 +9,7 @@ import { SumOverviewComponent } from './sum-overview/sum-overview.component';
 import { IntroductionComponent } from './introduction/introduction.component';
 import { EntrySearchComponent } from './entry-search/entry-search.component';
 import { EntryListComponent } from './entry-list/entry-list.component';
+import { SavingsComponent } from './savings/savings.component';
 
 @NgModule({
   imports: [
@@ -17,8 +18,8 @@ import { EntryListComponent } from './entry-list/entry-list.component';
     IonicModule
   ],
   declarations: [MoneyValueBadgeComponent, OpensourceComponent, SumOverviewComponent, IntroductionComponent, EntrySearchComponent,
-    EntryListComponent],
+    EntryListComponent, SavingsComponent],
   exports: [MoneyValueBadgeComponent, OpensourceComponent, SumOverviewComponent, IntroductionComponent, EntrySearchComponent,
-    EntryListComponent]
+    EntryListComponent, SavingsComponent]
 })
 export class ComponentsModule { }

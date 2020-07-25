@@ -13,6 +13,10 @@
         <ion-label>Zahlungsausgänge</ion-label>
         <app-moneyvaluebadge [value]="outcomeSum" debit="true" [currency]="currency" badgeSlot="end" includePrefix="true"></app-moneyvaluebadge>
       </ion-item>
+      <ion-item button (click)="savingsClick()">
+        <ion-label>Sparen</ion-label>
+        <app-moneyvaluebadge [value]="savingsSum" debit="true" [currency]="currency" badgeSlot="end" includePrefix="true"></app-moneyvaluebadge>
+      </ion-item>
     </ion-list>
 
     <ion-list *ngIf="expenses">

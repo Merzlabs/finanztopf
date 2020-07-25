@@ -20,7 +20,7 @@
   <ion-grid>
     <ion-row>
       <ion-col size-sm *ngIf="incomeSum > 0 || outcomeSum > 0">
-        <app-sum-overview [incomeSum]="incomeSum" [outcomeSum]="outcomeSum" [currency]="currency"
+        <app-sum-overview [incomeSum]="incomeSum" [outcomeSum]="outcomeSum" [currency]="currency" [savingsSum]="savingsSum" (savingsClicked)="details(this.savings)"
           (incomeClicked)="filterEntries(incomeEntries)" (outcomeClicked)="filterEntries(outcomeEntries)" [expenses]="months" (expenseClicked)="filterEntries($event.entries)"></app-sum-overview>
       </ion-col>
 

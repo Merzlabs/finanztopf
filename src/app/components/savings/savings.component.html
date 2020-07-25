@@ -1,0 +1,24 @@
+<ion-list-header>
+  Einstellungen für Sparer
+</ion-list-header>
+
+<ion-item>
+  <ion-label class="ion-text-wrap">
+    Regelmäßige oder einmalige Transaktionen zu Sparkonten oder anderen Anlagen sind keine wirklichen Ausgaben. Hier
+    können Konten und Empfänger hinterlegt werden um diese zu erkennen und aus den Ausgaben herauszufiltern.
+  </ion-label>
+</ion-item>
+
+<ion-item>
+  <ion-label>
+    IBANs
+  </ion-label>
+  <ion-input [value]="iban" placeholder="Liste mit , getrennt" (ionChange)="saveIbans($event)"></ion-input>
+</ion-item>
+
+<ion-item>
+  <ion-label>
+    Zahlungsempfänger
+  </ion-label>
+  <ion-input [value]="creditor" placeholder="Liste mit , getrennt" (ionChange)="saveCreditors($event)"></ion-input>
+</ion-item>
