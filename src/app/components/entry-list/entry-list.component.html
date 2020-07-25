@@ -2,9 +2,9 @@
   <ion-item *ngFor="let entry of entries">
     <ion-label>
       {{entry.creditorName}}
+      <p>{{entry.remittanceInformation}}</p>
       <p>{{entry.bookingDate}}</p>
     </ion-label>
-    <ion-note>{{entry.remittanceInformation}}</ion-note>
     <app-moneyvaluebadge [value]="entry.amount" [currency]="entry.currency" badgeSlot="end"
       [creditordebit]="entry.creditordebit" includePrefix="true"></app-moneyvaluebadge>
   </ion-item>
