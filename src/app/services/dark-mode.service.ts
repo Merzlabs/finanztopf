@@ -13,7 +13,7 @@ export class DarkModeService {
     // Use matchMedia to check the user preference
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-    const value = localStorage.getItem(STORAGE_KEY);;
+    const value = localStorage.getItem(STORAGE_KEY);
     if (value === undefined || value === null) {
       // initialize
       this.setDarkTheme(prefersDark.matches);
