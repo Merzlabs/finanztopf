@@ -2,6 +2,8 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EditCategoryPage } from './edit-category.page';
+import { RouterModule } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
 
 describe('EditCategoryPage', () => {
   let component: EditCategoryPage;
@@ -11,6 +13,7 @@ describe('EditCategoryPage', () => {
     TestBed.configureTestingModule({
       declarations: [ EditCategoryPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [IonicModule.forRoot(), RouterModule.forRoot([])],
     })
     .compileComponents();
   }));

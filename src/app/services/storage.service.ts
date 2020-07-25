@@ -22,7 +22,9 @@ export class StorageService {
       appId: '1:344072257495:web:04dd4820921dd7b5069592'
     };
 
-    this.app = firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) {
+      this.app = firebase.initializeApp(firebaseConfig);
+    }
     this.storage = firebase.storage();
   }
 
