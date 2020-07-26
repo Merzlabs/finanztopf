@@ -53,31 +53,14 @@
     </ion-row>
 
     <ion-row>
+      <ion-col *ngIf="unassinged?.length > 0">
+        <app-category-assign [entries]="unassinged"></app-category-assign>
+      </ion-col>
       <ion-col>
+        <ion-list-header>
+          Alle Transaktionen
+        </ion-list-header>
         <app-entry-search [entries]="api.entries" [results]="results"></app-entry-search>
-
-        <!-- TODO allow to put camt add file here on this site -->
-        <!-- <ion-card>
-          <ion-card-header>
-            <ion-card-title>Übersicht</ion-card-title>
-          </ion-card-header>
-        
-          <ion-card-content>
-            <ion-item>
-              <ion-label>CAMT-Dateien hinzufügen</ion-label>
-              <input type="file" multiple id="camtfiles" (change)="handleFileInput($event.target.files)">
-            </ion-item>
-            <ion-list>
-              <ion-list-header mode="ios">
-                Importierte Dateien
-              </ion-list-header>
-              <ion-item>
-                <ion-label class="ion-text-wrap">{{fileNames.substr(1)}}</ion-label>
-              </ion-item>
-              <ion-button fill="clear" slot="end" type="button" (click)="clearCache()">Aufräumen</ion-button>
-            </ion-list>
-          </ion-card-content>
-        </ion-card> -->
       </ion-col>
     </ion-row>
   </ion-grid>

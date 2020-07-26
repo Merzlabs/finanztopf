@@ -16,7 +16,7 @@ import { SavingsComponent } from '../components/savings/savings.component';
  * Just for categorizing one field added
  */
 class CheckEntry extends PEntry {
-    found: Array<string>;
+    found?: Array<string>;
 }
 
 class Month implements Expense {
@@ -46,6 +46,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     results: PEntry[];
     ignoredIBANs: string[];
     ignoredCreditors: string[];
+    unassinged: PEntry[];
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
                 private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute) {
@@ -144,11 +145,11 @@ export class Tab3Page implements OnInit, OnDestroy {
         this.querySubscription.unsubscribe();
     }
 
-    private calcCategories(entries?: Array<PEntry>) {
+    private calcCategories(entries?: Array<CheckEntry>) {
         let clearCache = false;
         if (!entries) {
             clearCache = true;
-            entries = this.api.entries;
+            entries = this.api.entries as CheckEntry[];
         }
 
         if (clearCache) {
@@ -168,7 +169,7 @@ export class Tab3Page implements OnInit, OnDestroy {
         this.currency = accounts.length > 0 ? accounts[0].currency : 'EUR';
 
         for (const entry of entries) {
-            const checkEntry = entry as CheckEntry;
+            const checkEntry = entry;
             checkEntry.found = [];
             this.checkCategories(checkEntry);
 
@@ -181,6 +182,7 @@ export class Tab3Page implements OnInit, OnDestroy {
 
         }
         console.log(this.categories);
+        this.unassinged = entries.filter((elem) => elem.found?.length < 1);
     }
 
     private addExpense(entry: PEntry) {
