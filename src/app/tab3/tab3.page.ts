@@ -177,7 +177,7 @@ export class Tab3Page implements OnInit, OnDestroy {
 
         }
         console.log(this.categories);
-        this.unassinged = entries.filter((elem) => elem.found?.length < 1);
+        this.unassinged = entries.filter((elem) => !this.checkIgnored(elem) && elem.found?.length < 1);
     }
 
     private addExpense(entry: PEntry) {
@@ -230,6 +230,10 @@ export class Tab3Page implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Check if entry should be ignored because of user settings
+     * @return true if invalid
+     */
     checkIgnored(entry: PEntry): boolean {
         let invalid = false;
         if (this.ignoredIBANs?.length > 0) {
@@ -240,7 +244,7 @@ export class Tab3Page implements OnInit, OnDestroy {
             let i = 0;
             let cred = this.ignoredCreditors[i];
             while (cred && !invalid) {
-                invalid = entry.creditorName.toLowerCase().includes(cred.toLowerCase());
+                invalid = entry.creditorName?.toLowerCase().includes(cred.toLowerCase());
                 cred = this.ignoredCreditors[++i];
             }
         }
