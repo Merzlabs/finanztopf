@@ -40,8 +40,8 @@
     "@types/jszip": "^3.1.7",
     "camtts": "0.0.2",
     "core-js": "^2.5.4",
-    "firebase": "^7.9.1",
     "jszip": "^3.2.2",
+    "realm-web": "^0.7.0",
     "rxjs": "~6.6.0",
     "tslib": "^1.9.0",
     "zone.js": "~0.10.3"

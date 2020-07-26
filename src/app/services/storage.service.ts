@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as firebase from 'firebase';
-import 'firebase/storage';
+import * as RealmWeb from 'realm-web';
 
 import { Category } from '../types/Category';
 
@@ -8,46 +7,43 @@ import { Category } from '../types/Category';
   providedIn: 'root'
 })
 export class StorageService {
-  app: firebase.app.App;
-  storage: firebase.storage.Storage;
+  app: RealmWeb.App;
+  credentials: RealmWeb.Credentials<Realm.Credentials.AnonymousPayload>;
+  user: RealmWeb.User;
 
   constructor() {
-    const firebaseConfig = {
-      apiKey: 'AIzaSyDQAnVnwZQ9rGIt5LZP9_S0lTFkyxY685A',
-      authDomain: 'merzlabs-pecuniator.firebaseapp.com',
-      databaseURL: 'https://merzlabs-pecuniator.firebaseio.com',
-      projectId: 'merzlabs-pecuniator',
-      storageBucket: 'merzlabs-pecuniator.appspot.com',
-      messagingSenderId: '344072257495',
-      appId: '1:344072257495:web:04dd4820921dd7b5069592'
-    };
-
-    if (!firebase.apps.length) {
-      this.app = firebase.initializeApp(firebaseConfig);
-    }
-    this.storage = firebase.storage();
+    this.app = new RealmWeb.App({ id: 'finanztopf-cnhkd' });
+    this.credentials = RealmWeb.Credentials.anonymous();
+    this.login();
   }
 
-  addToStorage(cat: Category) {
+  private async login() {
+    try {
+      // Authenticate the user
+      this.user  = await this.app.logIn(this.credentials);
+      // `App.currentUser` updates to match the logged in user
+      if (this.user.id !== this.app.currentUser.id) {
+        throw new Error('USERFAILED');
+      }
+    } catch (err) {
+      console.error('Failed to log in', err);
+    }
+  }
+
+  async addToStorage(cat: Category) {
     // Clean up!
     cat.sum = 0;
     delete cat.entries;
+    cat.owner = this.user.id;
 
-    const storageRef = firebase.storage().ref();
-    const fileRef = storageRef.child('toepfe/' + cat.id + '.json');
-    return fileRef.putString(JSON.stringify(cat));
+    const res = await this.app.functions.addCategory(cat);
+    console.debug(res);
   }
 
   async getFromStorage(id: string): Promise<any> {
-    const storageRef = firebase.storage().ref();
-    const fileRef = storageRef.child('toepfe/' + id + '.json');
-
-    try {
-        const url = await fileRef.getDownloadURL();
-        const response = await fetch(url);
-        return response.json();
-    } catch (e) {
-        throw e;
-    }
+    const res = await this.app.functions.getCategory(id);
+    res.sum = 0;
+    console.debug(res);
+    return res;
   }
 }
