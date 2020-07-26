@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { PEntry } from '@merzlabs/pecuniator-api';
 
 @Component({
@@ -9,9 +9,14 @@ import { PEntry } from '@merzlabs/pecuniator-api';
 export class EntryListComponent implements OnInit {
 
   @Input() entries: Array<PEntry>;
+  @Output() entryClicked = new EventEmitter<PEntry>();
 
   constructor() { }
 
   ngOnInit() {}
+
+  click(entry: PEntry) {
+    this.entryClicked.emit(entry);
+  }
 
 }

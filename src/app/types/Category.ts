@@ -10,6 +10,7 @@ export class Category {
     title: string;
     id: string;
     entries?: Array<PEntry>;
+    owner?: string;
 
     constructor() {
         this.id = Date.now().toString(); // TODO better idgen

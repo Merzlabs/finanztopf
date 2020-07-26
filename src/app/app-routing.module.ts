@@ -10,7 +10,11 @@ const routes: Routes = [
   { path: 'edit-category', loadChildren: './edit-category/edit-category.module#EditCategoryPageModule' },
   { path: 'detail-category', loadChildren: './detail-category/detail-category.module#DetailCategoryPageModule' },
   { path: 'settings', loadChildren: './settings/settings.module#SettingsPageModule' },
-  { path: 'onboarding', loadChildren: './onboarding/onboarding.module#OnboardingPageModule' }
+  { path: 'onboarding', loadChildren: './onboarding/onboarding.module#OnboardingPageModule' },
+  {
+    path: 'assign',
+    loadChildren: () => import('./assign/assign.module').then( m => m.AssignPageModule)
+  }
 ];
 @NgModule({
   imports: [

@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="secondary">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Neue Töpfe hinzufügen</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="add()">
+        <ion-icon name="checkmark" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list *ngIf="suggestions?.length > 0">
+    <ion-list-header>
+      Passende Töpfe wurden gefunden
+    </ion-list-header>
+    <ion-item *ngFor="let suggestion of suggestions">
+      <ion-label>
+        {{suggestion.title}}
+        <p>{{suggestion.subtile}}</p>
+      </ion-label>
+      <ion-checkbox slot="end" [(ngModel)]="suggestion.isChecked"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+
+  <ion-item *ngIf="!suggestions || suggestions.length == 0">
+    <ion-label>
+      Keine passenden Töpfe gefunden
+    </ion-label>
+  </ion-item>
+
+</ion-content>
