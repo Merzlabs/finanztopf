@@ -21,7 +21,10 @@
       Passende Töpfe wurden gefunden
     </ion-list-header>
     <ion-item *ngFor="let suggestion of suggestions">
-      <ion-label>{{suggestion.title}}</ion-label>
+      <ion-label>
+        {{suggestion.title}}
+        <p>{{suggestion.subtile}}</p>
+      </ion-label>
       <ion-checkbox slot="end" [(ngModel)]="suggestion.isChecked"></ion-checkbox>
     </ion-item>
   </ion-list>

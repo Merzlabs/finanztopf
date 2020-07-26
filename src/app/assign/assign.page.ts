@@ -7,6 +7,7 @@ import { ModalController } from '@ionic/angular';
 
 class CategorySelect extends Category {
   isChecked?: boolean;
+  subtile?: string;
 }
 
 @Component({
@@ -32,6 +33,18 @@ export class AssignPage implements OnInit {
     this.category.checkCategories(this.entry, this.allCategories);
 
     this.suggestions = this.allCategories.filter((elem) => elem.entries?.length > 0);
+    this.suggestions.forEach((elem) => {
+      elem.subtile = '';
+      if (elem?.creditorName?.length > 0) {
+        elem.subtile += 'Kreditor: ';
+        elem.subtile += elem.creditorName.join(',');
+      }
+
+      if (elem?.remittanceInformation?.length > 0) {
+        elem.subtile += 'Verwend.: ';
+        elem.subtile += elem.remittanceInformation.join(',');
+      }
+    });
   }
 
   dismiss(data?: CategorySelect[]) {
