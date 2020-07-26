@@ -269,10 +269,13 @@ export class Tab3Page implements OnInit, OnDestroy {
         }
         this.categories.push(cat);
         this.edit(cat);
+        this.saveCategories();
     }
 
     remove(index: number) {
         this.categories.splice(index, 1);
+        this.saveCategories();
+        this.calcCategories();
     }
 
     async details(p: Category | Array<PEntry>) {
