@@ -66,7 +66,7 @@ export class EditCategoryPage implements OnInit {
   }
 
     const alert = await this.alertCtrl.create({
-      header: 'Radio',
+      header: 'Filter',
       inputs,
       buttons: [
         {
@@ -100,26 +100,50 @@ export class EditCategoryPage implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  share() {
-    this.storage.addToStorage(this.category).then(async () => {
-      const toast = await this.toastCtrl.create({
-        duration: 5000,
-        message: `Topf mit der ID "${this.category.id}" zum Teilen verfügbar.`,
-        header: 'Speichern erfolgreich',
-        color: 'primary',
-        buttons: [
-          {
-            side: 'end',
-            icon: 'clipboard',
-            text: 'Kopieren',
-            handler: () => {
-              const url = location.href.replace(location.search, '');
-              navigator.clipboard.writeText(url + '?load=' + this.category.id);
-            }
+  async share() {
+    const message = `Sind Sie sicher, dass Sie diesen Topf öffentlich teilen möchten?
+    Alle Filter werden in ein öffentliches Verzeichnis hochgeladen und können nicht mehr bearbeitet und gelöscht werden.
+    Private Daten wie Transaktionen werden natürlich nicht geteilt.`;
+
+    const alert = await this.alertCtrl.create({
+      header: 'Bestätigen',
+      message,
+      buttons: [
+        {
+          text: 'Abbrechen',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            // Ignore
           }
-        ]
-      });
-      toast.present();
+        }, {
+          text: 'Ok',
+          handler: () => {
+            this.storage.addToStorage(this.category).then(async () => {
+              const toast = await this.toastCtrl.create({
+                duration: 5000,
+                message: `Topf mit der ID "${this.category.id}" zum Teilen verfügbar.`,
+                header: 'Speichern erfolgreich',
+                color: 'primary',
+                buttons: [
+                  {
+                    side: 'end',
+                    icon: 'clipboard',
+                    text: 'Kopieren',
+                    handler: () => {
+                      const url = location.href.replace(location.search, '');
+                      navigator.clipboard.writeText(url + '?load=' + this.category.id);
+                    }
+                  }
+                ]
+              });
+              toast.present();
+            });
+          }
+        }
+      ]
     });
+
+    await alert.present();
   }
 }
