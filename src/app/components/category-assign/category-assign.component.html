@@ -1,4 +1,4 @@
 <ion-list-header>
     Nicht zugeordnet
 </ion-list-header>
-<app-entry-list [entries]="entries"></app-entry-list>
+<app-entry-list [entries]="entries" (entryClicked)="assign($event)"></app-entry-list>

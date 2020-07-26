@@ -37,13 +37,17 @@ export class StorageService {
     cat.owner = this.user.id;
 
     const res = await this.app.functions.addCategory(cat);
-    console.debug(res);
   }
 
-  async getFromStorage(id: string): Promise<any> {
+  async getFromStorage(id: string): Promise<Category> {
     const res = await this.app.functions.getCategory(id);
     res.sum = 0;
-    console.debug(res);
+    return res;
+  }
+
+  async getAll(): Promise<Category[]> {
+    const res = await this.app.functions.getAllCategories();
+    res.sum = 0;
     return res;
   }
 }

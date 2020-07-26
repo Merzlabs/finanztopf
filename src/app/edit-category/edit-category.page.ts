@@ -24,7 +24,7 @@ export class EditCategoryPage implements OnInit {
   private buildConditions() {
     this.condtions = [];
     for (const prop in this.category) {
-      if (this.category.hasOwnProperty(prop) && prop !== 'id' && prop !== 'title' && prop !== 'sum' && prop !== 'entries') {
+      if (this.category.hasOwnProperty(prop) && prop in Filters) {
         this.condtions.push({ property: prop, filter: this.category[prop] });
       }
     }

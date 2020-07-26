@@ -11,13 +11,7 @@ import { FileCacheService, CachedFile } from '../services/file-cache.service';
 import { StorageService } from '../services/storage.service';
 import { Expense } from '../types/Expense';
 import { SavingsComponent } from '../components/savings/savings.component';
-
-/**
- * Just for categorizing one field added
- */
-class CheckEntry extends PEntry {
-    found?: Array<string>;
-}
+import { CheckEntry, CategoryService } from '../services/category.service';
 
 class Month implements Expense {
     label: string;
@@ -49,7 +43,8 @@ export class Tab3Page implements OnInit, OnDestroy {
     unassinged: PEntry[];
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
-                private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute) {
+                private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute,
+                private category: CategoryService) {
         this.api = new PecuniAPI();
 
         const savedCategories = localStorage.getItem('userCategories');
@@ -171,7 +166,7 @@ export class Tab3Page implements OnInit, OnDestroy {
         for (const entry of entries) {
             const checkEntry = entry;
             checkEntry.found = [];
-            this.checkCategories(checkEntry);
+            this.category.checkCategories(checkEntry, this.categories);
 
             if (clearCache) {
                 const isExpense = this.checkIncomeOutcome(checkEntry);
@@ -210,28 +205,6 @@ export class Tab3Page implements OnInit, OnDestroy {
 
         localStorage.setItem('userCategories', JSON.stringify(this.categories));
         this.calcCategories();
-    }
-
-    checkCategories(entry: CheckEntry) {
-        for (const cat of this.categories) {
-            const catname = cat.id;
-            for (const check in cat) {
-                if (check !== 'amount' && check !== 'title' && typeof entry[check] !== 'undefined') {
-                    for (const test of cat[check]) {
-                        if (!entry.found.includes(catname) && entry[check].toString().toLowerCase().includes(test.toLowerCase())) {
-
-                            if (entry.creditordebit === 'CRDT') {
-                                cat.sum += entry.amount;
-                            } else if (entry.creditordebit === 'DBIT') {
-                                cat.sum -= entry.amount;
-                            }
-                            cat.entries.push(entry);
-                            entry.found.push(catname);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     filterEntries(entries: Array<PEntry>) {
@@ -279,8 +252,17 @@ export class Tab3Page implements OnInit, OnDestroy {
         return invalid;
     }
 
-    add() {
-        const cat = new Category();
+    addCategories(categories: Category[]) {
+        categories.forEach((elem) => elem.sum = 0);
+        this.categories = this.categories.concat(categories);
+        this.saveCategories();
+        this.calcCategories();
+    }
+
+    add(cat?: Category) {
+        if (!cat) {
+            cat = new Category();
+        }
         this.categories.push(cat);
         this.edit(cat);
     }

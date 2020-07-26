@@ -54,7 +54,7 @@
 
     <ion-row>
       <ion-col *ngIf="unassinged?.length > 0">
-        <app-category-assign [entries]="unassinged"></app-category-assign>
+        <app-category-assign [entries]="unassinged" (addCategories)="addCategories($event)"></app-category-assign>
       </ion-col>
       <ion-col>
         <ion-list-header>

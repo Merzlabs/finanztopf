@@ -1,5 +1,5 @@
 <ion-list *ngIf="entries && entries.length > 0">
-  <ion-item *ngFor="let entry of entries">
+  <ion-item *ngFor="let entry of entries" (click)="click(entry)">
     <ion-label>
       {{entry.creditorName}}
       <p>{{entry.remittanceInformation}}</p>
