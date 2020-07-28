@@ -19,11 +19,13 @@ export class StorageService {
   }
 
   async login(username?: string, password?: string) {
+    let forceLogin = false;
     if (username && password) {
       this.credentials = RealmWeb.Credentials.emailPassword(username, password);
+      forceLogin = true;
     }
 
-    if (!this.user) {
+    if (!this.user || forceLogin) {
       console.log('Login', this.credentials);
       try {
         // Authenticate the user
