@@ -17,7 +17,11 @@ export class StorageService {
     this.login();
   }
 
-  private async login() {
+  async login(username?: string, password?: string) {
+    if (username && password) {
+      this.credentials = RealmWeb.Credentials.emailPassword(username, password);
+    }
+
     try {
       // Authenticate the user
       this.user  = await this.app.logIn(this.credentials);
@@ -27,6 +31,7 @@ export class StorageService {
       }
     } catch (err) {
       console.error('Failed to log in', err);
+      throw err;
     }
   }
 
@@ -48,6 +53,17 @@ export class StorageService {
   async getAll(): Promise<Category[]> {
     const res = await this.app.functions.getAllCategories();
     res.sum = 0;
+    return res;
+  }
+
+  async getAllAdmin(): Promise<Category[]> {
+    const res = await this.app.functions.getAllCategoriesAdmin();
+    res.sum = 0;
+    return res;
+  }
+
+  async updateAllAdmin(cats: Category[]): Promise<any> {
+    const res = await this.app.functions.updateAllCategoriesAdmin(cats);
     return res;
   }
 }

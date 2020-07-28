@@ -11,6 +11,7 @@ export class Category {
     id: string;
     entries?: Array<PEntry>;
     owner?: string;
+    active?: boolean;
 
     constructor() {
         this.id = Date.now().toString(); // TODO better idgen

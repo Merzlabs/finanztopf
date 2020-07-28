@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Admin Interface</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button (click)="update()" *ngIf="loggedIn">
+        Update
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list *ngIf="!loggedIn">
+    <ion-item>
+      <ion-label>Username</ion-label>
+      <ion-input type="email" [(ngModel)]="username"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Password</ion-label>
+      <ion-input type="password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+    <ion-button (click)="login()">Login</ion-button>
+  </ion-list>
+
+  <ion-list *ngIf="list?.length > 0">
+    <ion-item *ngFor="let item of list">
+      <ion-label>
+      {{item.title}}
+      <p>{{item.creditorName}}</p>
+      <p>{{item.remittanceInformation}}</p>
+      </ion-label>
+      <ion-checkbox [(ngModel)]="item.active"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
