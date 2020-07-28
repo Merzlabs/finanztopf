@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as RealmWeb from 'realm-web';
 
 import { Category } from '../types/Category';
+import { UserConfig } from '../types/UserConfig';
 
 @Injectable({
   providedIn: 'root'
@@ -65,5 +66,14 @@ export class StorageService {
   async updateAllAdmin(cats: Category[]): Promise<any> {
     const res = await this.app.functions.updateAllCategoriesAdmin(cats);
     return res;
+  }
+
+  async storeConfig(config: UserConfig) {
+    config.owner = this.user.id;
+    return this.app.functions.storeConfig(config);
+  }
+
+  async getConfig(id: string): Promise<UserConfig> {
+    return this.app.functions.getConfig(id);
   }
 }
