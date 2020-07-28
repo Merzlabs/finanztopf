@@ -13,6 +13,7 @@ import { Expense } from '../types/Expense';
 import { SavingsComponent } from '../components/savings/savings.component';
 import { CheckEntry, CategoryService } from '../services/category.service';
 import { UserConfig } from '../types/UserConfig';
+import { ConfigsharePage } from '../configshare/configshare.page';
 
 class Month implements Expense {
     label: string;
@@ -137,8 +138,9 @@ export class Tab3Page implements OnInit, OnDestroy {
     ngOnInit() {
         this.querySubscription = this.route.queryParams.subscribe((params) => {
             if (params.config) {
-                this.loadConfig(params.config);
-                return;
+                this.storage.login().then(() => {
+                    this.loadConfig(params.config);
+                });
             }
 
             if (params.load) {
@@ -393,7 +395,6 @@ export class Tab3Page implements OnInit, OnDestroy {
 
     private loadConfig(id: string) {
         this.storage.getConfig(id).then(async (data) => {
-            console.debug(data);
             for (const prop in data) {
                 if (typeof data[prop] === 'string' || typeof data[prop] === 'boolean') {
                     localStorage.setItem(prop, data[prop]);
@@ -415,24 +416,13 @@ export class Tab3Page implements OnInit, OnDestroy {
         const config = new UserConfig();
         const id = await this.storage.storeConfig(config);
 
-        const toast = await this.toastCtrl.create({
-            duration: 0,
-            message: `Die Konfiguration wurde gespeichert. Wenn Sie die URL auf einem anderen Gerät öffnen wird diese geladen.`,
-            header: 'Speichern erfolgreich',
-            color: 'primary',
-            buttons: [
-                {
-                    side: 'end',
-                    icon: 'clipboard',
-                    text: 'Kopieren',
-                    handler: () => {
-                        const url = location.href.replace(location.search, '');
-                        navigator.clipboard.writeText(url + '?config=' + id);
-                        toast.dismiss();
-                    }
-                }
-            ]
+        const modal = await this.modalCtrl.create({
+            component: ConfigsharePage,
+            swipeToClose: true,
+            componentProps: {
+                id
+            }
         });
-        toast.present();
+        modal.present();
     }
 }

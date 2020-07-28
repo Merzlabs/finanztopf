@@ -21,18 +21,14 @@ export class StorageService {
   async login(username?: string, password?: string) {
     if (username && password) {
       this.credentials = RealmWeb.Credentials.emailPassword(username, password);
-    }
-
-    try {
-      // Authenticate the user
-      this.user  = await this.app.logIn(this.credentials);
-      // `App.currentUser` updates to match the logged in user
-      if (this.user.id !== this.app.currentUser.id) {
-        throw new Error('USERFAILED');
+    } else if (!this.user) {
+      try {
+        // Authenticate the user
+        this.user  = await this.app.logIn(this.credentials);
+      } catch (err) {
+        console.error('Failed to log in', err);
+        throw err;
       }
-    } catch (err) {
-      console.error('Failed to log in', err);
-      throw err;
     }
   }
 

@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Töpfe gespeichert</ion-title>
+
+    <ion-buttons slot="primary">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item>
+    <ion-label class="ion-text-wrap">
+      Ihre Einstellungen werden für eine bestimmte Zeit unter diesem Link gespeichert. Sie können diesen Link verwenden um die Einstellungen auf ein anderes Gerät zu übertragen.
+    </ion-label>
+  </ion-item>
+
+  <ion-button expand="block" (click)="copy()">
+    Link in Zwischenablage kopieren
+  </ion-button>
+
+  <ion-grid>
+    <ion-row class="ion-align-items-center">
+      <ion-col class="ion-text-center">
+        <qrcode [qrdata]="url" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
