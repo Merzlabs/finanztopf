@@ -18,6 +18,10 @@ const routes: Routes = [
   {
     path: 'admin',
     loadChildren: () => import('./admin/admin.module').then( m => m.AdminPageModule)
+  },
+  {
+    path: 'configshare',
+    loadChildren: () => import('./configshare/configshare.module').then( m => m.ConfigsharePageModule)
   }
 ];
 @NgModule({

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import * as RealmWeb from 'realm-web';
 
 import { Category } from '../types/Category';
+import { UserConfig } from '../types/UserConfig';
 
 @Injectable({
   providedIn: 'root'
@@ -20,18 +21,14 @@ export class StorageService {
   async login(username?: string, password?: string) {
     if (username && password) {
       this.credentials = RealmWeb.Credentials.emailPassword(username, password);
-    }
-
-    try {
-      // Authenticate the user
-      this.user  = await this.app.logIn(this.credentials);
-      // `App.currentUser` updates to match the logged in user
-      if (this.user.id !== this.app.currentUser.id) {
-        throw new Error('USERFAILED');
+    } else if (!this.user) {
+      try {
+        // Authenticate the user
+        this.user  = await this.app.logIn(this.credentials);
+      } catch (err) {
+        console.error('Failed to log in', err);
+        throw err;
       }
-    } catch (err) {
-      console.error('Failed to log in', err);
-      throw err;
     }
   }
 
@@ -65,5 +62,14 @@ export class StorageService {
   async updateAllAdmin(cats: Category[]): Promise<any> {
     const res = await this.app.functions.updateAllCategoriesAdmin(cats);
     return res;
+  }
+
+  async storeConfig(config: UserConfig) {
+    config.owner = this.user.id;
+    return this.app.functions.storeConfig(config);
+  }
+
+  async getConfig(id: string): Promise<UserConfig> {
+    return this.app.functions.getConfig(id);
   }
 }

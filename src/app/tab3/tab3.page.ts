@@ -12,6 +12,8 @@ import { StorageService } from '../services/storage.service';
 import { Expense } from '../types/Expense';
 import { SavingsComponent } from '../components/savings/savings.component';
 import { CheckEntry, CategoryService } from '../services/category.service';
+import { UserConfig } from '../types/UserConfig';
+import { ConfigsharePage } from '../configshare/configshare.page';
 
 class Month implements Expense {
     label: string;
@@ -43,10 +45,14 @@ export class Tab3Page implements OnInit, OnDestroy {
     unassinged: PEntry[];
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
-                private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute,
-                private category: CategoryService) {
+        private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute,
+        private category: CategoryService) {
         this.api = new PecuniAPI();
 
+        this.init();
+    }
+
+    private init() {
         const savedCategories = localStorage.getItem('userCategories');
         if (savedCategories && savedCategories !== '') {
             this.categories = JSON.parse(savedCategories);
@@ -82,6 +88,7 @@ export class Tab3Page implements OnInit, OnDestroy {
                 },
             ];
         }
+        this.loadIgnored();
     }
 
     get incomeSum(): number {
@@ -130,8 +137,14 @@ export class Tab3Page implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.querySubscription = this.route.queryParams.subscribe((params) => {
+            if (params.config) {
+                this.storage.login().then(() => {
+                    this.loadConfig(params.config);
+                });
+            }
+
             if (params.load) {
-                this.download(params.load);
+                this.downloadCategory(params.load);
             }
         });
     }
@@ -333,7 +346,7 @@ export class Tab3Page implements OnInit, OnDestroy {
                 }, {
                     text: 'Ok',
                     handler: (data) => {
-                        this.download(data.id);
+                        this.downloadCategory(data.id);
                     }
                 }
             ]
@@ -342,7 +355,7 @@ export class Tab3Page implements OnInit, OnDestroy {
         await alert.present();
     }
 
-    private download(id: string) {
+    private downloadCategory(id: string) {
         this.storage.getFromStorage(id).then(async (data) => {
             this.categories.push(data);
 
@@ -353,5 +366,63 @@ export class Tab3Page implements OnInit, OnDestroy {
             });
             toast.present();
         }).catch((e) => console.error(e));
+    }
+
+    async storeConfig() {
+        const alert = await this.alertCtrl.create({
+            header: 'Konfiguration hochladen',
+            // tslint:disable-next-line: max-line-length
+            message: 'Sie könne alle ihre Einstellungen (natürlich ohne Finanzdaten) anonym speichern um sie auf einem anderen Gerät wieder herunterzuladen.',
+            buttons: [
+                {
+                    text: 'Abbrechen',
+                    role: 'cancel',
+                    cssClass: 'secondary',
+                    handler: () => {
+
+                    }
+                }, {
+                    text: 'Ok',
+                    handler: () => {
+                        this.uploadConfig();
+                    }
+                }
+            ]
+        });
+
+        await alert.present();
+    }
+
+    private loadConfig(id: string) {
+        this.storage.getConfig(id).then(async (data) => {
+            for (const prop in data) {
+                if (typeof data[prop] === 'string' || typeof data[prop] === 'boolean') {
+                    localStorage.setItem(prop, data[prop]);
+                }
+            }
+            this.init();
+            this.calcCategories();
+
+            const toast = await this.toastCtrl.create({
+                duration: 5000,
+                message: `Konfiguration geladen`,
+                color: 'primary'
+            });
+            toast.present();
+        }).catch((e) => console.error(e));
+    }
+
+    private async uploadConfig() {
+        const config = new UserConfig();
+        const id = await this.storage.storeConfig(config);
+
+        const modal = await this.modalCtrl.create({
+            component: ConfigsharePage,
+            swipeToClose: true,
+            componentProps: {
+                id
+            }
+        });
+        modal.present();
     }
 }
