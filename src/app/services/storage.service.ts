@@ -21,7 +21,10 @@ export class StorageService {
   async login(username?: string, password?: string) {
     if (username && password) {
       this.credentials = RealmWeb.Credentials.emailPassword(username, password);
-    } else if (!this.user) {
+    }
+
+    if (!this.user) {
+      console.log('Login', this.credentials);
       try {
         // Authenticate the user
         this.user  = await this.app.logIn(this.credentials);
@@ -66,6 +69,7 @@ export class StorageService {
 
   async storeConfig(config: UserConfig) {
     config.owner = this.user.id;
+    console.debug(config);
     return this.app.functions.storeConfig(config);
   }
 
