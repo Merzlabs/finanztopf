@@ -36,12 +36,12 @@ export class AssignPage implements OnInit {
     this.suggestions.forEach((elem) => {
       elem.subtile = '';
       if (elem?.creditorName?.length > 0) {
-        elem.subtile += 'Kreditor: ';
+        elem.subtile += ' Kreditor: ';
         elem.subtile += elem.creditorName.join(',');
       }
 
       if (elem?.remittanceInformation?.length > 0) {
-        elem.subtile += 'Verwend.: ';
+        elem.subtile += ' Verwend.: ';
         elem.subtile += elem.remittanceInformation.join(',');
       }
     });
