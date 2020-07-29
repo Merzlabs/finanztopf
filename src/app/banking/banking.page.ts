@@ -10,7 +10,7 @@ declare var window: any;
 })
 export class BankingPage implements OnInit {
   token: string;
-  result: Promise<any>;
+  result: string;
 
   constructor(private banking: BankingService) { }
 
