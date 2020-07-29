@@ -45,8 +45,8 @@ export class BankingService {
   }
 
   async startAccountsFlow() {
-    const url = this.session.flows.accounts;
-    const res = await this.app.functions.startKlarnaAccountsFlow(url);
+    const url = this.session.flows.transactions;
+    const res = await this.app.functions.startKlarnaFlow(url);
     this.session.client_token = res.data.client_token;
     this.session.flow_id = res.data.flow_id;
     this.session.self = res.data.self;

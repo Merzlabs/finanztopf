@@ -31,7 +31,6 @@ export class BankingPage implements OnInit {
         {
           onFinished: () => {
             // Read the flow from the server to retrieve the account list.
-            console.log('onFinished: read the flow from the server to retrieve the account list.');
             this.loadResult();
           },
           onError: error => {
