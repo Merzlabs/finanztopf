@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'configshare',
     loadChildren: () => import('./configshare/configshare.module').then( m => m.ConfigsharePageModule)
+  },
+  {
+    path: 'banking',
+    loadChildren: () => import('./banking/banking.module').then( m => m.BankingPageModule)
   }
 ];
 @NgModule({
