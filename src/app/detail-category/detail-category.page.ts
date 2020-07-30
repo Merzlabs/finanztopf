@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { PEntry } from '@merzlabs/pecuniator-api';
+import { PecuniatorEntry } from '@merzlabs/pecuniator-api';
 
 @Component({
   selector: 'app-detail-category',
@@ -9,7 +9,7 @@ import { PEntry } from '@merzlabs/pecuniator-api';
 })
 export class DetailCategoryPage implements OnInit {
 
-  @Input() entries: Array<PEntry>;
+  @Input() entries: Array<PecuniatorEntry>;
 
   constructor(private modalCtrl: ModalController) { }
 

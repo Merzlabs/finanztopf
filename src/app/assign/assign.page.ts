@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PEntry } from '@merzlabs/pecuniator-api';
+import { PecuniatorEntry } from '@merzlabs/pecuniator-api';
 import { StorageService } from '../services/storage.service';
 import { Category } from '../types/Category';
 import { CategoryService } from '../services/category.service';
@@ -17,7 +17,7 @@ class CategorySelect extends Category {
 })
 export class AssignPage implements OnInit {
 
-  @Input() entry: PEntry;
+  @Input() entry: PecuniatorEntry;
   allCategories: Category[];
   suggestions: CategorySelect[];
 

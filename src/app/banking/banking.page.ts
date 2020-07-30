@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BankingService } from '../services/banking.service';
+import { Router } from '@angular/router';
 
 declare var window: any;
 
@@ -12,7 +13,7 @@ export class BankingPage implements OnInit {
   token: string;
   result: string;
 
-  constructor(private banking: BankingService) { }
+  constructor(private banking: BankingService, private router: Router) { }
 
   ngOnInit() {
   }
@@ -37,7 +38,7 @@ export class BankingPage implements OnInit {
             console.error('onError: something bad happened during the flow.', error);
           },
         }
-      )
+      );
     } catch (e) {
       // Handle error that happened while opening the App
       console.error(e);
@@ -47,6 +48,7 @@ export class BankingPage implements OnInit {
   private async loadResult() {
     const data = await this.banking.loadData();
     this.result = JSON.stringify(data);
+    this.router.navigate(['/tabs/tab3']);
   }
 
 }

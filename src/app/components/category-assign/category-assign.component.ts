@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PEntry } from '@merzlabs/pecuniator-api';
+import { PecuniatorEntry } from '@merzlabs/pecuniator-api';
 import { ModalController } from '@ionic/angular';
 import { AssignPage } from 'src/app/assign/assign.page';
 import { Category } from 'src/app/types/Category';
@@ -11,14 +11,14 @@ import { Category } from 'src/app/types/Category';
 })
 export class CategoryAssignComponent implements OnInit {
 
-  @Input() entries: PEntry[];
+  @Input() entries: PecuniatorEntry[];
   @Output() addCategories = new EventEmitter<Category[]>();
 
   constructor(private modalCtrl: ModalController) { }
 
   ngOnInit() { }
 
-  async assign(entry: PEntry) {
+  async assign(entry: PecuniatorEntry) {
     const modal = await this.modalCtrl.create({
       component: AssignPage,
       swipeToClose: true,

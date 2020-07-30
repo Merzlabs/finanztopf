@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { PEntry } from '@merzlabs/pecuniator-api';
+import { PecuniatorEntry } from '@merzlabs/pecuniator-api';
 import { Category } from '../types/Category';
 
 /**
  * Just for categorizing one field added
  */
-export class CheckEntry extends PEntry {
+export interface CheckEntry extends PecuniatorEntry {
   found?: Array<string>;
 }
 

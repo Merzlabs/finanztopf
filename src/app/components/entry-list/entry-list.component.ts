@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { PEntry } from '@merzlabs/pecuniator-api';
+import { PecuniatorEntry } from '@merzlabs/pecuniator-api';
 
 @Component({
   selector: 'app-entry-list',
@@ -8,14 +8,14 @@ import { PEntry } from '@merzlabs/pecuniator-api';
 })
 export class EntryListComponent implements OnInit {
 
-  @Input() entries: Array<PEntry>;
-  @Output() entryClicked = new EventEmitter<PEntry>();
+  @Input() entries: Array<PecuniatorEntry>;
+  @Output() entryClicked = new EventEmitter<PecuniatorEntry>();
 
   constructor() { }
 
   ngOnInit() {}
 
-  click(entry: PEntry) {
+  click(entry: PecuniatorEntry) {
     this.entryClicked.emit(entry);
   }
 
