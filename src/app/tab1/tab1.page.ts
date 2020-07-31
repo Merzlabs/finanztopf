@@ -48,7 +48,7 @@ export class Tab1Page implements OnInit {
 
     modal.onDidDismiss().then((value) => {
       if (value?.data) {
-        this.router.navigate(['/tabs/tab3']);
+        // navigate used to be here
       }
     });
 

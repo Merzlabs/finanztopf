@@ -51,6 +51,7 @@ export class BankingPage implements OnInit {
     this.result = JSON.stringify(data);
     const res = await this.banking.closeSession();
     console.log('Session close', res);
+    this.router.navigate(['/tabs/tab3']);
     this.close(res);
   }
 

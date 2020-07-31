@@ -11,11 +11,15 @@
 
 <ion-content>
 
-  <ion-item>
-    <ion-label>
-      Test Integration der Banking Schnittstelle
-    </ion-label>
-  </ion-item>
+  <ion-list>
+    <ion-list-header>
+      Test Integration der Banking Schnittstelle von Klarna
+    </ion-list-header>
+    <ion-item class="ion-text-wrap">
+      Klarna bietet eine Schnittstelle mit der man als Entwickler Kontodaten in seine eigene Anwendung laden kann. Wir möchten das hier mit einem Testzugang der Sandbox von Klarna testen.
+      Einfach irgendwelche Logindaten eingeben und ein Konto wählen um Beispieldaten zu sehen.
+    </ion-item>
+  </ion-list>
 
   <ion-button (click)="login()" expand="full">
     Login
