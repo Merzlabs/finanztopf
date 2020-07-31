@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../services/storage.service';
 import { Category } from '../types/Category';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-admin',
@@ -13,14 +14,14 @@ export class AdminPage implements OnInit {
   password: string;
   list: Category[];
 
-  constructor(private storage: StorageService) { }
+  constructor(private storage: StorageService, private data: DataService) { }
 
   ngOnInit() {
   }
 
   async login() {
     try {
-      await this.storage.login(this.username, this.password);
+      await this.data.login(this.username, this.password);
       this.loggedIn = true;
       this.load();
     } catch (e) {

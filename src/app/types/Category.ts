@@ -1,4 +1,4 @@
-import { PEntry } from '@merzlabs/pecuniator-api';
+import { PecuniatorEntry } from '@merzlabs/pecuniator-api';
 
 /**
  * Query object for entries with some fields for categories. Always tests objects properties with include.
@@ -9,7 +9,7 @@ export class Category {
     sum: number;
     title: string;
     id: string;
-    entries?: Array<PEntry>;
+    entries?: Array<PecuniatorEntry>;
     owner?: string;
     active?: boolean;
 

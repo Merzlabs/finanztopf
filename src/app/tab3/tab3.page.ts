@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { PecuniAPI, PEntry } from '@merzlabs/pecuniator-api';
+import { PecuniAPI, PecuniatorEntry } from '@merzlabs/pecuniator-api';
 import { ModalController, IonList, AlertController, ToastController } from '@ionic/angular';
 
 import { EditCategoryPage } from '../edit-category/edit-category.page';
@@ -14,11 +14,12 @@ import { SavingsComponent } from '../components/savings/savings.component';
 import { CheckEntry, CategoryService } from '../services/category.service';
 import { UserConfig } from '../types/UserConfig';
 import { ConfigsharePage } from '../configshare/configshare.page';
+import { BankingService } from '../services/banking.service';
 
 class Month implements Expense {
     label: string;
     date: string;
-    entries: Array<PEntry>;
+    entries: Array<PecuniatorEntry>;
     amount: number;
 }
 
@@ -34,19 +35,19 @@ export class Tab3Page implements OnInit, OnDestroy {
     @ViewChild('categorylist') list: IonList;
     querySubscription: Subscription;
     currency: string;
-    incomeEntries: Array<PEntry>;
-    outcomeEntries: Array<PEntry>;
-    savings: Array<PEntry>;
+    incomeEntries: Array<PecuniatorEntry>;
+    outcomeEntries: Array<PecuniatorEntry>;
+    savings: Array<PecuniatorEntry>;
     months: Array<Month>;
     month: Month;
-    results: PEntry[];
+    results: PecuniatorEntry[];
     ignoredIBANs: string[];
     ignoredCreditors: string[];
-    unassinged: PEntry[];
+    unassinged: PecuniatorEntry[];
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
-        private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute,
-        private category: CategoryService) {
+                private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute,
+                private category: CategoryService, private banking: BankingService) {
         this.api = new PecuniAPI();
 
         this.init();
@@ -122,6 +123,12 @@ export class Tab3Page implements OnInit, OnDestroy {
             }
         }
 
+        const data = this.banking.getData();
+        console.log('Banking data', data);
+        if (data) {
+            this.api.load(data);
+        }
+
         this.loadIgnored();
         this.calcCategories();
     }
@@ -193,7 +200,7 @@ export class Tab3Page implements OnInit, OnDestroy {
         this.unassinged = entries.filter((elem) => !this.checkIgnored(elem) && elem.found?.length < 1);
     }
 
-    private addExpense(entry: PEntry) {
+    private addExpense(entry: PecuniatorEntry) {
         const yearAndMonth = entry.bookingDate.substring(0, 7);
         const month = this.months.find((elem) => elem.date === yearAndMonth);
         if (month) {
@@ -220,7 +227,7 @@ export class Tab3Page implements OnInit, OnDestroy {
         this.calcCategories();
     }
 
-    filterEntries(entries: Array<PEntry>) {
+    filterEntries(entries: Array<PecuniatorEntry>) {
         this.calcCategories(entries);
         this.results = entries;
     }
@@ -229,7 +236,7 @@ export class Tab3Page implements OnInit, OnDestroy {
      * Check creditordebit
      * @return true if outcome
      */
-    checkIncomeOutcome(entry: PEntry) {
+    checkIncomeOutcome(entry: PecuniatorEntry) {
         if (entry.creditordebit === 'CRDT') {
             this.incomeEntries.push(entry);
             return false;
@@ -247,7 +254,7 @@ export class Tab3Page implements OnInit, OnDestroy {
      * Check if entry should be ignored because of user settings
      * @return true if invalid
      */
-    checkIgnored(entry: PEntry): boolean {
+    checkIgnored(entry: PecuniatorEntry): boolean {
         let invalid = false;
         if (this.ignoredIBANs?.length > 0) {
             invalid = this.ignoredIBANs.includes(entry.creditorIBAN);
@@ -291,8 +298,8 @@ export class Tab3Page implements OnInit, OnDestroy {
         this.calcCategories();
     }
 
-    async details(p: Category | Array<PEntry>) {
-        let entries: Array<PEntry> = [];
+    async details(p: Category | Array<PecuniatorEntry>) {
+        let entries: Array<PecuniatorEntry> = [];
         if (p instanceof Array) {
             entries = p;
         } else {

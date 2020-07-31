@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PEntry } from '@merzlabs/pecuniator-api';
+import { PecuniatorEntry } from '@merzlabs/pecuniator-api';
 
 @Component({
   selector: 'app-entry-search',
@@ -8,8 +8,8 @@ import { PEntry } from '@merzlabs/pecuniator-api';
 })
 export class EntrySearchComponent implements OnInit {
 
-  @Input() entries: Array<PEntry>;
-  @Input() results: Array<PEntry>;
+  @Input() entries: Array<PecuniatorEntry>;
+  @Input() results: Array<PecuniatorEntry>;
   private searchString: string;
 
   private MAX_EMPTY_ENTRIES = 10;
