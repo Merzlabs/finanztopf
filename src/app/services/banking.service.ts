@@ -28,6 +28,7 @@ export class BankingService {
   user: RealmWeb.User;
   session: Session;
   private data: any;
+  sessionURL: string;
 
   constructor(private realm: DataService) {
     this.login();
@@ -41,8 +42,8 @@ export class BankingService {
 
   async startSession() {
     const res = await this.app.functions.startKlarnaSession();
-    console.debug(res);
     this.session = res.data as Session;
+    this.sessionURL = res.data.self;
   }
 
   async startAccountsFlow() {
@@ -67,5 +68,11 @@ export class BankingService {
 
   getData() {
     return this.data;
+  }
+
+  async closeSession() {
+    if (this.sessionURL) {
+      return await this.app.functions.closeKlarnaSession(this.sessionURL);
+    }
   }
 }
