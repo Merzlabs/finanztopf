@@ -124,6 +124,7 @@ export class Tab3Page implements OnInit, OnDestroy {
         }
 
         const data = this.banking.getData();
+        console.log('Banking data', data);
         if (data) {
             this.api.load(data);
         }
