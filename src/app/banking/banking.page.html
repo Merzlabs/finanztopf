@@ -1,16 +1,24 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="secondary">
+      <ion-button (click)="close()">
+        <ion-icon name="close" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>Banking</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
+  <ion-item>
+    <ion-label>
+      Test Integration der Banking Schnittstelle
+    </ion-label>
+  </ion-item>
 
-  <ion-button (click)="login()">
+  <ion-button (click)="login()" expand="block">
     Start
   </ion-button>
-
-  {{result}}
 
 </ion-content>

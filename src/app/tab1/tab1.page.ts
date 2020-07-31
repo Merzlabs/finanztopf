@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FileCacheService, CachedFile } from '../services/file-cache.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { X2saService } from '../services/x2sa/x2sa.service';
+import { BankingPage } from '../banking/banking.page';
 
 @Component({
   selector: 'app-tab1',
@@ -14,8 +15,9 @@ export class Tab1Page implements OnInit {
   constructor(
     public filecache: FileCacheService,
     private route: ActivatedRoute,
-    public modalController: ModalController,
-    public x2saService: X2saService) {
+    public modalCtrl: ModalController,
+    public x2saService: X2saService,
+    private router: Router) {
   }
 
   ngOnInit() {
@@ -36,6 +38,21 @@ export class Tab1Page implements OnInit {
 
   clearCache() {
     this.filecache.deleteAll();
+  }
+
+  async openBanking() {
+    const modal = await this.modalCtrl.create({
+      component: BankingPage,
+      swipeToClose: true
+    });
+
+    modal.onDidDismiss().then((value) => {
+      if (value?.data) {
+        this.router.navigate(['/tabs/tab3']);
+      }
+    });
+
+    modal.present();
   }
 
 }

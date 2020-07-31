@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BankingService } from '../services/banking.service';
 import { Router } from '@angular/router';
+import { ModalController } from '@ionic/angular';
 
 declare var window: any;
 
@@ -13,7 +14,7 @@ export class BankingPage implements OnInit {
   token: string;
   result: string;
 
-  constructor(private banking: BankingService, private router: Router) { }
+  constructor(private banking: BankingService, private router: Router, private modalCtrl: ModalController) { }
 
   ngOnInit() {
   }
@@ -48,9 +49,13 @@ export class BankingPage implements OnInit {
   private async loadResult() {
     const data = await this.banking.loadData();
     this.result = JSON.stringify(data);
-    this.router.navigate(['/tabs/tab3']);
     const res = await this.banking.closeSession();
     console.log('Session close', res);
+    this.close(res);
+  }
+
+  close(data: any) {
+    this.modalCtrl.dismiss(data);
   }
 
 }
