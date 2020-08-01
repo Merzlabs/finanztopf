@@ -55,8 +55,10 @@ export class BankingPage implements OnInit {
     this.close(res);
   }
 
-  close(data?: any) {
-    this.modalCtrl.dismiss(data);
+  async close(data?: any) {
+    if (await this.modalCtrl.getTop()) {
+      this.modalCtrl.dismiss(data);
+    }
   }
 
 }
