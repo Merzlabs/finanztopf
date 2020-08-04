@@ -1,7 +1,7 @@
 <ion-list *ngIf="entries && entries.length > 0">
   <ion-item *ngFor="let entry of entries" (click)="click(entry)">
     <ion-label>
-      {{entry.creditorName}}
+      {{creditorDebtor(entry)}}
       <p>
         <ng-container *ngFor="let remittanceLine of entry.remittanceInformation">
           {{remittanceLine}}

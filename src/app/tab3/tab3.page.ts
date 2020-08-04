@@ -35,7 +35,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     month: Month;
     results: PecuniatorEntry[];
     ignoredIBANs: string[];
-    ignoredTransactionPartner: string[];
+    ignoredTransactionPartners: string[];
     unassinged: PecuniatorEntry[];
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
@@ -128,7 +128,7 @@ export class Tab3Page implements OnInit, OnDestroy {
 
     loadIgnored() {
         this.ignoredIBANs = localStorage.getItem(SavingsComponent.IGNOREIBAN)?.split(',');
-        this.ignoredTransactionPartner = localStorage.getItem(SavingsComponent.IGNORECREDITOR)?.split(',');
+        this.ignoredTransactionPartners = localStorage.getItem(SavingsComponent.IGNORETRANSACTIONPARTNER)?.split(',');
     }
 
     ionViewWillLeave() {
@@ -259,26 +259,34 @@ export class Tab3Page implements OnInit, OnDestroy {
      * Check if entry should be ignored because of user settings
      * @return true if invalid
      */
-    // TODO global distinction value/ts type wether received or sent transaction would be better
-    checkIgnored(entry: PecuniatorEntry, debit = true): boolean {
+    checkIgnored(entry: PecuniatorEntry): boolean {
         let invalid = false;
-        if (this.ignoredIBANs?.length > 0) {
-            invalid = debit ? this.ignoredIBANs.includes(entry.debitorIBAN) : this.ignoredIBANs.includes(entry.creditorIBAN);
+
+        let isDebit = null;
+        // TODO smarter way for pecuniator to strongly type tell if credit or debit transaction
+        if (entry.creditordebit === 'CRDT') {
+            isDebit = false;
+        } else if (entry.creditordebit === 'DBIT') {
+            isDebit = true;
         }
 
-        if (!invalid && this.ignoredTransactionPartner?.length > 0) {
-            let i = 0;
-            let transactionPartner = this.ignoredTransactionPartner[i];
-            while (transactionPartner && !invalid) {
-                invalid =  debit ?
-                            entry.creditorName?.toLowerCase().includes(transactionPartner.toLowerCase()) :
-                            entry.debtorName?.toLowerCase().includes(transactionPartner.toLowerCase());
+        if (this.ignoredIBANs?.length > 0) {
+            invalid = isDebit ? this.ignoredIBANs.includes(entry.creditorIBAN) : this.ignoredIBANs.includes(entry.debitorIBAN);
+        }
 
-                transactionPartner = this.ignoredTransactionPartner[++i];
+        if (!invalid && this.ignoredTransactionPartners?.length > 0) {
+            let i = 0;
+            let account = this.ignoredTransactionPartners[i];
+            while (account && !invalid) {
+                invalid = isDebit ?
+                        entry.creditorName?.toLowerCase().includes(account.toLowerCase()) :
+                        entry.debtorName?.toLowerCase().includes(account.toLowerCase());
+
+                account = this.ignoredTransactionPartners[++i];
             }
         }
 
-        if (invalid && debit) {
+        if (invalid && isDebit) {
             // TODO change this part after savings behaviour is changed
             this.savings.push(entry);
         }

@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SavingsComponent implements OnInit {
   static readonly IGNOREIBAN = 'ignoreIBAN';
-  static readonly IGNORECREDITOR = 'ignoreCreditor';
+  static readonly IGNORETRANSACTIONPARTNER = 'ignoreTransactionPartner';
   iban: string;
   creditor: string;
 
@@ -15,7 +15,7 @@ export class SavingsComponent implements OnInit {
 
   ngOnInit() {
     this.iban = localStorage.getItem(SavingsComponent.IGNOREIBAN);
-    this.creditor = localStorage.getItem(SavingsComponent.IGNORECREDITOR);
+    this.creditor = localStorage.getItem(SavingsComponent.IGNORETRANSACTIONPARTNER);
   }
 
   saveIbans(event: any) {
@@ -28,7 +28,7 @@ export class SavingsComponent implements OnInit {
   saveCreditors(event: any) {
     const value = event.detail?.value;
     if (typeof value === 'string') {
-      localStorage.setItem(SavingsComponent.IGNORECREDITOR, value);
+      localStorage.setItem(SavingsComponent.IGNORETRANSACTIONPARTNER, value);
     }
   }
 
