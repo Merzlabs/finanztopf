@@ -2,7 +2,12 @@
   <ion-item *ngFor="let entry of entries" (click)="click(entry)">
     <ion-label>
       {{entry.creditorName}}
-      <p>{{entry.remittanceInformation}}</p>
+      <p>
+        <ng-container *ngFor="let remittanceLine of entry.remittanceInformation">
+          {{remittanceLine}}
+          <br>
+        </ng-container>
+      </p>
       <p>{{entry.bookingDate}}</p>
     </ion-label>
     <app-moneyvaluebadge [value]="entry.amount" [currency]="entry.currency" badgeSlot="end"
