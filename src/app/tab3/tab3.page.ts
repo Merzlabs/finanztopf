@@ -42,7 +42,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     month: Month;
     results: PecuniatorEntry[];
     ignoredIBANs: string[];
-    ignoredCreditors: string[];
+    ignoredAccounts: string[];
     unassinged: PecuniatorEntry[];
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
@@ -135,7 +135,7 @@ export class Tab3Page implements OnInit, OnDestroy {
 
     loadIgnored() {
         this.ignoredIBANs = localStorage.getItem(SavingsComponent.IGNOREIBAN)?.split(',');
-        this.ignoredCreditors = localStorage.getItem(SavingsComponent.IGNORECREDITOR)?.split(',');
+        this.ignoredAccounts = localStorage.getItem(SavingsComponent.IGNORECREDITOR)?.split(',');
     }
 
     ionViewWillLeave() {
@@ -257,15 +257,24 @@ export class Tab3Page implements OnInit, OnDestroy {
     checkIgnored(entry: PecuniatorEntry): boolean {
         let invalid = false;
         if (this.ignoredIBANs?.length > 0) {
-            invalid = this.ignoredIBANs.includes(entry.creditorIBAN);
+            // TODO better code not this check two times
+            if (entry.creditordebit === 'CRDT') {
+                invalid = this.ignoredIBANs.includes(entry.debitorIBAN);
+            } else if (entry.creditordebit === 'DBIT') {
+                invalid = this.ignoredIBANs.includes(entry.creditorIBAN);
+            }
         }
 
-        if (!invalid && this.ignoredCreditors?.length > 0) {
+        if (!invalid && this.ignoredAccounts?.length > 0) {
             let i = 0;
-            let cred = this.ignoredCreditors[i];
-            while (cred && !invalid) {
-                invalid = entry.creditorName?.toLowerCase().includes(cred.toLowerCase());
-                cred = this.ignoredCreditors[++i];
+            let account = this.ignoredAccounts[i];
+            while (account && !invalid) {
+                if (entry.creditordebit === 'CRDT') {
+                    invalid = entry.debtorName?.toLowerCase().includes(account.toLowerCase());
+                } else if (entry.creditordebit === 'DBIT') {
+                    invalid = entry.creditorName?.toLowerCase().includes(account.toLowerCase());
+                }
+                account = this.ignoredAccounts[++i];
             }
         }
 
