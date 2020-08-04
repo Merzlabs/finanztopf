@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Expense } from 'src/app/types/Expense';
+import { Month } from 'src/app/types/Month';
 
 @Component({
   selector: 'app-sum-overview',
@@ -12,11 +12,11 @@ export class SumOverviewComponent implements OnInit {
   @Input() outcomeSum: number;
   @Input() savingsSum: number;
   @Input() currency: string;
-  @Input() expenses: Array<Expense>;
+  @Input() months: Array<Month>;
 
   @Output() incomeClicked: EventEmitter<void> = new EventEmitter();
   @Output() outcomeClicked: EventEmitter<void> = new EventEmitter();
-  @Output() expenseClicked: EventEmitter<Expense> = new EventEmitter();
+  @Output() monthClicked: EventEmitter<Month> = new EventEmitter();
   @Output() savingsClicked: EventEmitter<void> = new EventEmitter();
 
   constructor() { }
@@ -31,8 +31,8 @@ export class SumOverviewComponent implements OnInit {
     this.outcomeClicked.emit();
   }
 
-  expenseClick(expense: Expense) {
-    this.expenseClicked.emit(expense);
+  monthClick(month: Month) {
+    this.monthClicked.emit(month);
   }
 
   savingsClick() {

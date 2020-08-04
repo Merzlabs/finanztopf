@@ -9,19 +9,12 @@ import { Category } from '../types/Category';
 import { DetailCategoryPage } from '../detail-category/detail-category.page';
 import { FileCacheService, CachedFile } from '../services/file-cache.service';
 import { StorageService } from '../services/storage.service';
-import { Expense } from '../types/Expense';
+import { Month } from '../types/Month';
 import { SavingsComponent } from '../components/savings/savings.component';
 import { CheckEntry, CategoryService } from '../services/category.service';
 import { UserConfig } from '../types/UserConfig';
 import { ConfigsharePage } from '../configshare/configshare.page';
 import { BankingService } from '../services/banking.service';
-
-class Month implements Expense {
-    label: string;
-    date: string;
-    entries: Array<PecuniatorEntry>;
-    amount: number;
-}
 
 @Component({
     selector: 'app-tab3',
@@ -42,7 +35,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     month: Month;
     results: PecuniatorEntry[];
     ignoredIBANs: string[];
-    ignoredCreditors: string[];
+    ignoredTransactionPartner: string[];
     unassinged: PecuniatorEntry[];
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
@@ -135,7 +128,7 @@ export class Tab3Page implements OnInit, OnDestroy {
 
     loadIgnored() {
         this.ignoredIBANs = localStorage.getItem(SavingsComponent.IGNOREIBAN)?.split(',');
-        this.ignoredCreditors = localStorage.getItem(SavingsComponent.IGNORECREDITOR)?.split(',');
+        this.ignoredTransactionPartner = localStorage.getItem(SavingsComponent.IGNORECREDITOR)?.split(',');
     }
 
     ionViewWillLeave() {
@@ -190,9 +183,7 @@ export class Tab3Page implements OnInit, OnDestroy {
 
             if (clearCache) {
                 const isExpense = this.checkIncomeOutcome(checkEntry);
-                if (isExpense) {
-                    this.addExpense(entry);
-                }
+                this.addTransactionToMonth(entry, isExpense);
             }
 
         }
@@ -200,20 +191,34 @@ export class Tab3Page implements OnInit, OnDestroy {
         this.unassinged = entries.filter((elem) => !this.checkIgnored(elem) && elem.found?.length < 1);
     }
 
-    private addExpense(entry: PecuniatorEntry) {
+    private addTransactionToMonth(entry: PecuniatorEntry, isExpense: boolean) {
         const yearAndMonth = entry.bookingDate.substring(0, 7);
-        const month = this.months.find((elem) => elem.date === yearAndMonth);
-        if (month) {
-            month.entries.push(entry);
-            month.amount += entry.amount;
-        } else {
-            const date = new Date(entry.bookingDate);
-            this.months.push({
-                label: `${date.getMonth() > 9 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getFullYear()}`,
-                date: yearAndMonth,
-                entries: [entry],
-                amount: entry.amount
-            });
+        const month: Month | null = this.months.find((elem) => elem.date === yearAndMonth);
+
+        if (!this.checkIgnored(entry)) {
+            if (month) {
+                month.entries.push(entry);
+                if (isExpense) {
+                    month.expenseSum += entry.amount;
+                } else {
+                    month.incomeSum += entry.amount;
+                }
+            } else {
+                const date = new Date(entry.bookingDate);
+                const newMonth: Month = {
+                    label: `${date.getMonth() > 9 ? date.getMonth() + 1 : '0' + (date.getMonth() + 1)}-${date.getFullYear()}`,
+                    date: yearAndMonth,
+                    expenseSum: 0.0,
+                    incomeSum: 0.0,
+                    entries: [entry]
+                };
+                if (isExpense) {
+                    newMonth.expenseSum += entry.amount;
+                } else {
+                    newMonth.incomeSum += entry.amount;
+                }
+                this.months.push(newMonth);
+            }
         }
     }
 
@@ -254,22 +259,27 @@ export class Tab3Page implements OnInit, OnDestroy {
      * Check if entry should be ignored because of user settings
      * @return true if invalid
      */
-    checkIgnored(entry: PecuniatorEntry): boolean {
+    // TODO global distinction value/ts type wether received or sent transaction would be better
+    checkIgnored(entry: PecuniatorEntry, debit = true): boolean {
         let invalid = false;
         if (this.ignoredIBANs?.length > 0) {
-            invalid = this.ignoredIBANs.includes(entry.creditorIBAN);
+            invalid = debit ? this.ignoredIBANs.includes(entry.debitorIBAN) : this.ignoredIBANs.includes(entry.creditorIBAN);
         }
 
-        if (!invalid && this.ignoredCreditors?.length > 0) {
+        if (!invalid && this.ignoredTransactionPartner?.length > 0) {
             let i = 0;
-            let cred = this.ignoredCreditors[i];
-            while (cred && !invalid) {
-                invalid = entry.creditorName?.toLowerCase().includes(cred.toLowerCase());
-                cred = this.ignoredCreditors[++i];
+            let transactionPartner = this.ignoredTransactionPartner[i];
+            while (transactionPartner && !invalid) {
+                invalid =  debit ?
+                            entry.creditorName?.toLowerCase().includes(transactionPartner.toLowerCase()) :
+                            entry.debtorName?.toLowerCase().includes(transactionPartner.toLowerCase());
+
+                transactionPartner = this.ignoredTransactionPartner[++i];
             }
         }
 
-        if (invalid) {
+        if (invalid && debit) {
+            // TODO change this part after savings behaviour is changed
             this.savings.push(entry);
         }
 
