@@ -24,7 +24,7 @@ export class CategoryAssignComponent implements OnInit {
         return sum;
     }
     this.entries.forEach((entry) => {
-        if (!this.isDebt(entry)) {
+        if (entry.isCredit) {
             sum += entry.amount;
         }
     });
@@ -37,7 +37,7 @@ export class CategoryAssignComponent implements OnInit {
         return sum;
     }
     this.entries.forEach((entry) => {
-        if (this.isDebt(entry)) {
+        if (entry.isDebit) {
             sum += entry.amount;
         }
     });
