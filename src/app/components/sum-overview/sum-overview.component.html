@@ -15,7 +15,7 @@
       </ion-item>
       <ion-item button (click)="savingsClick()">
         <ion-label>Sparen</ion-label>
-        <app-moneyvaluebadge [value]="savingsSum" debit="true" [currency]="currency" badgeSlot="end" includePrefix="true"></app-moneyvaluebadge>
+        <app-moneyvaluebadge [value]="savingsSum" typeByValue="true" [currency]="currency" badgeSlot="end" includePrefix="true"></app-moneyvaluebadge>
       </ion-item>
     </ion-list>
 
@@ -25,12 +25,8 @@
       </ion-list-header>
       <ion-item button *ngFor="let month of months" (click)="monthClick(month)">
         <ion-label>{{month.label}}</ion-label>
-        <app-moneyvaluebadge [value]="month.incomeSum" credit="true" [currency]="currency" badgeSlot="end" includePrefix="true"></app-moneyvaluebadge>
-        <br>
-        <app-moneyvaluebadge [value]="month.expenseSum" debit="true" [currency]="currency" badgeSlot="end" includePrefix="true"></app-moneyvaluebadge>
-        <br>
-        <hr>
-        =<app-moneyvaluebadge [value]="month.incomeSum - month.expenseSum" [currency]="currency" badgeSlot="end" includePrefix="true"></app-moneyvaluebadge>
+
+        <app-balance-calculation [incomeSum]="month.incomeSum" [expenseSum]="month.expenseSum"></app-balance-calculation>
       </ion-item>
     </ion-list>
   </ion-card-content>

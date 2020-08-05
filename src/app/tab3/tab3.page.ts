@@ -35,7 +35,8 @@ export class Tab3Page implements OnInit, OnDestroy {
     month: Month;
     results: PecuniatorEntry[];
     ignoredIBANs: string[];
-    ignoredTransactionPartners: string[];
+    ignoredCreditor: string[];
+    ignoredDebtor: string[];
     unassinged: PecuniatorEntry[];
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
@@ -100,10 +101,19 @@ export class Tab3Page implements OnInit, OnDestroy {
     }
 
     get savingsSum(): number {
+        let sum = 0.0;
         if (!this.savings || this.savings.length === 0) {
-            return 0.0;
+            return sum;
         }
-        return this.savings.map(item => item.amount).reduce((prev, next) => prev + next);
+        // savings are not only transferred into savings account but also out so calculate that
+        this.savings.forEach((entry) => {
+            if (this.isDebt(entry)) {
+                sum += entry.amount;
+            } else {
+                sum -= entry.amount;
+            }
+        });
+        return sum;
     }
 
     ionViewWillEnter() {
@@ -128,7 +138,8 @@ export class Tab3Page implements OnInit, OnDestroy {
 
     loadIgnored() {
         this.ignoredIBANs = localStorage.getItem(SavingsComponent.IGNOREIBAN)?.split(',');
-        this.ignoredTransactionPartners = localStorage.getItem(SavingsComponent.IGNORETRANSACTIONPARTNER)?.split(',');
+        this.ignoredCreditor = localStorage.getItem(SavingsComponent.IGNORECREDITOR)?.split(',');
+        this.ignoredDebtor = localStorage.getItem(SavingsComponent.IGNOREDEBTOR)?.split(',');
     }
 
     ionViewWillLeave() {
@@ -182,8 +193,8 @@ export class Tab3Page implements OnInit, OnDestroy {
             this.category.checkCategories(checkEntry, this.categories);
 
             if (clearCache) {
-                const isExpense = this.checkIncomeOutcome(checkEntry);
-                this.addTransactionToMonth(entry, isExpense);
+                const returnValue = this.appendIncomeOutcomeEntries(checkEntry);
+                this.addTransactionToMonth(entry);
             }
 
         }
@@ -191,14 +202,15 @@ export class Tab3Page implements OnInit, OnDestroy {
         this.unassinged = entries.filter((elem) => !this.checkIgnored(elem) && elem.found?.length < 1);
     }
 
-    private addTransactionToMonth(entry: PecuniatorEntry, isExpense: boolean) {
+    private addTransactionToMonth(entry: PecuniatorEntry) {
+        const isDebit = this.isDebt(entry);
         const yearAndMonth = entry.bookingDate.substring(0, 7);
         const month: Month | null = this.months.find((elem) => elem.date === yearAndMonth);
 
         if (!this.checkIgnored(entry)) {
             if (month) {
                 month.entries.push(entry);
-                if (isExpense) {
+                if (isDebit) {
                     month.expenseSum += entry.amount;
                 } else {
                     month.incomeSum += entry.amount;
@@ -212,7 +224,7 @@ export class Tab3Page implements OnInit, OnDestroy {
                     incomeSum: 0.0,
                     entries: [entry]
                 };
-                if (isExpense) {
+                if (isDebit) {
                     newMonth.expenseSum += entry.amount;
                 } else {
                     newMonth.incomeSum += entry.amount;
@@ -239,20 +251,47 @@ export class Tab3Page implements OnInit, OnDestroy {
 
     /**
      * Check creditordebit
-     * @return true if outcome
+     * @return true if appended to outcome, false if appended to income and null if was ignored by exclusion filters
      */
-    checkIncomeOutcome(entry: PecuniatorEntry) {
-        if (entry.creditordebit === 'CRDT') {
-            this.incomeEntries.push(entry);
-            return false;
-        } else if (entry.creditordebit === 'DBIT') {
-            if (this.checkIgnored(entry)) {
+    appendIncomeOutcomeEntries(entry: PecuniatorEntry) {
+        if (!this.checkIgnored(entry)) {
+            if (entry.creditordebit === 'CRDT') {
+                if (!this.incomeEntries.includes(entry)) {
+                    this.incomeEntries.push(entry);
+                }
                 return false;
-            }
+            } else if (entry.creditordebit === 'DBIT') {
+                if (this.checkIgnored(entry)) {
+                    return false;
+                }
 
-            this.outcomeEntries.push(entry);
-            return true;
+                // TODO is this check necessary or a workaround which should be removed
+                // my testing showed to include it
+                if (!this.outcomeEntries.includes(entry)) {
+                    this.outcomeEntries.push(entry);
+                }
+                return true;
+            }
         }
+        // TODO good idea or nah?
+        return null;
+    }
+
+
+    /**
+     * Checks if an entry is debit or credit
+     * Should be replaced by clearer typed pecuniator method/attribute
+     * @param entry Pecuniator Entry
+     */
+    isDebt(entry: PecuniatorEntry): boolean | null {
+        let isDebit = null;
+        // TODO smarter way for pecuniator to strongly type tell if credit or debit transaction
+        if (entry.creditordebit === 'CRDT') {
+            isDebit = false;
+        } else if (entry.creditordebit === 'DBIT') {
+            isDebit = true;
+        }
+        return isDebit;
     }
 
     /**
@@ -261,33 +300,43 @@ export class Tab3Page implements OnInit, OnDestroy {
      */
     checkIgnored(entry: PecuniatorEntry): boolean {
         let invalid = false;
-
-        let isDebit = null;
-        // TODO smarter way for pecuniator to strongly type tell if credit or debit transaction
-        if (entry.creditordebit === 'CRDT') {
-            isDebit = false;
-        } else if (entry.creditordebit === 'DBIT') {
-            isDebit = true;
-        }
+        const isDebit = this.isDebt(entry);
 
         if (this.ignoredIBANs?.length > 0) {
             invalid = isDebit ? this.ignoredIBANs.includes(entry.creditorIBAN) : this.ignoredIBANs.includes(entry.debitorIBAN);
         }
 
-        if (!invalid && this.ignoredTransactionPartners?.length > 0) {
+        if (!invalid && this.ignoredCreditor?.length > 0) {
             let i = 0;
-            let account = this.ignoredTransactionPartners[i];
+            let account = this.ignoredCreditor[i];
             while (account && !invalid) {
                 invalid = isDebit ?
                         entry.creditorName?.toLowerCase().includes(account.toLowerCase()) :
                         entry.debtorName?.toLowerCase().includes(account.toLowerCase());
 
-                account = this.ignoredTransactionPartners[++i];
+                account = this.ignoredCreditor[++i];
             }
         }
 
-        if (invalid && isDebit) {
-            // TODO change this part after savings behaviour is changed
+        if (!invalid && this.ignoredDebtor?.length > 0) {
+            let i = 0;
+            let account = this.ignoredDebtor[i];
+            while (account && !invalid) {
+                invalid = isDebit ?
+                        entry.creditorName?.toLowerCase().includes(account.toLowerCase()) :
+                        entry.debtorName?.toLowerCase().includes(account.toLowerCase());
+
+                account = this.ignoredDebtor[++i];
+            }
+        }
+
+        if (invalid && !this.savings.includes(entry)) {
+            // TODO cannot overwrite what kind of transaction to display as +/- in list of entries for saving part
+            // every transactions to saving is listed as losing money and getting back as income which is wrong
+            // const assignValue = this.isDebt(entry) ? 'CRDT' : 'DBIT';
+            // const retyped = entry as SavingTransaction;
+            // retyped.creditordebit = assignValue;
+
             this.savings.push(entry);
         }
 

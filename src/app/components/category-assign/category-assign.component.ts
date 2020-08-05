@@ -18,6 +18,50 @@ export class CategoryAssignComponent implements OnInit {
 
   ngOnInit() { }
 
+  // TODO delete after pecuniator api change
+  /**
+   * Checks if an entry is debit or credit
+   * Should be replaced by clearer typed pecuniator method/attribute
+   * @param entry Pecuniator Entry
+   */
+  isDebt(entry: PecuniatorEntry): boolean | null {
+    let isDebit = null;
+    // TODO smarter way for pecuniator to strongly type tell if credit or debit transaction
+    if (entry.creditordebit === 'CRDT') {
+        isDebit = false;
+    } else if (entry.creditordebit === 'DBIT') {
+        isDebit = true;
+    }
+    return isDebit;
+  }
+
+
+  get incomeSum(): number {
+    let sum = 0.0;
+    if (!this.entries || this.entries.length === 0) {
+        return sum;
+    }
+    this.entries.forEach((entry) => {
+        if (!this.isDebt(entry)) {
+            sum += entry.amount;
+        }
+    });
+    return sum;
+  }
+
+  get expenseSum(): number {
+    let sum = 0.0;
+    if (!this.entries || this.entries.length === 0) {
+        return sum;
+    }
+    this.entries.forEach((entry) => {
+        if (this.isDebt(entry)) {
+            sum += entry.amount;
+        }
+    });
+    return sum;
+  }
+
   async assign(entry: PecuniatorEntry) {
     const modal = await this.modalCtrl.create({
       component: AssignPage,

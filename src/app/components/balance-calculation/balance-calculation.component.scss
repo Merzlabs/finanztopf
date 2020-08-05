@@ -1,0 +1,15 @@
+.balanceContainer {
+    margin-bottom: 8px;
+    margin-top: 8px;
+    border-radius: 5px;
+    border: 2px solid var(--ion-color-medium);
+    padding: 6px;
+}
+
+hr.sumDivider {
+    border: 1px solid var(--ion-color-medium);
+    height: 0px;
+    display: block;
+    margin-left: 4px;
+    margin-right: 8px;
+}

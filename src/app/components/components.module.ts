@@ -11,6 +11,7 @@ import { EntrySearchComponent } from './entry-search/entry-search.component';
 import { EntryListComponent } from './entry-list/entry-list.component';
 import { SavingsComponent } from './savings/savings.component';
 import { CategoryAssignComponent } from './category-assign/category-assign.component';
+import { BalanceCalculationComponent } from './balance-calculation/balance-calculation.component';
 
 @NgModule({
   imports: [
@@ -19,8 +20,8 @@ import { CategoryAssignComponent } from './category-assign/category-assign.compo
     IonicModule
   ],
   declarations: [MoneyValueBadgeComponent, OpensourceComponent, SumOverviewComponent, IntroductionComponent, EntrySearchComponent,
-    EntryListComponent, SavingsComponent, CategoryAssignComponent],
+    EntryListComponent, SavingsComponent, CategoryAssignComponent, BalanceCalculationComponent],
   exports: [MoneyValueBadgeComponent, OpensourceComponent, SumOverviewComponent, IntroductionComponent, EntrySearchComponent,
-    EntryListComponent, SavingsComponent, CategoryAssignComponent]
+    EntryListComponent, SavingsComponent, CategoryAssignComponent, BalanceCalculationComponent]
 })
 export class ComponentsModule { }
