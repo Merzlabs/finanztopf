@@ -303,7 +303,7 @@ export class Tab3Page implements OnInit, OnDestroy {
         const isDebit = this.isDebt(entry);
 
         if (this.ignoredIBANs?.length > 0) {
-            invalid = isDebit ? this.ignoredIBANs.includes(entry.creditorIBAN) : this.ignoredIBANs.includes(entry.debitorIBAN);
+            invalid = isDebit ? this.ignoredIBANs.includes(entry.creditorIBAN) : this.ignoredIBANs.includes(entry.debtorIBAN);
         }
 
         if (!invalid && this.ignoredCreditor?.length > 0) {
