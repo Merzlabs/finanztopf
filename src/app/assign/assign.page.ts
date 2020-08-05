@@ -40,6 +40,11 @@ export class AssignPage implements OnInit {
         elem.subtile += elem.creditorName.join(',');
       }
 
+      if (elem?.debtorName?.length > 0) {
+        elem.subtile += ' Debitor: ';
+        elem.subtile += elem.debtorName.join(',');
+      }
+
       if (elem?.remittanceInformation?.length > 0) {
         elem.subtile += ' Verwend.: ';
         elem.subtile += elem.remittanceInformation.join(',');

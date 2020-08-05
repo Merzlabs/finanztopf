@@ -6,6 +6,7 @@ import { PecuniatorEntry } from '@merzlabs/pecuniator-api';
 export class Category {
     remittanceInformation?: Array<string>;
     creditorName?: Array<string>;
+    debtorName?: Array<string>;
     sum: number;
     title: string;
     id: string;
