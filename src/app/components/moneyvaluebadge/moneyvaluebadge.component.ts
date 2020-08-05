@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-moneyvaluebadge',
@@ -12,7 +12,9 @@ export class MoneyValueBadgeComponent implements OnInit {
   @Input() badgeSlot: string;
   @Input() credit: boolean;
   @Input() debit: boolean;
+  @Input() typeByValue: boolean;
   @Input() includePrefix: boolean;
+  @Input() manualPrefix = '';
 
   @Input()
   set creditordebit(value) {
@@ -25,5 +27,11 @@ export class MoneyValueBadgeComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.typeByValue) {
+      this.debit = this.value < 0;
+      this.credit = this.value >= 0;
+      this.value = Math.abs(this.value);
+    }
+  }
 }
