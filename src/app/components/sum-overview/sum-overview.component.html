@@ -26,7 +26,7 @@
       <ion-item button *ngFor="let month of months" (click)="monthClick(month)">
         <ion-label>{{month.label}}</ion-label>
 
-        <app-balance-calculation [incomeSum]="month.incomeSum" [expenseSum]="month.expenseSum"></app-balance-calculation>
+        <app-balance-calculation [incomeSum]="month.incomeSum" [expenseSum]="month.expenseSum" [currency]="currency"></app-balance-calculation>
       </ion-item>
     </ion-list>
   </ion-card-content>

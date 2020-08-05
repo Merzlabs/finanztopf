@@ -9,6 +9,7 @@ export class BalanceCalculationComponent implements OnInit {
 
   @Input() incomeSum: number;
   @Input() expenseSum: number;
+  @Input() currency: string;
 
   constructor() { }
 
