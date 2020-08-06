@@ -16,10 +16,9 @@ export class EntryListComponent implements OnInit {
   ngOnInit() {}
 
   creditorDebtor(entry: PecuniatorEntry) {
-    // TODO make PecunatiorEntry creditordebit enum value type stronger or similiar
-    if (entry.creditordebit === 'DBIT') {
+    if (entry.isDebit) {
       return entry.creditorName;
-    } else if (entry.creditordebit === 'CRDT') {
+    } else if (entry.isCredit) {
       return entry.debtorName;
     }
   }
