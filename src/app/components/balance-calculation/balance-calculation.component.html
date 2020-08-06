@@ -1,0 +1,7 @@
+<div class="balanceContainer ion-text-end" slot="end">
+  <app-moneyvaluebadge [value]="incomeSum" credit="true" [currency]="currency"  includePrefix="true"></app-moneyvaluebadge>
+  <br>
+  <app-moneyvaluebadge [value]="expenseSum" debit="true" [currency]="currency" includePrefix="true"></app-moneyvaluebadge>
+  <hr class="sumDivider">
+  <app-moneyvaluebadge [value]="incomeSum - expenseSum" typeByValue="true" [currency]="currency" includePrefix="true" manualPrefix="="></app-moneyvaluebadge>
+</div>

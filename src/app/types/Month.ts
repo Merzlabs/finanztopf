@@ -1,7 +1,9 @@
 import { PecuniatorEntry } from '@merzlabs/pecuniator-api';
 
-export interface Expense {
+export interface Month {
     label: string;
-    amount: number;
+    date: string;
+    expenseSum: number;
+    incomeSum: number;
     entries: Array<PecuniatorEntry>;
 }

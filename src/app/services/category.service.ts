@@ -26,7 +26,7 @@ export class CategoryService {
       for (const check in cat) {
         if (check !== 'amount' && check !== 'title' && typeof entry[check] !== 'undefined') {
           for (const test of cat[check]) {
-            if (!entry.found.includes(catname) && entry[check].toString().toLowerCase().includes(test.toLowerCase())) {
+            if (!entry.found.includes(catname) && entry[check].toString().toLowerCase().trim().includes(test.toLowerCase().trim())) {
 
               if (entry.creditordebit === 'CRDT') {
                 cat.sum += entry.amount;

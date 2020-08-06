@@ -1,0 +1,16 @@
+.balanceContainer {
+    margin-bottom: 8px;
+    margin-top: 8px;
+    border-radius: 5px;
+    padding: 6px;
+    font-family: monospace;
+    --ion-font-family: monospace;
+}
+
+hr.sumDivider {
+    border: 1px solid var(--ion-color-medium);
+    height: 0px;
+    display: block;
+    margin-left: 4px;
+    margin-right: 8px;
+}

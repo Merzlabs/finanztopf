@@ -18,6 +18,32 @@ export class CategoryAssignComponent implements OnInit {
 
   ngOnInit() { }
 
+  get incomeSum(): number {
+    let sum = 0.0;
+    if (!this.entries || this.entries.length === 0) {
+        return sum;
+    }
+    this.entries.forEach((entry) => {
+        if (entry.isCredit) {
+            sum += entry.amount;
+        }
+    });
+    return sum;
+  }
+
+  get expenseSum(): number {
+    let sum = 0.0;
+    if (!this.entries || this.entries.length === 0) {
+        return sum;
+    }
+    this.entries.forEach((entry) => {
+        if (entry.isDebit) {
+            sum += entry.amount;
+        }
+    });
+    return sum;
+  }
+
   async assign(entry: PecuniatorEntry) {
     const modal = await this.modalCtrl.create({
       component: AssignPage,
