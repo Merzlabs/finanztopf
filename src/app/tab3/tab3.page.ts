@@ -36,7 +36,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     results: PecuniatorEntry[];
     ignoredIBANs: string[];
     ignoredCreditor: string[];
-    ignoredDebtor: string[];
+    ignoredAccounts: string[];
     unassinged: PecuniatorEntry[];
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
@@ -139,7 +139,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     loadIgnored() {
         this.ignoredIBANs = localStorage.getItem(SavingsComponent.IGNOREIBAN)?.split(',');
         this.ignoredCreditor = localStorage.getItem(SavingsComponent.IGNORECREDITOR)?.split(',');
-        this.ignoredDebtor = localStorage.getItem(SavingsComponent.IGNOREDEBTOR)?.split(',');
+        this.ignoredAccounts = localStorage.getItem(SavingsComponent.IGNOREDEBTOR)?.split(',');
     }
 
     ionViewWillLeave() {
@@ -303,30 +303,24 @@ export class Tab3Page implements OnInit, OnDestroy {
         const isDebit = this.isDebt(entry);
 
         if (this.ignoredIBANs?.length > 0) {
-            invalid = isDebit ? this.ignoredIBANs.includes(entry.creditorIBAN) : this.ignoredIBANs.includes(entry.debtorIBAN);
-        }
-
-        if (!invalid && this.ignoredCreditor?.length > 0) {
-            let i = 0;
-            let account = this.ignoredCreditor[i];
-            while (account && !invalid) {
-                invalid = isDebit ?
-                        entry.creditorName?.toLowerCase().includes(account.toLowerCase()) :
-                        entry.debtorName?.toLowerCase().includes(account.toLowerCase());
-
-                account = this.ignoredCreditor[++i];
+            // TODO better code not this check two times
+            if (entry.isCredit) {
+                invalid = this.ignoredIBANs.includes(entry.debtorIBAN);
+            } else if (entry.isDebit) {
+                invalid = this.ignoredIBANs.includes(entry.creditorIBAN);
             }
         }
 
-        if (!invalid && this.ignoredDebtor?.length > 0) {
+        if (!invalid && this.ignoredAccounts?.length > 0) {
             let i = 0;
-            let account = this.ignoredDebtor[i];
+            let account = this.ignoredAccounts[i];
             while (account && !invalid) {
-                invalid = isDebit ?
-                        entry.creditorName?.toLowerCase().includes(account.toLowerCase()) :
-                        entry.debtorName?.toLowerCase().includes(account.toLowerCase());
-
-                account = this.ignoredDebtor[++i];
+                if (entry.isCredit) {
+                    invalid = entry.debtorName?.toLowerCase().includes(account.toLowerCase());
+                } else if (entry.isDebit) {
+                    invalid = entry.creditorName?.toLowerCase().includes(account.toLowerCase());
+                }
+                account = this.ignoredAccounts[++i];
             }
         }
 
