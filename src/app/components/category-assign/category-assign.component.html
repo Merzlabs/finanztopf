@@ -3,5 +3,5 @@
 </ion-list-header>
 
 <!-- For now only getting currency of first item but eventually have to have conversion between and one base currency? -->
-<app-balance-calculation [incomeSum]="incomeSum" [expenseSum]="expenseSum" [currency]="entries[0].currency"></app-balance-calculation>
+<app-balance-calculation *ngIf="entries" [incomeSum]="incomeSum" [expenseSum]="expenseSum" [currency]="entries[0].currency"></app-balance-calculation>
 <app-entry-list [entries]="entries" (entryClicked)="assign($event)"></app-entry-list>
