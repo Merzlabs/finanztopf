@@ -2,8 +2,9 @@
     margin-bottom: 8px;
     margin-top: 8px;
     border-radius: 5px;
-    border: 2px solid var(--ion-color-medium);
     padding: 6px;
+    font-family: monospace;
+    --ion-font-family: monospace;
 }
 
 hr.sumDivider {
