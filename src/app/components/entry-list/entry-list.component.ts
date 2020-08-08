@@ -23,6 +23,14 @@ export class EntryListComponent implements OnInit {
     }
   }
 
+  creditorDebtorIBAN(entry: PecuniatorEntry) {
+    if (entry.isDebit) {
+      return entry.creditorIBAN;
+    } else if (entry.isCredit) {
+      return entry.debtorIBAN;
+    }
+  }
+
   click(entry: PecuniatorEntry) {
     this.entryClicked.emit(entry);
   }
