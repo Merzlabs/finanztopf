@@ -1,6 +1,6 @@
 # Finanztopf
 
-![Deploy](https://https://github.com/Merzlabs/finanztopf/workflows/Deploy/badge.svg)
+![deploy](https://github.com/Merzlabs/finanztopf/workflows/Deploy/badge.svg)
 
 ![logo](/cover.png "Pecuniator Logo")
 
