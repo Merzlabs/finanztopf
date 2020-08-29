@@ -11,6 +11,18 @@
 
 <ion-content>
   <ion-item>
+    <ion-label class="ion-text-wrap">
+      <strong>Sollen die Dateien im Browser gespeichert werden?</strong> Die Dateien werden <strong>aktuell unverschlüsselt</strong> im Browser auf diesem Gerät in einer "IndexedDB" gepspeichert.
+      So werden bei jedem Aufruf der Seite auf diesem Gerät alle Transaktionen verfügbar sein.
+      Verschlüsselung ist bereits geplant.
+    </ion-label>
+    <ion-toggle [(ngModel)]="enableSave" (ionChange)="saveSetting()"></ion-toggle>
+  </ion-item>
+  <ion-button expand="block" color="danger" fill="outline" (click)="deleteDatabase()">
+    Gespeicherte Daten Löschen
+  </ion-button>
+
+  <ion-item>
     <ion-label>CAMT-Dateien hinzufügen</ion-label>
     <input type="file" multiple id="camtfiles" (change)="handleFileInput($event.target.files)">
     <ion-button fill="clear" (click)="clearCache()" slot="end">

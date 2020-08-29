@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
 import * as JSZip from 'jszip';
+import { NgxIndexedDBService } from 'ngx-indexed-db';
+import { AppModule } from '../app.module';
 
 export class CachedFile {
   constructor(public name: string, public content: string) {}
@@ -12,7 +14,7 @@ export class CachedFile {
 export class FileCacheService {
   private files: Array<CachedFile>;
 
-  constructor() {
+  constructor(private dbService: NgxIndexedDBService) {
     this.files = [];
   }
 
@@ -27,11 +29,11 @@ export class FileCacheService {
     return this.fileNames.join(',');
   }
 
-  async loadFiles(files: FileList) {
+  async loadFiles(files: FileList, save = false) {
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < files.length; i++) {
       if (files[i].type === 'text/xml') {
-        this.processXMLFile(files[i]);
+        this.processXMLFile(files[i], save);
       } else if (files[i].type === 'application/zip') {
         const newFileZipObject = await JSZip.loadAsync(files[i]);
 
@@ -45,7 +47,7 @@ export class FileCacheService {
             if (splitPath.length > 0) {
               name = splitPath[splitPath.length - 1];
             }
-            this.add(new CachedFile(name, xmlContent));
+            this.add(new CachedFile(name, xmlContent), save);
           } else {
             console.warn('Unzipped File not supported', path);
           }
@@ -56,17 +58,21 @@ export class FileCacheService {
     }
   }
 
-  private processXMLFile(file: File) {
+  private processXMLFile(file: File, save) {
     const xmlReader = new FileReader();
     xmlReader.onload = (e: any) => {
       const xmlContent = e.target.result;
-      this.add(new CachedFile(file.name, xmlContent));
+      this.add(new CachedFile(file.name, xmlContent), save);
     };
     xmlReader.readAsText(file);
   }
 
-  add(file: CachedFile) {
+  add(file: CachedFile, save = false) {
     this.files.push(file);
+
+    if (save) {
+      this.storeToDB(file);
+    }
   }
 
   getAll() {
@@ -77,4 +83,44 @@ export class FileCacheService {
     this.files = [];
   }
 
+  private async storeToDB(file: CachedFile) {
+    try {
+      const key = await this.digestMessage(file.content);
+
+      const exists = await this.dbService.getByKey('files', key);
+      if (!exists) {
+        await this.dbService.add('files', file, key);
+      }
+
+    } catch (e) {
+      console.error('Error storing', file, e);
+    }
+  }
+
+  async loadFromDB() {
+    try {
+      const all = await this.dbService.getAll('files') as CachedFile[];
+      if (all) {
+        all.forEach((elem) => this.add(elem));
+      }
+    } catch (e) {
+      console.error('Load error', e);
+    }
+  }
+
+  async deleteDatabase() {
+    await this.dbService.clear('files');
+  }
+
+  /**
+   * Hash data
+   * See https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
+   */
+  private async digestMessage(message) {
+    const msgUint8 = new TextEncoder().encode(message);                           // encode as (utf-8) Uint8Array
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);           // hash the message
+    const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
+    return hashHex;
+  }
 }

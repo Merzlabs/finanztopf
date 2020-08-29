@@ -42,6 +42,7 @@
     "camtts": "0.0.5",
     "core-js": "^2.5.4",
     "jszip": "^3.2.2",
+    "ngx-indexed-db": "^5.0.5",
     "realm-web": "^0.7.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FileCacheService, CachedFile } from '../services/file-cache.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { FileCacheService } from '../services/file-cache.service';
+import { ActivatedRoute} from '@angular/router';
+import { ModalController, ToastController } from '@ionic/angular';
 import { X2saService } from '../services/x2sa/x2sa.service';
 import { BankingPage } from '../banking/banking.page';
 
@@ -11,13 +11,14 @@ import { BankingPage } from '../banking/banking.page';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page implements OnInit {
+  enableSave: boolean;
 
   constructor(
     public filecache: FileCacheService,
     private route: ActivatedRoute,
-    public modalCtrl: ModalController,
+    private modalCtrl: ModalController,
     public x2saService: X2saService,
-    private router: Router) {
+    private toastCtrl: ToastController) {
   }
 
   ngOnInit() {
@@ -26,11 +27,16 @@ export class Tab1Page implements OnInit {
         this.x2saService.loadxs2aTransactions(res.state);
       }
     });
+
+    this.enableSave = localStorage.getItem('saveEnabled') === 'true';
+    if (this.enableSave) {
+      this.filecache.loadFromDB();
+    }
   }
 
   handleFileInput(files: FileList) {
     console.log('Files', files);
-    this.filecache.loadFiles(files);
+    this.filecache.loadFiles(files, this.enableSave);
   }
 
   ionViewDidEnter() {
@@ -55,4 +61,21 @@ export class Tab1Page implements OnInit {
     modal.present();
   }
 
+  saveSetting() {
+    localStorage.setItem('saveEnabled', JSON.stringify(this.enableSave));
+  }
+
+  async deleteDatabase() {
+    try {
+      await this.filecache.deleteDatabase();
+      const toast = await this.toastCtrl.create({
+        duration: 3000,
+        message: `Daten gelöscht`,
+        color: 'primary'
+      });
+      toast.present();
+    } catch (e) {
+      console.error('Delete error', e);
+    }
+  }
 }
