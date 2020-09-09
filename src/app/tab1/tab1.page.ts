@@ -4,6 +4,7 @@ import { ActivatedRoute} from '@angular/router';
 import { ModalController, ToastController } from '@ionic/angular';
 import { X2saService } from '../services/x2sa/x2sa.service';
 import { BankingPage } from '../banking/banking.page';
+import { SyncService } from '../services/sync.service';
 
 @Component({
   selector: 'app-tab1',
@@ -12,13 +13,15 @@ import { BankingPage } from '../banking/banking.page';
 })
 export class Tab1Page implements OnInit {
   enableSave: boolean;
+  paringCode: string;
 
   constructor(
     public filecache: FileCacheService,
     private route: ActivatedRoute,
     private modalCtrl: ModalController,
     public x2saService: X2saService,
-    private toastCtrl: ToastController) {
+    private toastCtrl: ToastController,
+    private sync: SyncService) {
   }
 
   ngOnInit() {
@@ -77,5 +80,17 @@ export class Tab1Page implements OnInit {
     } catch (e) {
       console.error('Delete error', e);
     }
+  }
+
+  pairAndSync() {
+    if (!this.paringCode) {
+      this.paringCode = this.sync.setup();
+      const all = this.filecache.getAll(true);
+      this.sync.onReady().subscribe(() => all.forEach((elem) => this.sync.send(JSON.stringify(elem))));
+    } else {
+      this.sync.setup(this.paringCode);
+      this.sync.onMessage().subscribe((data) => this.filecache.add(JSON.parse(data), this.enableSave));
+    }
+
   }
 }

@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 
 import * as JSZip from 'jszip';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { AppModule } from '../app.module';
 
 export class CachedFile {
+  public hash: string;
+
   constructor(public name: string, public content: string) {}
 }
 
@@ -75,7 +76,10 @@ export class FileCacheService {
     }
   }
 
-  getAll() {
+  getAll(hash = false) {
+    if (hash) {
+      this.files.forEach(async (elem) => elem.hash = await this.digestMessage(elem.content));
+    }
     return this.files;
   }
 

@@ -37,7 +37,23 @@
     <ion-item>
       <ion-label class="ion-text-wrap">{{filecache.fileNameStringConcat}}</ion-label>
     </ion-item>
+    
+    <!-- Savings -->
     <app-savings></app-savings>
+
+    <!-- Sync -->
+    <ion-list-header>
+      Experimental Sync
+    </ion-list-header>
+    <ion-item>
+      <ion-label>Paring Code</ion-label>
+      <ion-input [(ngModel)]="paringCode"></ion-input>
+    </ion-item>
+    <ion-button (click)="pairAndSync()">
+      Pair & Sync
+    </ion-button>
+    
+
     <ion-item routerLink="/tabs/tab3" detail="true">
       <ion-label color="primary">Weiter</ion-label>
     </ion-item>
