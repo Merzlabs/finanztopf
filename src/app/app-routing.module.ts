@@ -20,8 +20,8 @@ const routes: Routes = [
     loadChildren: () => import('./admin/admin.module').then( m => m.AdminPageModule)
   },
   {
-    path: 'configshare',
-    loadChildren: () => import('./configshare/configshare.module').then( m => m.ConfigsharePageModule)
+    path: 'share',
+    loadChildren: () => import('./share/share.module').then( m => m.SharePageModule)
   },
   {
     path: 'banking',

@@ -1,22 +1,19 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ToastController, ModalController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-configshare',
-  templateUrl: './configshare.page.html',
-  styleUrls: ['./configshare.page.scss'],
+  selector: 'app-share',
+  templateUrl: './share.page.html',
+  styleUrls: ['./share.page.scss'],
 })
-export class ConfigsharePage implements OnInit {
-  url: string;
+export class SharePage {
+  @Input() url: string;
+  @Input() duration = 10000;
+  @Input() message: string;
+  @Input() header: string;
+  @Input() color: string;
 
   constructor(private toastCtrl: ToastController, private modalCtrl: ModalController) { }
-
-  @Input() id: string;
-
-  ngOnInit() {
-    const url = location.href.replace(location.search, '');
-    this.url = url + '?config=' + this.id;
-  }
 
   async copy() {
     navigator.clipboard.writeText(this.url);
