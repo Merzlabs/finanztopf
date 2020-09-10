@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 
 import * as JSZip from 'jszip';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { AppModule } from '../app.module';
 
 export class CachedFile {
+  public hash: string;
+
   constructor(public name: string, public content: string) {}
 }
 
@@ -67,11 +68,15 @@ export class FileCacheService {
     xmlReader.readAsText(file);
   }
 
-  add(file: CachedFile, save = false) {
-    this.files.push(file);
-
+  async add(file: CachedFile, save = false) {
     if (save) {
-      this.storeToDB(file);
+      const added = await this.storeToDB(file);
+
+      if (added) {
+        this.files.push(file);
+      }
+    } else {
+      this.files.push(file);
     }
   }
 
@@ -83,18 +88,24 @@ export class FileCacheService {
     this.files = [];
   }
 
-  private async storeToDB(file: CachedFile) {
+  /**
+   * Check if file exists and add if not.
+   * @return true if file has been added to db and is not duplicate
+   */
+  private async storeToDB(file: CachedFile): Promise<boolean> {
     try {
       const key = await this.digestMessage(file.content);
 
       const exists = await this.dbService.getByKey('files', key);
       if (!exists) {
         await this.dbService.add('files', file, key);
+        return true;
       }
-
     } catch (e) {
       console.error('Error storing', file, e);
     }
+
+    return false;
   }
 
   async loadFromDB() {

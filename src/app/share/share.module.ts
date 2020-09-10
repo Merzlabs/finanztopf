@@ -5,18 +5,18 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { QRCodeModule } from 'angularx-qrcode';
 
-import { ConfigsharePageRoutingModule } from './configshare-routing.module';
+import { SharePageRoutingModule } from './share-routing.module';
 
-import { ConfigsharePage } from './configshare.page';
+import { SharePage } from './share.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ConfigsharePageRoutingModule,
+    SharePageRoutingModule,
     QRCodeModule
   ],
-  declarations: [ConfigsharePage]
+  declarations: [SharePage]
 })
-export class ConfigsharePageModule {}
+export class SharePageModule {}

@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Töpfe gespeichert</ion-title>
+    <ion-title>{{title}}</ion-title>
 
     <ion-buttons slot="primary">
       <ion-button (click)="close()">
@@ -14,7 +14,7 @@
 
   <ion-item>
     <ion-label class="ion-text-wrap">
-      Ihre Einstellungen werden für eine bestimmte Zeit unter diesem Link gespeichert. Sie können diesen Link verwenden um die Einstellungen auf ein anderes Gerät zu übertragen.
+      {{message}}
     </ion-label>
   </ion-item>
 

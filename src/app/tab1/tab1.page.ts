@@ -4,6 +4,8 @@ import { ActivatedRoute} from '@angular/router';
 import { ModalController, ToastController } from '@ionic/angular';
 import { X2saService } from '../services/x2sa/x2sa.service';
 import { BankingPage } from '../banking/banking.page';
+import { SyncService } from '../services/sync.service';
+import { SharePage } from '../share/share.page';
 
 @Component({
   selector: 'app-tab1',
@@ -12,19 +14,27 @@ import { BankingPage } from '../banking/banking.page';
 })
 export class Tab1Page implements OnInit {
   enableSave: boolean;
+  pairingCode: string;
 
   constructor(
     public filecache: FileCacheService,
     private route: ActivatedRoute,
     private modalCtrl: ModalController,
     public x2saService: X2saService,
-    private toastCtrl: ToastController) {
+    private toastCtrl: ToastController,
+    private sync: SyncService) {
   }
 
   ngOnInit() {
     this.route.queryParams.subscribe((res) => {
       if (res.state) {
         this.x2saService.loadxs2aTransactions(res.state);
+      }
+
+      if (res.pairingCode) {
+        this.enableSave = true;
+        this.pairingCode = res.pairingCode;
+        this.pairAndSync();
       }
     });
 
@@ -77,5 +87,35 @@ export class Tab1Page implements OnInit {
     } catch (e) {
       console.error('Delete error', e);
     }
+  }
+
+  async pairAndSync() {
+    if (!this.pairingCode) {
+      this.pairingCode = this.sync.setup();
+      const all = this.filecache.getAll();
+      this.sync.onReady().subscribe(() => all.forEach((elem) => this.sync.send(JSON.stringify(elem))));
+
+      let url = location.href.replace(location.search, '');
+      url = url + '?pairingCode=' + this.pairingCode;
+      const modal = await this.modalCtrl.create({
+        component: SharePage,
+        swipeToClose: true,
+        componentProps: {
+            url,
+            title: 'Daten an anderes Gerät übertragen',
+            message: `Wenn Sie die URL auf einem anderen Gerät werden Ihre Transaktionen übertragen.
+            Der Pairing Code für die Manuelle Eingabe lautet: "${this.pairingCode}"`,
+            header: 'Link kopiert',
+            color: 'primary',
+            duration: 10000,
+        }
+      });
+      modal.present();
+
+    } else {
+      this.sync.setup(this.pairingCode);
+      this.sync.onMessage().subscribe((data) => this.filecache.add(JSON.parse(data), true));
+    }
+
   }
 }

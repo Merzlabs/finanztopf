@@ -13,7 +13,7 @@ import { Month } from '../types/Month';
 import { SavingsComponent } from '../components/savings/savings.component';
 import { CheckEntry, CategoryService } from '../services/category.service';
 import { UserConfig } from '../types/UserConfig';
-import { ConfigsharePage } from '../configshare/configshare.page';
+import { SharePage } from '../share/share.page';
 import { BankingService } from '../services/banking.service';
 
 @Component({
@@ -483,12 +483,19 @@ export class Tab3Page implements OnInit, OnDestroy {
     private async uploadConfig() {
         const config = new UserConfig();
         const id = await this.storage.storeConfig(config);
+        let url = location.href.replace(location.search, '');
+        url = url + '?config=' + id;
 
         const modal = await this.modalCtrl.create({
-            component: ConfigsharePage,
+            component: SharePage,
             swipeToClose: true,
             componentProps: {
-                id
+                url,
+                title: 'Töpfe gespeichert',
+                message: `Wenn Sie die URL auf einem anderen Gerät öffnen, werden diese Töpfe geladen.`,
+                header: 'Link kopiert',
+                color: 'primary',
+                duration: 10000,
             }
         });
         modal.present();
