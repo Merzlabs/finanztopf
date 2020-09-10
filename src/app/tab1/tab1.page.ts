@@ -29,6 +29,11 @@ export class Tab1Page implements OnInit {
       if (res.state) {
         this.x2saService.loadxs2aTransactions(res.state);
       }
+
+      if (res.paringcode) {
+        this.paringCode = res.pairingcode;
+        this.pairAndSync();
+      }
     });
 
     this.enableSave = localStorage.getItem('saveEnabled') === 'true';
