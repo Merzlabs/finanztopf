@@ -491,6 +491,7 @@ export class Tab3Page implements OnInit, OnDestroy {
             swipeToClose: true,
             componentProps: {
                 url,
+                title: 'Töpfe gespeichert',
                 message: `Wenn Sie die URL auf einem anderen Gerät öffnen, werden diese Töpfe geladen.`,
                 header: 'Link kopiert',
                 color: 'primary',

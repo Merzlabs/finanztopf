@@ -12,6 +12,7 @@ export class SharePage {
   @Input() message: string;
   @Input() header: string;
   @Input() color: string;
+  @Input() title: string;
 
   constructor(private toastCtrl: ToastController, private modalCtrl: ModalController) { }
 
