@@ -85,7 +85,7 @@ export class Tab1Page implements OnInit {
   pairAndSync() {
     if (!this.paringCode) {
       this.paringCode = this.sync.setup();
-      const all = this.filecache.getAll(true);
+      const all = this.filecache.getAll();
       this.sync.onReady().subscribe(() => all.forEach((elem) => this.sync.send(JSON.stringify(elem))));
     } else {
       this.sync.setup(this.paringCode);
