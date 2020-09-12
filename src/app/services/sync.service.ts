@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { CSARClient } from '@merzlabs/csar-client';
+import { CSARSyncClient } from '@merzlabs/csar-client';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SyncService {
-  client: CSARClient;
+  client: CSARSyncClient;
 
   constructor() { }
 
   setup(id?: string): string {
-    this.client = new CSARClient('https://connect.pecuniator.com');
+    this.client = new CSARSyncClient('https://connect.pecuniator.com');
     if (!id) {
       id = this.client.randomId();
       this.client.isSender = true;
