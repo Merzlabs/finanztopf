@@ -24,7 +24,11 @@
 
   <ion-item>
     <ion-label>CAMT-Dateien hinzufügen</ion-label>
-    <input type="file" multiple id="camtfiles" (change)="handleFileInput($event.target.files)">
+  
+    <!-- Old and new file picker -->
+    <input *ngIf="!hasNativeFS" type="file" multiple id="camtfiles" (change)="handleFileInput($event.target.files)">
+    <ion-button *ngIf="hasNativeFS" (click)="openDirectory()">Ordner mit Dateien zum Importieren auswählen</ion-button>
+
     <ion-button fill="clear" (click)="clearCache()" slot="end">
       <ion-icon slot="icon-only" name="trash"></ion-icon>
     </ion-button>

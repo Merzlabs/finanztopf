@@ -7,6 +7,8 @@ import { BankingPage } from '../banking/banking.page';
 import { SyncService } from '../services/sync.service';
 import { SharePage } from '../share/share.page';
 
+declare var window: any;
+
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
@@ -15,6 +17,7 @@ import { SharePage } from '../share/share.page';
 export class Tab1Page implements OnInit {
   enableSave: boolean;
   pairingCode: string;
+  hasNativeFS: boolean;
 
   constructor(
     public filecache: FileCacheService,
@@ -23,6 +26,8 @@ export class Tab1Page implements OnInit {
     public x2saService: X2saService,
     private toastCtrl: ToastController,
     private sync: SyncService) {
+    this.hasNativeFS = 'chooseFileSystemEntries' in window ||
+              'showOpenFilePicker' in window;
   }
 
   ngOnInit() {
@@ -46,6 +51,18 @@ export class Tab1Page implements OnInit {
 
   handleFileInput(files: FileList) {
     console.log('Files', files);
+    this.filecache.loadFiles(files, this.enableSave);
+  }
+
+  async openDirectory() {
+    const opts = {type: 'open-directory'};
+    const handle = await window.chooseFileSystemEntries(opts);
+    const entries = await handle.getEntries();
+    const files: File[] = [];
+    for await (const entry of entries) {
+      const file = await entry.getFile();
+      files.push(file);
+    }
     this.filecache.loadFiles(files, this.enableSave);
   }
 

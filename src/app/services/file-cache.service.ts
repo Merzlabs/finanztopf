@@ -30,7 +30,7 @@ export class FileCacheService {
     return this.fileNames.join(',');
   }
 
-  async loadFiles(files: FileList, save = false) {
+  async loadFiles(files: FileList|File[], save = false) {
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < files.length; i++) {
       if (files[i].type === 'text/xml') {
