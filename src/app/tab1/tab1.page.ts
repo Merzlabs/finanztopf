@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FileCacheService } from '../services/file-cache.service';
 import { ActivatedRoute} from '@angular/router';
-import { ModalController, ToastController } from '@ionic/angular';
+import { LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { X2saService } from '../services/x2sa/x2sa.service';
 import { BankingPage } from '../banking/banking.page';
 import { SyncService } from '../services/sync.service';
@@ -25,7 +25,8 @@ export class Tab1Page implements OnInit {
     private modalCtrl: ModalController,
     public x2saService: X2saService,
     private toastCtrl: ToastController,
-    private sync: SyncService) {
+    private sync: SyncService,
+    private loadingCtrl: LoadingController) {
     this.hasNativeFS = 'showOpenFilePicker' in window;
   }
 
@@ -140,6 +141,8 @@ export class Tab1Page implements OnInit {
     const directoryHandle = await window.showDirectoryPicker();
 
     const all = this.filecache.getAll();
+    const loading = await this.loadingCtrl.create({message: 'Bitte warten'});
+    loading.present();
     for (const file of all) {
       const fileHandle = await directoryHandle.getFile(file.name, {create: true});
       const writable = await fileHandle.createWritable();
@@ -148,6 +151,14 @@ export class Tab1Page implements OnInit {
       // Close the file and write the contents to disk.
       await writable.close();
     }
+
+    loading.dismiss();
+    const toast = await this.toastCtrl.create({
+      duration: 3000,
+      message: `Export abgeschlossen`,
+      color: 'primary'
+    });
+    toast.present();
   }
 
 }
