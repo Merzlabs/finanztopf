@@ -41,6 +41,15 @@
     <ion-item>
       <ion-label class="ion-text-wrap">{{filecache.fileNameStringConcat}}</ion-label>
     </ion-item>
+
+    <ion-item *ngIf="hasNativeFS">
+      <ion-label>
+        Alle Daten, die im Browser gespeichert wurden, können auch wieder exportiert werden.
+      </ion-label>
+      <ion-button color="secondary" (click)="exportToFiles()">
+        Exportordner wählen
+      </ion-button>
+    </ion-item>
     
     <!-- Savings -->
     <app-savings></app-savings>

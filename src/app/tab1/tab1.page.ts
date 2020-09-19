@@ -54,18 +54,6 @@ export class Tab1Page implements OnInit {
     this.filecache.loadFiles(files, this.enableSave);
   }
 
-  async openDirectory() {
-    const opts = {type: 'open-directory'};
-    const handle = await window.chooseFileSystemEntries(opts);
-    const entries = await handle.getEntries();
-    const files: File[] = [];
-    for await (const entry of entries) {
-      const file = await entry.getFile();
-      files.push(file);
-    }
-    this.filecache.loadFiles(files, this.enableSave);
-  }
-
   ionViewDidEnter() {
   }
 
@@ -135,4 +123,42 @@ export class Tab1Page implements OnInit {
     }
 
   }
+
+  // Native file system
+
+  async openDirectory() {
+    const opts = {type: 'open-directory'};
+    const handle = await window.chooseFileSystemEntries(opts);
+    const entries = await handle.getEntries();
+    const files: File[] = [];
+    for await (const entry of entries) {
+      const file = await entry.getFile();
+      files.push(file);
+    }
+    this.filecache.loadFiles(files, this.enableSave);
+  }
+
+  async exportToFiles() {
+    /* const opts = {
+      type: 'save-file',
+      accepts: [{
+        description: 'Text file',
+        extensions: ['txt'],
+        mimeTypes: ['text/plain'],
+      }],
+    }; */
+    const opts = {type: 'open-directory'};
+    const directoryHandle = await window.chooseFileSystemEntries(opts);
+
+    const all = this.filecache.getAll();
+    for (const file of all) {
+      const fileHandle = await directoryHandle.getFile(file.name, {create: true});
+      const writable = await fileHandle.createWritable();
+      // Write the contents of the file to the stream.
+      await writable.write(file.content);
+      // Close the file and write the contents to disk.
+      await writable.close();
+    }
+  }
+
 }
