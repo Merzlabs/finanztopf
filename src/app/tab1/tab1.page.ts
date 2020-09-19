@@ -128,6 +128,7 @@ export class Tab1Page implements OnInit {
 
   async openDirectory() {
     const handle = await window.showDirectoryPicker();
+    this.verifyPermission(handle);
     const entries = await handle.getEntries();
     const files: File[] = [];
     for await (const entry of entries) {
@@ -139,6 +140,7 @@ export class Tab1Page implements OnInit {
 
   async exportToFiles() {
     const directoryHandle = await window.showDirectoryPicker();
+    this.verifyPermission(directoryHandle, true);
 
     const all = this.filecache.getAll();
     const loading = await this.loadingCtrl.create({message: 'Bitte warten'});
@@ -159,6 +161,23 @@ export class Tab1Page implements OnInit {
       color: 'primary'
     });
     toast.present();
+  }
+
+  async verifyPermission(fileHandle, withWrite = false) {
+    const opts: any = {};
+    if (withWrite) {
+      opts.writable = true;
+    }
+    // Check if permission was already granted. If so, return true.
+    if (await fileHandle.queryPermission(opts) === 'granted') {
+      return true;
+    }
+    // Request permission. If the user grants permission, return true.
+    if (await fileHandle.requestPermission(opts) === 'granted') {
+      return true;
+    }
+    // The user didn't grant permission, so return false.
+    return false;
   }
 
 }
