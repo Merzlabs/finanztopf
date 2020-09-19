@@ -26,8 +26,7 @@ export class Tab1Page implements OnInit {
     public x2saService: X2saService,
     private toastCtrl: ToastController,
     private sync: SyncService) {
-    this.hasNativeFS = 'chooseFileSystemEntries' in window ||
-              'showOpenFilePicker' in window;
+    this.hasNativeFS = 'showOpenFilePicker' in window;
   }
 
   ngOnInit() {
@@ -127,8 +126,7 @@ export class Tab1Page implements OnInit {
   // Native file system
 
   async openDirectory() {
-    const opts = {type: 'open-directory'};
-    const handle = await window.chooseFileSystemEntries(opts);
+    const handle = await window.showDirectoryPicker();
     const entries = await handle.getEntries();
     const files: File[] = [];
     for await (const entry of entries) {
@@ -139,16 +137,7 @@ export class Tab1Page implements OnInit {
   }
 
   async exportToFiles() {
-    /* const opts = {
-      type: 'save-file',
-      accepts: [{
-        description: 'Text file',
-        extensions: ['txt'],
-        mimeTypes: ['text/plain'],
-      }],
-    }; */
-    const opts = {type: 'open-directory'};
-    const directoryHandle = await window.chooseFileSystemEntries(opts);
+    const directoryHandle = await window.showDirectoryPicker();
 
     const all = this.filecache.getAll();
     for (const file of all) {
