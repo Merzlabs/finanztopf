@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
+import { CSARFile } from '@merzlabs/csar-client';
 
 import * as JSZip from 'jszip';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 
-export class CachedFile {
-  public hash: string;
-
-  constructor(public name: string, public content: string) {}
+export class CachedFile extends CSARFile {
+  public hash?: string;
 }
 
 @Injectable({

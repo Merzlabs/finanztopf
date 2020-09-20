@@ -6,6 +6,7 @@ import { X2saService } from '../services/x2sa/x2sa.service';
 import { BankingPage } from '../banking/banking.page';
 import { SyncService } from '../services/sync.service';
 import { SharePage } from '../share/share.page';
+import { CSARFileClient } from '@merzlabs/csar-client';
 
 declare var window: any;
 
@@ -127,32 +128,15 @@ export class Tab1Page implements OnInit {
   // Native file system
 
   async openDirectory() {
-    const handle = await window.showDirectoryPicker();
-    this.verifyPermission(handle);
-    const entries = await handle.getEntries();
-    const files: File[] = [];
-    for await (const entry of entries) {
-      const file = await entry.getFile();
-      files.push(file);
-    }
+    const files = await CSARFileClient.openDirectory();
     this.filecache.loadFiles(files, this.enableSave);
   }
 
   async exportToFiles() {
-    const directoryHandle = await window.showDirectoryPicker();
-    this.verifyPermission(directoryHandle, true);
-
     const all = this.filecache.getAll();
     const loading = await this.loadingCtrl.create({message: 'Bitte warten'});
     loading.present();
-    for (const file of all) {
-      const fileHandle = await directoryHandle.getFile(file.name, {create: true});
-      const writable = await fileHandle.createWritable();
-      // Write the contents of the file to the stream.
-      await writable.write(file.content);
-      // Close the file and write the contents to disk.
-      await writable.close();
-    }
+    await CSARFileClient.exportToFiles(all);
 
     loading.dismiss();
     const toast = await this.toastCtrl.create({
@@ -161,23 +145,6 @@ export class Tab1Page implements OnInit {
       color: 'primary'
     });
     toast.present();
-  }
-
-  async verifyPermission(fileHandle, withWrite = false) {
-    const opts: any = {};
-    if (withWrite) {
-      opts.writable = true;
-    }
-    // Check if permission was already granted. If so, return true.
-    if (await fileHandle.queryPermission(opts) === 'granted') {
-      return true;
-    }
-    // Request permission. If the user grants permission, return true.
-    if (await fileHandle.requestPermission(opts) === 'granted') {
-      return true;
-    }
-    // The user didn't grant permission, so return false.
-    return false;
   }
 
 }
