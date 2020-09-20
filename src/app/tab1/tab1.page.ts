@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FileCacheService } from '../services/file-cache.service';
 import { ActivatedRoute} from '@angular/router';
-import { ModalController, ToastController } from '@ionic/angular';
+import { LoadingController, ModalController, ToastController } from '@ionic/angular';
 import { X2saService } from '../services/x2sa/x2sa.service';
 import { BankingPage } from '../banking/banking.page';
 import { SyncService } from '../services/sync.service';
 import { SharePage } from '../share/share.page';
+import { CSARFileClient } from '@merzlabs/csar-client';
+
+declare var window: any;
 
 @Component({
   selector: 'app-tab1',
@@ -15,6 +18,7 @@ import { SharePage } from '../share/share.page';
 export class Tab1Page implements OnInit {
   enableSave: boolean;
   pairingCode: string;
+  hasNativeFS: boolean;
 
   constructor(
     public filecache: FileCacheService,
@@ -22,7 +26,9 @@ export class Tab1Page implements OnInit {
     private modalCtrl: ModalController,
     public x2saService: X2saService,
     private toastCtrl: ToastController,
-    private sync: SyncService) {
+    private sync: SyncService,
+    private loadingCtrl: LoadingController) {
+    this.hasNativeFS = 'showOpenFilePicker' in window;
   }
 
   ngOnInit() {
@@ -118,4 +124,31 @@ export class Tab1Page implements OnInit {
     }
 
   }
+
+  // Native file system
+
+  async openDirectory() {
+    const files = await CSARFileClient.openDirectory();
+    this.filecache.loadFiles(files, this.enableSave);
+  }
+
+  async exportToFiles() {
+    const all = this.filecache.getAll();
+    const loading = await this.loadingCtrl.create({message: 'Bitte warten'});
+    loading.present();
+    try {
+      await CSARFileClient.exportToFiles(all);
+      const toast = await this.toastCtrl.create({
+        duration: 3000,
+        message: `Export abgeschlossen`,
+        color: 'primary'
+      });
+      toast.present();
+    } catch (e) {
+      console.log('Export error', e);
+    }
+
+    loading.dismiss();
+  }
+
 }

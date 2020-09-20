@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
+import { CSARFile } from '@merzlabs/csar-client';
 
 import * as JSZip from 'jszip';
 import { NgxIndexedDBService } from 'ngx-indexed-db';
 
-export class CachedFile {
-  public hash: string;
-
-  constructor(public name: string, public content: string) {}
+export class CachedFile extends CSARFile {
+  public hash?: string;
 }
 
 @Injectable({
@@ -30,7 +29,7 @@ export class FileCacheService {
     return this.fileNames.join(',');
   }
 
-  async loadFiles(files: FileList, save = false) {
+  async loadFiles(files: FileList|File[], save = false) {
     // tslint:disable-next-line: prefer-for-of
     for (let i = 0; i < files.length; i++) {
       if (files[i].type === 'text/xml') {
