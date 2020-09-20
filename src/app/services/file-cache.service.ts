@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { CSARFile } from '@merzlabs/csar-client';
+import { CSARFile, CSARStorageClient } from '@merzlabs/csar-client';
 
 import * as JSZip from 'jszip';
-import { NgxIndexedDBService } from 'ngx-indexed-db';
 
 export class CachedFile extends CSARFile {
   public hash?: string;
@@ -13,9 +12,12 @@ export class CachedFile extends CSARFile {
 })
 export class FileCacheService {
   private files: Array<CachedFile>;
+  private db: CSARStorageClient;
 
-  constructor(private dbService: NgxIndexedDBService) {
+  constructor() {
     this.files = [];
+
+    this.db = new CSARStorageClient('Pecuniator');
   }
 
   get fileNames() {
@@ -87,29 +89,14 @@ export class FileCacheService {
     this.files = [];
   }
 
-  /**
-   * Check if file exists and add if not.
-   * @return true if file has been added to db and is not duplicate
-   */
   private async storeToDB(file: CachedFile): Promise<boolean> {
-    try {
-      const key = await this.digestMessage(file.content);
-
-      const exists = await this.dbService.getByKey('files', key);
-      if (!exists) {
-        await this.dbService.add('files', file, key);
-        return true;
-      }
-    } catch (e) {
-      console.error('Error storing', file, e);
-    }
-
-    return false;
+    return this.db.store(file);
   }
 
   async loadFromDB() {
-    try {
-      const all = await this.dbService.getAll('files') as CachedFile[];
+      try {
+      const all = await this.db.load();
+      console.debug(all);
       if (all) {
         all.forEach((elem) => this.add(elem));
       }
@@ -119,18 +106,7 @@ export class FileCacheService {
   }
 
   async deleteDatabase() {
-    await this.dbService.clear('files');
-  }
-
-  /**
-   * Hash data
-   * See https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
-   */
-  private async digestMessage(message) {
-    const msgUint8 = new TextEncoder().encode(message);                           // encode as (utf-8) Uint8Array
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);           // hash the message
-    const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
-    return hashHex;
+    await this.db.clear();
+    this.deleteAll();
   }
 }
