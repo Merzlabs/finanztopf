@@ -136,15 +136,19 @@ export class Tab1Page implements OnInit {
     const all = this.filecache.getAll();
     const loading = await this.loadingCtrl.create({message: 'Bitte warten'});
     loading.present();
-    await CSARFileClient.exportToFiles(all);
+    try {
+      await CSARFileClient.exportToFiles(all);
+      const toast = await this.toastCtrl.create({
+        duration: 3000,
+        message: `Export abgeschlossen`,
+        color: 'primary'
+      });
+      toast.present();
+    } catch (e) {
+      console.log('Export error', e);
+    }
 
     loading.dismiss();
-    const toast = await this.toastCtrl.create({
-      duration: 3000,
-      message: `Export abgeschlossen`,
-      color: 'primary'
-    });
-    toast.present();
   }
 
 }
