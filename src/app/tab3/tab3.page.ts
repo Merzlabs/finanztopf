@@ -10,7 +10,6 @@ import { DetailCategoryPage } from '../detail-category/detail-category.page';
 import { FileCacheService, CachedFile } from '../services/file-cache.service';
 import { StorageService } from '../services/storage.service';
 import { Month } from '../types/Month';
-import { SavingsComponent } from '../components/savings/savings.component';
 import { CheckEntry, CategoryService } from '../services/category.service';
 import { UserConfig } from '../types/UserConfig';
 import { SharePage } from '../share/share.page';
@@ -30,13 +29,9 @@ export class Tab3Page implements OnInit, OnDestroy {
     currency: string;
     incomeEntries: Array<PecuniatorEntry>;
     outcomeEntries: Array<PecuniatorEntry>;
-    savings: Array<PecuniatorEntry>;
     months: Array<Month>;
     month: Month;
     results: PecuniatorEntry[];
-    ignoredIBANs: string[];
-    ignoredCreditor: string[];
-    ignoredAccounts: string[];
     unassinged: PecuniatorEntry[];
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
@@ -102,17 +97,6 @@ export class Tab3Page implements OnInit, OnDestroy {
 
     get savingsSum(): number {
         let sum = 0.0;
-        if (!this.savings || this.savings.length === 0) {
-            return sum;
-        }
-        // savings are not only transferred into savings account but also out so calculate that
-        this.savings.forEach((entry) => {
-            if (this.isDebt(entry)) {
-                sum += entry.amount;
-            } else {
-                sum -= entry.amount;
-            }
-        });
         return sum;
     }
 
@@ -137,9 +121,6 @@ export class Tab3Page implements OnInit, OnDestroy {
     }
 
     loadIgnored() {
-        this.ignoredIBANs = localStorage.getItem(SavingsComponent.IGNOREIBAN)?.split(',');
-        this.ignoredCreditor = localStorage.getItem(SavingsComponent.IGNORECREDITOR)?.split(',');
-        this.ignoredAccounts = localStorage.getItem(SavingsComponent.IGNOREDEBTOR)?.split(',');
     }
 
     ionViewWillLeave() {
@@ -175,7 +156,6 @@ export class Tab3Page implements OnInit, OnDestroy {
             this.incomeEntries = [];
             this.outcomeEntries = [];
             this.months = [];
-            this.savings = [];
         }
 
         // Reset sums on categories
@@ -302,37 +282,6 @@ export class Tab3Page implements OnInit, OnDestroy {
         let invalid = false;
         const isDebit = this.isDebt(entry);
 
-        if (this.ignoredIBANs?.length > 0) {
-            // TODO better code not this check two times
-            if (entry.isCredit) {
-                invalid = this.ignoredIBANs.includes(entry.debtorIBAN);
-            } else if (entry.isDebit) {
-                invalid = this.ignoredIBANs.includes(entry.creditorIBAN);
-            }
-        }
-
-        if (!invalid && this.ignoredAccounts?.length > 0) {
-            let i = 0;
-            let account = this.ignoredAccounts[i];
-            while (account && !invalid) {
-                if (entry.isCredit) {
-                    invalid = entry.debtorName?.toLowerCase().includes(account.toLowerCase());
-                } else if (entry.isDebit) {
-                    invalid = entry.creditorName?.toLowerCase().includes(account.toLowerCase());
-                }
-                account = this.ignoredAccounts[++i];
-            }
-        }
-
-        if (invalid && !this.savings.includes(entry)) {
-            // TODO cannot overwrite what kind of transaction to display as +/- in list of entries for saving part
-            // every transactions to saving is listed as losing money and getting back as income which is wrong
-            // const assignValue = this.isDebt(entry) ? 'CRDT' : 'DBIT';
-            // const retyped = entry as SavingTransaction;
-            // retyped.creditordebit = assignValue;
-
-            this.savings.push(entry);
-        }
 
         return invalid;
     }
