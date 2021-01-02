@@ -29,10 +29,12 @@ export class Tab3Page implements OnInit, OnDestroy {
     currency: string;
     incomeEntries: Array<PecuniatorEntry>;
     outcomeEntries: Array<PecuniatorEntry>;
+    ignoredEntries: Array<PecuniatorEntry>;
     months: Array<Month>;
     month: Month;
     results: PecuniatorEntry[];
     unassinged: PecuniatorEntry[];
+    ignoredCategories: Category[];
 
     constructor(private filecache: FileCacheService, private modalCtrl: ModalController, private alertCtrl: AlertController,
                 private storage: StorageService, private toastCtrl: ToastController, private route: ActivatedRoute,
@@ -95,11 +97,6 @@ export class Tab3Page implements OnInit, OnDestroy {
         return this.outcomeEntries.map(item => item.amount).reduce((prev, next) => prev + next);
     }
 
-    get savingsSum(): number {
-        let sum = 0.0;
-        return sum;
-    }
-
     ionViewWillEnter() {
         // Reset api instance of this page from files in cache every time
         this.api.clear();
@@ -121,6 +118,8 @@ export class Tab3Page implements OnInit, OnDestroy {
     }
 
     loadIgnored() {
+        this.ignoredEntries = [];
+        this.ignoredCategories = this.categories.filter((elem) => elem.isIgnored);
     }
 
     ionViewWillLeave() {
@@ -155,6 +154,7 @@ export class Tab3Page implements OnInit, OnDestroy {
         if (clearCache) {
             this.incomeEntries = [];
             this.outcomeEntries = [];
+            this.ignoredEntries = [];
             this.months = [];
         }
 
@@ -229,6 +229,11 @@ export class Tab3Page implements OnInit, OnDestroy {
         this.results = entries;
     }
 
+    resetFilter() {
+        this.calcCategories();
+        this.results = [];
+    }
+
     /**
      * Check creditordebit
      * @return true if appended to outcome, false if appended to income and null if was ignored by exclusion filters
@@ -280,8 +285,14 @@ export class Tab3Page implements OnInit, OnDestroy {
      */
     checkIgnored(entry: PecuniatorEntry): boolean {
         let invalid = false;
-        const isDebit = this.isDebt(entry);
-
+    
+        for (const cat of this.ignoredCategories) {
+            invalid = this.category.checkCategory(entry, cat);
+            
+            if (invalid) {
+                this.ignoredEntries.push(entry);
+            }
+        }
 
         return invalid;
     }

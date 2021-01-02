@@ -24,6 +24,12 @@
       <ion-label>ID</ion-label>
       <ion-input readonly [(ngModel)]="category.id"></ion-input>
     </ion-item>
+    <ion-item>
+      <ion-label>
+        Aus Summen und anderen Töpfen ausschließen
+      </ion-label>
+      <ion-checkbox [(ngModel)]="category.isIgnored"></ion-checkbox>
+    </ion-item>
 
     <ion-list-header>
       Bedingungen

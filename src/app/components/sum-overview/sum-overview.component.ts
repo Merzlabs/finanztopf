@@ -10,14 +10,14 @@ export class SumOverviewComponent implements OnInit {
 
   @Input() incomeSum: number;
   @Input() outcomeSum: number;
-  @Input() savingsSum: number;
   @Input() currency: string;
   @Input() months: Array<Month>;
 
   @Output() incomeClicked: EventEmitter<void> = new EventEmitter();
   @Output() outcomeClicked: EventEmitter<void> = new EventEmitter();
   @Output() monthClicked: EventEmitter<Month> = new EventEmitter();
-  @Output() savingsClicked: EventEmitter<void> = new EventEmitter();
+  @Output() ignoredClicked: EventEmitter<void> = new EventEmitter();
+  @Output() allClicked: EventEmitter<void> = new EventEmitter();
 
   constructor() { }
 
@@ -35,8 +35,12 @@ export class SumOverviewComponent implements OnInit {
     this.monthClicked.emit(month);
   }
 
-  savingsClick() {
-    this.savingsClicked.emit();
+  ignoredClick() {
+    this.ignoredClicked.emit();
+  }
+
+  allClick() {
+    this.allClicked.emit();
   }
 
 }
