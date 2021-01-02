@@ -97,7 +97,7 @@ export class EditCategoryPage implements OnInit {
   }
 
   close() {
-    this.modalCtrl.dismiss();
+    this.modalCtrl.dismiss(this.category);
   }
 
   async share() {

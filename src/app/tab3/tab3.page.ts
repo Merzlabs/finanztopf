@@ -80,7 +80,6 @@ export class Tab3Page implements OnInit, OnDestroy {
                 },
             ];
         }
-        this.loadIgnored();
     }
 
     get incomeSum(): number {
@@ -113,7 +112,6 @@ export class Tab3Page implements OnInit, OnDestroy {
             this.api.load(data);
         }
 
-        this.loadIgnored();
         this.calcCategories();
     }
 
@@ -163,7 +161,8 @@ export class Tab3Page implements OnInit, OnDestroy {
             elem.sum = 0;
             elem.entries = [];
         });
-
+        this.loadIgnored();
+        
         const accounts = this.api.accounts;
         this.currency = accounts.length > 0 ? accounts[0].currency : 'EUR';
 
@@ -347,7 +346,6 @@ export class Tab3Page implements OnInit, OnDestroy {
             }
         });
         modal.onDidDismiss().then((value) => {
-            this.calcCategories();
             this.saveCategories();
         });
         modal.present();
