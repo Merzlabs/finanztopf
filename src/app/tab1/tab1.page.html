@@ -51,17 +51,19 @@
       </ion-button>
     </ion-item>
     
-    <!-- Sync -->
-    <ion-list-header>
-      Experimental Sync
-    </ion-list-header>
-    <ion-item>
-      <ion-label>Paring Code</ion-label>
-      <ion-input [(ngModel)]="pairingCode"></ion-input>
-    </ion-item>
-    <ion-button (click)="pairAndSync()">
-      Pair & Sync
-    </ion-button>
+    <ion-item-group [hidden]="true">
+      <!-- Sync -->
+      <ion-list-header>
+        Experimental Sync
+      </ion-list-header>
+      <ion-item>
+        <ion-label>Paring Code</ion-label>
+        <ion-input [(ngModel)]="pairingCode"></ion-input>
+      </ion-item>
+      <ion-button (click)="pairAndSync()">
+        Pair & Sync
+      </ion-button>
+    </ion-item-group>
     
 
     <ion-item routerLink="/tabs/tab3" detail="true">
@@ -69,6 +71,8 @@
     </ion-item>
   </ion-list>
 
-  <ion-button (click)="openBanking()">Online Banking Integration (Klarna)</ion-button>
-  <ion-button (click)="x2saService.connectToBank()">XS2A Test mit Sandbox</ion-button>
+  <ion-item-group [hidden]="true">
+    <ion-button (click)="openBanking()">Online Banking Integration (Klarna)</ion-button>
+    <ion-button (click)="x2saService.connectToBank()">XS2A Test mit Sandbox</ion-button>
+  </ion-item-group>
 </ion-content>
