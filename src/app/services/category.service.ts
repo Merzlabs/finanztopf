@@ -41,4 +41,18 @@ export class CategoryService {
       }
     }
   }
+
+  checkCategory(entry: CheckEntry, category: Category): boolean {
+    for (const check in category) {
+      if (check !== 'amount' && check !== 'title' && typeof entry[check] !== 'undefined') {
+        for (const test of category[check]) {
+          if (entry[check].toString().toLowerCase().trim().includes(test.toLowerCase().trim())) {
+            return true
+          }
+        }
+      }
+    }
+
+    return false;
+  }
 }

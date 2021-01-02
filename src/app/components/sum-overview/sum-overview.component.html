@@ -5,6 +5,11 @@
 
   <ion-card-content>
     <ion-list>
+      <ion-item button (click)="allClick()">
+        <ion-label>Alle Transaktionen</ion-label>
+
+        <app-balance-calculation [incomeSum]="incomeSum" [expenseSum]="outcomeSum" [currency]="currency"></app-balance-calculation>
+      </ion-item>
       <ion-item button (click)="incomeClick()">
         <ion-label>Zahlungseingänge</ion-label>
         <app-moneyvaluebadge [value]="incomeSum" credit="true" [currency]="currency" badgeSlot="end" includePrefix="true"></app-moneyvaluebadge>
@@ -13,9 +18,8 @@
         <ion-label>Zahlungsausgänge</ion-label>
         <app-moneyvaluebadge [value]="outcomeSum" debit="true" [currency]="currency" badgeSlot="end" includePrefix="true"></app-moneyvaluebadge>
       </ion-item>
-      <ion-item button (click)="savingsClick()">
-        <ion-label>Sparen</ion-label>
-        <app-moneyvaluebadge [value]="savingsSum" typeByValue="true" [currency]="currency" badgeSlot="end" includePrefix="true"></app-moneyvaluebadge>
+      <ion-item button (click)="ignoredClick()">
+        <ion-label>Ignorierte Einträge</ion-label>
       </ion-item>
     </ion-list>
 

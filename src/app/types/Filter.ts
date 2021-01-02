@@ -3,4 +3,6 @@ export enum Filters {
     creditorName = 'Kreditor',
     debtorName = 'Debitor',
     remittanceInformation = 'Verwendungszweck',
+    creditorIBAN = 'Kreditor IBAN',
+    debtorIBAN = 'Debtor IBAN'
 }

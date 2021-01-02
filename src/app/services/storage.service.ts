@@ -23,10 +23,17 @@ export class StorageService {
   }
 
   async addToStorage(cat: Category) {
+    // Copy
+    cat = {...cat};
     // Clean up!
     cat.sum = 0;
     delete cat.entries;
     cat.owner = this.user.id;
+    for (const prop in cat) {
+      if (prop?.toUpperCase().includes('IBAN')) {
+        delete cat[prop];
+      }
+    }
 
     const res = await this.app.functions.addCategory(cat);
   }

@@ -13,6 +13,7 @@ export class Category {
     entries?: Array<PecuniatorEntry>;
     owner?: string;
     active?: boolean;
+    isIgnored?: boolean;
 
     constructor() {
         this.id = Date.now().toString(); // TODO better idgen

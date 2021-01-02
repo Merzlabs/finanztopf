@@ -9,7 +9,6 @@ import { SumOverviewComponent } from './sum-overview/sum-overview.component';
 import { IntroductionComponent } from './introduction/introduction.component';
 import { EntrySearchComponent } from './entry-search/entry-search.component';
 import { EntryListComponent } from './entry-list/entry-list.component';
-import { SavingsComponent } from './savings/savings.component';
 import { CategoryAssignComponent } from './category-assign/category-assign.component';
 import { BalanceCalculationComponent } from './balance-calculation/balance-calculation.component';
 
@@ -20,8 +19,8 @@ import { BalanceCalculationComponent } from './balance-calculation/balance-calcu
     IonicModule
   ],
   declarations: [MoneyValueBadgeComponent, OpensourceComponent, SumOverviewComponent, IntroductionComponent, EntrySearchComponent,
-    EntryListComponent, SavingsComponent, CategoryAssignComponent, BalanceCalculationComponent],
+    EntryListComponent, CategoryAssignComponent, BalanceCalculationComponent],
   exports: [MoneyValueBadgeComponent, OpensourceComponent, SumOverviewComponent, IntroductionComponent, EntrySearchComponent,
-    EntryListComponent, SavingsComponent, CategoryAssignComponent, BalanceCalculationComponent]
+    EntryListComponent, CategoryAssignComponent, BalanceCalculationComponent]
 })
 export class ComponentsModule { }
