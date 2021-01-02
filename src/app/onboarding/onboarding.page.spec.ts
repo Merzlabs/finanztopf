@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { OnboardingPage } from './onboarding.page';
 import { RouterModule } from '@angular/router';
@@ -9,11 +9,11 @@ describe('OnboardingPage', () => {
   let component: OnboardingPage;
   let fixture: ComponentFixture<OnboardingPage>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ OnboardingPage ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [IonicModule.forRoot(), RouterModule.forRoot([])],
+      imports: [IonicModule.forRoot(), RouterModule.forRoot([], { relativeLinkResolution: 'legacy' })],
     })
     .compileComponents();
   }));

@@ -1,5 +1,5 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { OpensourceComponent } from './opensource.component';
 
@@ -7,7 +7,7 @@ describe('OpensourceComponent', () => {
   let component: OpensourceComponent;
   let fixture: ComponentFixture<OpensourceComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ OpensourceComponent ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
